@@ -351,6 +351,6 @@ app.post('/reply/:convo_id', restrict, function(req, res) {
 */  
 })
 
-http.createServer(app).listen(3000);
+http.createServer(app).listen(8010);
 
 console.log("Express server listening on port 3000");
