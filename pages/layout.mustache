@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    {{#pageTitle}}
+      <title>{{pageTitle}}</title>
+    {{/pageTitle}}
+
+    {{#user}}
+      <script>window.config = {user: {{{user}}} }</script>
+    {{/user}}
+    {{^user}}
+      <script>window.config = {user: {} }</script>
+    {{/user}}
+    
+    {{#metaDescription}}
+      <meta name="description" content="{{metaDescription}}">
+    {{/metaDescription}}
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="Shortcut Icon" href="/img/favicon.png">
+    <link href='http://fonts.googleapis.com/css?family=Ovo' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <script data-main="/js/main" src="/js/libs/require/require.js"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Ruby Rate</a>
+          <div class="nav-collapse">
+            <ul class="nav main-menu">
+            </ul>
+            <ul class="nav user-menu pull-right">
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="container"> 
+      <div id="app"></div>
+      <footer>
+        <ul class="nav nav-pills">
+          <li><a href="/">Home</a></li>
+          <li><a href="/toilets">Our Toilets</a></li>
+          <li><a href="/faq">F.A.Q.</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+        <div class="details">	
+          Copyright &copy;{{year}}
+          <br> info@rubyrate.com
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

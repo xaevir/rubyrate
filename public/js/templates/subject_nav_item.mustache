@@ -1,0 +1,10 @@
+<a href="/subjects/{{_id}}">
+{{body}} 
+
+  {{#if_unread}}
+    <span class="unread">{{unread}} new</span>
+  {{/if_unread}}
+  {{^if_unread}}
+    {{#if_total}} ({{total}}) {{/if_total}}
+  {{/if_unread}}
+</a>

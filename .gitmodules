@@ -1,0 +1,12 @@
+[submodule "public/js/libs/jquery-iframe-transport"]
+	path = public/js/libs/jquery-iframe-transport
+	url = git://github.com/cmlenz/jquery-iframe-transport.git
+[submodule "public/js/libs/bootstrap"]
+	path = public/js/libs/bootstrap
+	url = git://github.com/twitter/bootstrap.git
+[submodule "public/js/libs/hogan.js"]
+	path = public/js/libs/hogan.js
+	url = git://github.com/twitter/hogan.js.git
+[submodule "public/js/libs/backbone.validation"]
+	path = public/js/libs/backbone.validation
+	url = git://github.com/thedersen/backbone.validation.git
