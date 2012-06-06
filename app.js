@@ -65,7 +65,10 @@ function getUser(session){
 
 /* redirect from www */
 app.get('/*', function(req, res, next) {
-  if (req.headers.host.match(/^www/) !== null ) res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url, 301);
+  if (req.headers.host.match(/^www/) !== null ) {
+    var new_url = 'http://' + req.headers.host.replace(/^www\./, '') + req.url
+    res.redirect(301, new_url);
+  }
   else next();
 });
 
