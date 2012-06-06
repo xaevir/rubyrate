@@ -41,7 +41,7 @@ app.configure('production', function(){
 
 db.bind('messages')
 db.bind('subjects')
-
+db.bind('users')
 
 function restrict(req, res, next) {
   if (req.session.user) {
@@ -88,7 +88,7 @@ app.get('/fonts/*', function(req, res, next) {
 /* force xhr */
 app.get('/*', function(req, res, next) { 
   if (!(req.xhr)) 
-    res.render('layout', {user: getUser(req.session)})
+    res.render('layout', {user: getUser(req.session), year: new Date().getFullYear()})
   else 
     next()
 })
@@ -161,6 +161,26 @@ app.get("/check-email", function(req, res){
       ? res.send(false)
       : res.send(true);
   })
+})
+
+app.get('/profile/:username', function(req, res) {
+  db.users.findOne({username: req.params.username}, {password: 0}, function(err, user) {
+    res.send(user)
+  })
+})
+
+
+app.get('/profile/:username/edit', restrict, function(req, res) {
+  var username = req.session.user.username
+  db.users.findOne({username: username}, {password: 0}, function(err, user) {
+    res.send(user)
+  })
+})
+
+app.post('/profile', restrict, function(req, res) {
+  var username = req.session.user.username
+  db.users.update({username: username}, {$set: req.body})
+  res.send({success: false, message: 'user updated'})
 })
 
 app.get('/wishes', function(req, res) {

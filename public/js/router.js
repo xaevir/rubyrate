@@ -12,6 +12,9 @@ var SignupView = require('views/users/signup')
   , SingleConvo = require('views/singleConvo')
   , MessageView = require('views/message')
   , WishView = require('views/wish')
+  , ProfileView = require('views/users/profile')
+  , ProfileEditView = require('views/users/profile-edit')
+  , ContextualMenuView = require('views/contextual-menu')
 
 function showStatic(path) {
   $.get(path, function(obj) {
@@ -48,19 +51,32 @@ return Backbone.Router.extend({
   initialize: function() {
     _.bindAll(this); 
     this.on('all', this.highlight)
-    autoResetRouter.call(this)
+    this.on('all', this.reset)
+    //autoResetRouter.call(this)
     window.dispatcher.on('session:logout', this.logout, this)
     this.router = new Backbone.Router()
   },
 
   routes: {
-      'signup':         'signup'
-    , 'login':          'login'
-    , 'wishes':         'wishes' 
-    , 'wishes/:id':     'wish' 
-    , 'subjects/:id':   'subject'
-    , '*actions':       'home'
+      'signup':                     'signup'
+    , 'login':                      'login'
+    , 'profile/:username':          'profile'
+    , 'profile/:username/edit':     'profile_edit'
+    , 'wishes':                     'wishes' 
+    , 'wishes/:id':                 'wish' 
+    , 'subjects/:id':               'subject'
+    , '*actions':                   'home'
     //'*actions': his    'defaultAction'
+  },
+  
+  reset: function(route, section) {
+    route = route.replace('route:', '');
+    if(this.prev_route)
+      if(_.has(this, 'reset_'+this.prev_route)){
+        var path = 'reset_'+this.prev_route 
+        this[path]()
+      }
+    this.prev_route = route
   },
 
   home: function() { 
@@ -101,17 +117,15 @@ return Backbone.Router.extend({
     var that = this
     var collection = new Wishes()
     collection.fetch({success: function(collection, res){
-      $('body').addClass('wishes')
+      $('body').addClass('no-app')
       var view = new WishesView({collection: collection})
       $('#app').html(view.render().el);
       document.title = 'Wishes';
     }})
   },
 
-
   'reset_wishes': function(){
-    $('body').removeClass('wishes')
-
+    $('body').removeClass('no-app')
   },
 
   'wish': function(id) {
@@ -121,6 +135,43 @@ return Backbone.Router.extend({
       $('#app').html(view.render().el);
       document.title = 'Ruby Rate';
     });
+  },
+
+  contextualMenu: function(model){
+    if (window.user.isLoggedIn()){ 
+      this.contextualMenuView = new ContextualMenuView()
+      var template = this.contextualMenuView.render().el
+      $('.nav.main-menu').after(template)
+    }
+  },
+
+  profile: function(username){
+    $('body').addClass('no-app')
+    this.contextualMenu() 
+    $.get('/profile/'+username, function(user) {
+      var view = new ProfileView()
+      $('#app').html(view.render(user).el)
+      document.title = 'user.username' + 'on Rubyrate'
+    })
+  },
+
+  'reset_profile': function(){
+    $('body').removeClass('no-app')
+    if (this.contextualMenuView)
+      this.contextualMenuView.remove()
+  },
+
+  profile_edit: function(username){
+    $('body').addClass('no-app')
+    $.get('/profile/'+username+'/edit', function(user) {
+      var view = new ProfileEditView()
+      $('#app').html(view.render(user).el)
+      document.title = 'user.username' + 'on Rubyrate'
+    })
+  },
+
+  'reset_profile': function(){
+    $('body').removeClass('no-app')
   },
 
   login: _.wrap(function(){
@@ -148,28 +199,6 @@ return Backbone.Router.extend({
         router.navigate('login', {trigger: true})
       }
     })
-  },
-
-  highlight: function(route, section) {
-    route = route.replace('route:', '/');
-    if (route === '/home') 
-      route = '/' 
-    if (route == '/technology' || 
-        route == '/history' ||
-        route == '/our-team' ||
-        route == '/what-we-do'){
-          route = '#menu1' 
-        }
-    var hrefString = "a[href='" + route + "']"
-    var el = $(hrefString, '.navbar');
-    if (el.parent().hasClass('active')) 
-        return;
-    else {
-        $('.navbar li.active').removeClass('active');
-        var parent = el.parent(); 
-        if (route== '/') return 
-        parent.addClass('active');
-    }
   },
 
   highlight: function(route, section) {
