@@ -6,13 +6,6 @@
       <title>{{pageTitle}}</title>
     {{/pageTitle}}
 
-    {{#user}}
-      <script>window.config = {user: {{{user}}} }</script>
-    {{/user}}
-    {{^user}}
-      <script>window.config = {user: {} }</script>
-    {{/user}}
-    
     {{#metaDescription}}
       <meta name="description" content="{{metaDescription}}">
     {{/metaDescription}}
@@ -21,7 +14,12 @@
     <link rel="Shortcut Icon" href="/img/favicon.png">
     <link href='http://fonts.googleapis.com/css?family=Ovo' rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-    <script data-main="/js/main-built" src="/js/libs/require/require.js"></script>
+    {{#development}}
+      <script data-main="/js/main" src="/js/libs/require/require.js"></script>
+    {{/development}}
+    {{^development}}
+      <script data-main="/js/main-built" src="/js/libs/require/require.js"></script>
+    {{/development}}
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -45,18 +43,9 @@
     <div class="container"> 
       <div id="app"></div>
       <footer>
-      {{!
-        <ul class="nav nav-pills">
-          <li><a href="/">Home</a></li>
-          <li><a href="/toilets">Our Toilets</a></li>
-          <li><a href="/faq">F.A.Q.</a></li>
-          <li><a href="/about">About Us</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-        }}
         <div class="details">	
           Copyright &copy;{{year}}
-          <br> info@rubyrate.com
+          <br> ruby@rubyrate.com
         </div>
       </footer>
     </div>

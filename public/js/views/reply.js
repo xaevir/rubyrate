@@ -1,18 +1,18 @@
 define(function(require) {
 
-var tpl = require('text!templates/reply.mustache')
+var tpl = require('text!templates/reply-form.mustache')
   , Message = require('models/message') 
   , AlertView = require('views/site/alert')
 
 var ReplyView = Backbone.View.extend({
 
-  className: 'reply-unit',
-
   template: Hogan.compile(tpl).render(),
+  
+  className: 'reply-form',
 
   events: {
     'keyup :input': 'setAttr',
-    'paste :input':  'onPaste',
+    'paste :input': 'onPaste',
     'submit form' : 'submit'
   },
 
@@ -24,9 +24,10 @@ var ReplyView = Backbone.View.extend({
   button: '',
 
   initialize: function(options) {
-    _.bindAll(this, 'render', 'submit', 'setAttr', 'reset')
-    this.convo_id = options.convo_id
+    _.bindAll(this)
+    this.context = options.wish
     this.subject_id = options.subject_id
+    this.parentView = options.parentView
     this.model = new Message()
     Backbone.Validation.bind(this);
     this.model.on("validated:valid", this.valid, this)
@@ -58,7 +59,7 @@ var ReplyView = Backbone.View.extend({
   },
 
   render: function () {
-    $(this.el).html(this.template);
+    $(this.el).append(this.template);
     this.button = $('button[type="submit"]', this.el);
     var textarea = $('textarea', this.el)
     var t = setTimeout(function(){
@@ -75,16 +76,19 @@ var ReplyView = Backbone.View.extend({
       subject_id: this.subject_id,
       body: this.model.get('body')
     }
-    if (this.convo_id) 
-      var url = '/reply/' + this.convo_id
-    else
+    if (this.context == 'wish') 
       var url = '/first-reply/' + this.subject_id
+    else
+      var url = '/reply/' + this.convo_id
 
     $.post(url, data, function(res) {
-      self.collection.add(res.data)
+      //self.collection.add(res.data)
       self.reset()
       self.notice('Message sent')
-    });
+    // only one reply allowed
+    //if (this.context == 'wish') 
+    //  this.parentView.closeReplyForm() 
+    //});
   },
 
   notice: function(msg){

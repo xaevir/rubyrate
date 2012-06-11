@@ -1,0 +1,34 @@
+{{#head}}  
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Website</th>
+      <th>Location</th>
+      <th>Phone</th>
+      <th>About</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+{{/head}}
+{{#user}}
+    <td>
+      <div class="value">{{company}}</div>
+      <textarea class="span3 edit" name="company">{{company}}</textarea>
+    </td>
+
+    <td>{{name}}
+      <div class="edit"><textarea class="span3" name="name">{{name}}</textarea></div>
+    </td>
+
+    <td>{{email}}</td>
+
+    <td>{{website}}</td>
+
+    <td>{{location}}</td>
+
+    <td>{{phone}}</td>
+
+    <td>{{about}}</td>
+{{/user}}

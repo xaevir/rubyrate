@@ -1,0 +1,9 @@
+{{#makeProfileLink}}
+  <b><a href="/profile/{{userSlug}}" class="profile-link">{{author}}</a>:</b>
+{{/makeProfileLink}}
+{{^makeProfileLink}}
+  <b>{{author}}:</b>
+{{/makeProfileLink}}
+
+{{body}} 
+<span>Sent: {{time}}</span>

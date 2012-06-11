@@ -108,12 +108,21 @@ footer {
   border: 1px solid #e1e1e1;
 }
 
-.profile {
+.small-content {
   padding: 50px;
-  .box-shadow(0px 0px 6px #6fa1d9);
+  .box-shadow(0px 0px 6px #666);
   .border-radius(10px);
   background-color: #fff;
   margin-top: 30px;
+  #gradient > .vertical(#777, #444);
+  color: #fff;
+  label {
+    color: white; 
+  }
+  .error {
+    color: red;
+    font-weight: bold;
+  }
 }
 
 .body-content-small {
@@ -123,16 +132,14 @@ footer {
   float: none; //override bootstrap
 }
 
-.no-app #app {
-  background-color: transparent;  
-  .box-shadow(none);
-}
-
-#app {
+.app #app {
   min-height: 400px;
   background-color: #fff;
   .border-radius(4px);
   .box-shadow(0 0px 5px 1px #B8B8B8);
+}
+
+#app {
   .clearfix();
 }
 
@@ -338,22 +345,10 @@ img {
   }
 }
 
-.wishes {
-  margin: 0 auto;
-  width: 960px;
-}
 
 
-#wish #subject {
-  h1 { 
-    font-weight: normal;
-  }
-  .msg {
-    padding: 10px; 
-    .box-shadow(inset 0px 0px 6px #6FA1D9);
-    //background-color: #f7f7f7;
-  }
-}
+
+
 
 
 #conversations #header {
@@ -368,50 +363,76 @@ img {
   }
 }
 
-.convos {
+
+.chat-composite {
+  width: 250px;
+  .border-radius(10px);
+  float: left;
+  padding: 10px; 
+  background: #fff; 
+  position: relative;
+  //min-height: 72px;
+  margin: 20px;
+  &:hover {
+    .admin-options {
+      display: block; 
+    }
+  }
+  .admin-options {
+    position: absolute;  
+    display: none;
+    top: -10px;
+    background-color: white;
+    padding: 5px; 
+    .box-shadow(0px 3px 6px #666);
+  }
+  .box-shadow(0px 0px 6px #6fa1d9);
+  .bubble-lrg {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    .border-radius(15px);
+    right: -2px;
+    bottom: -10px;
+    background: #fff;
+    .box-shadow(0px 0px 6px #6fa1d9);
+    z-index: 1;
+  }  
+  .bubble-sml {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    .border-radius(15px);
+    right: -9px;
+    bottom: -15px;
+    background: #fff;
+    .box-shadow(0px 0px 6px #6fa1d9);
+    z-index: 2;
+  } 
+  blockquote {
+    margin: 0;    //reset
+    padding: 0;   //reset
+    border: none; //reset
+    margin-bottom: 7px;
+  }
+  .view-reply{
+    text-align: right;
+    margin-top: -9px;
+    display: block;
+  }
+  .reply {
+    display: block;
+    float: left;
+    font-size: 12px;
+  }
+
+}
+
+.chat-columns {
   list-style-type: none;
   position: relative;
   .span4 {
     width: 290px; 
-  }
-  .convo-item {
-    width: 250px;
-    .border-radius(10px);
-    float: left;
-    padding: 10px; 
-    background: #fff; 
-    position: relative;
-    //min-height: 72px;
-    margin: 20px;
-    .box-shadow(0px 0px 6px #6fa1d9);
-    .bubble-lrg {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      .border-radius(15px);
-      right: -2px;
-      bottom: -10px;
-      background: #fff;
-      .box-shadow(0px 0px 6px #6fa1d9);
-      z-index: 1;
-    }  
-    .bubble-sml {
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      .border-radius(15px);
-      right: -9px;
-      bottom: -15px;
-      background: #fff;
-      .box-shadow(0px 0px 6px #6fa1d9);
-      z-index: 2;
-    } 
-    blockquote {
-      margin: 0;    //reset
-      padding: 0;   //reset
-      border: none; //reset
-      margin-bottom: 7px;
-    }
   }
 }
 
@@ -455,9 +476,6 @@ img {
   }
 }
 
-
-
-
 .chat-unit form{
   text-align: center;
 }
@@ -465,17 +483,17 @@ img {
   display: inline-block;
 }
 
-.reply-unit{
+.reply-form{
   margin-top: 10px;
-}
-
-.reply-unit textarea {
-  height: 100px;
-  width:100%;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+  display: none;
+  textarea {
+    height: 100px;
+    width:100%;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 }
 
 .messages {
@@ -495,31 +513,40 @@ img {
   background-color: #EDF7FF;
 }
 
-.chat-unit {
-  width: 250px;
-  float: left;
-  text-align: left; 
-  position: relative;
-  margin: 20px;
-  .box-shadow(0px 0px 6px #6fa1d9);
-  .view-reply{
-    float: right;
+
+
+#wish #subject {
+  h1 { 
+    font-weight: normal;
   }
-  .reply {
-    display: block;
-    float: left;
-    font-size: 12px;
-    i {
-     background: url(/img/reply.png) no-repeat top right;
-     background-color: #08C;
-     width: 21px;
-     height: 16px;
-     position: relative;
-     top: 1px;
-     display: inline-block;
-    }
+  .msg {
+    padding: 10px; 
+    .box-shadow(inset 0px 0px 6px #6FA1D9);
+    //background-color: #f7f7f7;
   }
 }
 
+#app > .msg {
+  font-size: 30px;
+}  
 
+table.setup {
+  background-color: #fff;
+  td {
+    position: relative;
+    .edit {
+      display: none; 
+      position: absolute;
+      top: 0px;
+      z-index: 1;
+      left: -1px;
+    }
+  }
+  td.editing {
+    .edit {
+      display: block;  
+    } 
+  }
+
+}
 

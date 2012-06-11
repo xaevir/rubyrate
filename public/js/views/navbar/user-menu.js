@@ -24,7 +24,8 @@ return Backbone.View.extend({
   render: function(user) {
     var template;
     if (window.user.isLoggedIn()) {
-      template = this.template.render({user: {name: window.user.get('username') }})
+      var locals = {user: window.user.toJSON()}
+      template = this.template.render(locals)
     } else {
       template = this.template.render({user: false});
       $('.dropdown-toggle').dropdown()

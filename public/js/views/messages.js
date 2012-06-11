@@ -1,38 +1,26 @@
 define(function(require) {
 
-//  , Reply = require('models/reply') 
+var MessageBodyView = require('views/messageBody') 
 
 var MessageItem = Backbone.View.extend({
 
   tagName:  "li",
-  className: 'msg',
 
-  template: Hogan.compile('<b>{{author}}:</b> {{body}} <span title="{{time}}">Sent: {{time}}</span>'),
-
-  initialize: function() {
+  initialize: function(options) {
+    this.message = options.message
+    this.truncate = options.truncate
     _.bindAll(this, 'render');
   },
 
   render: function() {
-    var locals = this.model.toJSON()
+    var view = new MessageBodyView(this.options)
+    $(this.el).html(view.render().el)
+ 
+    // add color if not you
     var username = window.user.get('username')    
-    if (this.options.public_view) {
-      if (username != locals.author) 
-        $(this.el).addClass('colored')
-      if (locals.body.length > 50) 
-        locals.body = locals.body.substr(0, 200) + '...' 
-    }
-    else {
-      if (username == locals.author) 
-        $(this.el).addClass('colored')
-    }
-    if (username == locals.author) 
-      locals.author = 'Me'   
+    if (username != this.message.author)
+      $(this.el).addClass('colored')
 
-    var prettyTime = $.shortDate(locals._id)
-    locals.time = prettyTime
-    var template = this.template.render(locals)
-    $(this.el).html(template);
     return this;
   },
 
@@ -48,24 +36,21 @@ return  Backbone.View.extend({
 
   initialize: function(options) {
     _.bindAll(this, 'render');
-    this.collection.bind('add', this.addOne, this)
+//    this.collection.bind('add', this.addOne, this)
+    this.truncate = options.truncate
+    this.messagesOfChat = options.messagesOfChat
   },
 
-  addOne: function(model) {
-  /*
-    var locals;
-    if (!(this.counter % 2)) {
-      locals.stripe = true;
-      locals.className = 'even'
-    }
-    */
-    var messageItem = new MessageItem({model: model, public_view: this.options.public_view})
+  addOne: function(message) {
+    var opts = {message: message}
+    if (this.truncate)
+      opts.truncate = this.truncate
+    var messageItem = new MessageItem(opts)
     $(this.el).append(messageItem.render().el)
-    this.counter += 1
   },
 
   render: function() {
-    this.collection.each(this.addOne, this);
+      _.each(this.messagesOfChat, this.addOne, this);
     return this
   },
 })

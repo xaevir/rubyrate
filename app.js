@@ -1,8 +1,3 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express')
   , http = require('http')
   , cons = require('consolidate')
@@ -13,8 +8,14 @@ var express = require('express')
   , imagemagick = require('imagemagick')
   , check = require('validator').check
   , _ = require('underscore')
+  , nodemailer = require("nodemailer")
 
 var staticServer = express.static(__dirname + '/public')
+
+var smtpTransport = nodemailer.createTransport("SMTP",{
+    host: "localhost",
+})
+
 var app = express();
 
 app.engine('mustache', cons.hogan);
@@ -28,7 +29,15 @@ app.configure(function(){
   app.use(express.cookieParser('robin'));
   app.use(express.session({ secret: "batman", store: new RedisStore }));
   app.use(app.router);
+  app.use(error);
 });
+
+function error(err, req, res, next) {
+  var html = '<h2>Error</h2><p>'+err.message+'</p>'
+  var opts = { subject: 'Error', html: html }
+  email(opts)
+  next(err);
+}
 
 app.configure('development', function(){
   app.use(express.errorHandler());
@@ -43,25 +52,16 @@ db.bind('messages')
 db.bind('subjects')
 db.bind('users')
 
-function restrict(req, res, next) {
-  if (req.session.user) {
+function loadUser(req, res, next) {
+  var user = req.session.user;
+  if (user) {
+    req.user = user;
     next();
   } else {
-    res.redirect('/login');
+    next(new Error('Failed to load user'));
   }
 }
 
-function getUser(session){
-  var user = false 
-  if (session.user) {
-    user = {
-      username: session.user.username, 
-      _id:  session.user._id
-    }
-    user = JSON.stringify(user)
-  }
-  return user
-}
 
 /* redirect from www */
 app.get('/*', function(req, res, next) {
@@ -90,8 +90,12 @@ app.get('/fonts/*', function(req, res, next) {
 
 /* force xhr */
 app.get('/*', function(req, res, next) { 
-  if (!(req.xhr)) 
-    res.render('layout', {user: getUser(req.session), year: new Date().getFullYear()})
+  if (!(req.xhr)) {
+    var locals = { year: new Date().getFullYear() }
+    if (app.settings.env == 'development') 
+      locals.development = true  
+    res.render('layout', locals)
+  }
   else 
     next()
 })
@@ -102,16 +106,37 @@ app.get('/', function(req, res) {
   });
 })
 
-app.post('/session', function(req, res) {
-  var key
-  var spec = {}
-  try {
-    check(req.body.login).isEmail()
-    key = 'email'
-  } catch(e) {
-    key = 'username'
+app.get('/user', function(req, res){
+  res.send(req.session.user) 
+})
+
+function setUser(req, user){
+  var userOmittedData = {
+    _id: user._id,
+    username: user.username,
+    userSlug: user.username.replace(/[^a-zA-z0-9_\s\-]+/g, '-').toLowerCase(),
+    role: user.role
+  }    
+  req.session.user = userOmittedData
+  return userOmittedData
+}
+
+app.post('/login', function(req, res) {
+
+  function isEmailorUsername(){
+    var key
+    var spec = {}
+    try {
+      check(req.body.login).isEmail()
+      key = 'email'
+    } catch(e) {
+      key = 'username'
+    }
+    spec[key] = req.body.login  
+    return spec
   }
-  spec[key] = req.body.login  
+
+  var spec =isEmailorUsername(req.body.login)  
 
   db.collection('users').findOne(spec, function(err, user){
     if (!user)
@@ -119,9 +144,8 @@ app.post('/session', function(req, res) {
     bcrypt.compare(req.body.password, user.password, function(err, match) {
       if (!match) 
         return res.send({message: 'user not found'});
-      req.session.user = user;
-      user.password = '';
-      res.send(user)
+      var userData = setUser(req, user)
+      res.send(userData)
     })
   })
 })
@@ -134,9 +158,12 @@ app.del('/session', function(req, res) {
   })
 })
 
+
 app.get('/signup', function(req, res) { });
 
 app.post('/signup', function(req, res){ 
+  // slug 
+  req.body.email = req.body.email.toLowerCase() 
   bcrypt.genSalt(10, function(err, salt){
     bcrypt.hash(req.body.password, salt, function(err, hash){
       req.body.password = hash;
@@ -151,7 +178,9 @@ app.post('/signup', function(req, res){
 })
 
 app.get("/is-username-valid", function(req, res) {
-  db.collection('users').findOne({username: req.body.username}, function(err, user){
+  var username = req.query.username
+  username = username.toLowerCase()
+  db.collection('users').findOne({username: username}, function(err, user){
     return user 
       ? res.send(false) 
       : res.send(true);
@@ -159,7 +188,8 @@ app.get("/is-username-valid", function(req, res) {
 })
 
 app.get("/check-email", function(req, res){
-  db.collection('users').findOne({email: req.body.email}, function(err, user){
+  var email = req.query.email.toLowerCase()
+  db.collection('users').findOne({email: email}, function(err, user){
     return user
       ? res.send(false)
       : res.send(true);
@@ -167,38 +197,40 @@ app.get("/check-email", function(req, res){
 })
 
 app.get('/profile/:username', function(req, res) {
-  db.users.findOne({username: req.params.username}, {password: 0}, function(err, user) {
+  db.users.findOne({username: req.params.username}, {password: 0, email: 0}, function(err, user) {
     res.send(user)
   })
 })
 
 
-app.get('/profile/:username/edit', restrict, function(req, res) {
-  var username = req.session.user.username
-  db.users.findOne({username: username}, {password: 0}, function(err, user) {
+app.get('/profile/:username/edit', loadUser, function(req, res) {
+  db.users.findOne({username: req.user.username}, {password: 0, email: 0}, function(err, user) {
     res.send(user)
   })
 })
 
-app.post('/profile', restrict, function(req, res) {
-  var username = req.session.user.username
-  db.users.update({username: username}, {$set: req.body})
+app.post('/profile', loadUser, function(req, res) {
+  db.users.update({username: req.user.username}, {$set: req.body})
   res.send({success: false, message: 'user updated'})
 })
 
 app.get('/wishes', function(req, res) {
-  db.collection('subjects').find().toArray(function(err, result) {
-      if (err) throw err;
-      res.send(result)
+  db.collection('subjects').find().toArray(function(err, wishes) {
+    if (err) throw err;
+    for (i=0; i<wishes.length; i++) {
+      wishes[i] = new Array(wishes[i])
+    }
+    //_.map(wishes, function(wish){ return new Array(wish) });
+    res.send(wishes)
   })
 })
 
-app.post('/wishes', restrict, function(req, res) {
+app.post('/wishes', loadUser, function(req, res) {
   // TODO validate wish 
   var username = req.session.user.username
   req.body.author = username
   req.body.users = [{
-    username: username, 
+    username: req.user.username, 
   }]
   db.collection('subjects').insert(req.body, function(err, id){
     if (err) throw err;
@@ -210,6 +242,9 @@ app.get('/wishes/:id', function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
     db.messages.find({subject_id: req.params.id}).toArray(function(err, replies) {
       if (err) throw err;
+      for (i=0; i<replies.length; i++) {
+        replies[i] = new Array(replies[i])
+      }
       res.send({
         subject: subject, 
         replies: replies
@@ -218,10 +253,30 @@ app.get('/wishes/:id', function(req, res) {
   })
 })
 
+app.get('/wishes/:id/setup', loadUser, function(req, res) {
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, wish) {
+    db.users.find({wish_id: req.params.id}).toArray(function(err, halfUsers) {
+      if (err) throw err;
+      res.send({
+        wish: wish, 
+        halfUsers: halfUsers
+      })
+    })
+  })
+})
 
-app.get('/subjects/:id', restrict, function(req, res) {
+/* add restrict to role */
+app.post('/halfUser/:id', loadUser, function(req, res) {
+  var username = req.user.username
+  db.users.update({username: username}, {$set: req.body})
+  res.send({success: false, message: 'user updated'})
+})
+
+
+
+app.get('/subjects/:id', loadUser, function(req, res) {
   // check authorized first 
-  var username = req.session.user.username
+  var username = req.user.username
 
   // reset unread
   db.subjects.update(
@@ -287,8 +342,8 @@ app.get('/subjects/:id', restrict, function(req, res) {
   })
 })
 
-app.get('/subjects', restrict, function(req, res) {
-  var username = req.session.user.username
+app.get('/subjects', loadUser, function(req, res) {
+  var username = req.user.username
   db.subjects.find({'users.username': username}).toArray(function(err, subjects) {
     var arr = new Array()
     _.each(subjects, function(subject) {
@@ -302,8 +357,8 @@ app.get('/subjects', restrict, function(req, res) {
   })
 })
 
-app.post('/first-reply/:id', restrict, function(req, res) {
-  var username = req.session.user.username
+app.post('/first-reply/:id', loadUser, function(req, res) {
+  var username = req.user.username
   var convo_id = new ObjectID().toString()
 
   var user = {
@@ -324,10 +379,24 @@ app.post('/first-reply/:id', restrict, function(req, res) {
     if (err) throw err;
     res.send({success: true, message: 'message inserted', data: message})
   })
+
+
+  // email
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
+    var html = '<h1>First reply to wish</h1><p><b>author:</b>'+message.author+'</p><h3>Message</h3><p>'+message.body+'</p>'
+        html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
+
+    var options = {
+        subject: 'First reply from wishes page', 
+        html: html 
+    }
+    email(message)
+  })
+
 })
 
-app.post('/reply/:convo_id', restrict, function(req, res) {
-  var username = req.session.user.username
+app.post('/reply/:convo_id', loadUser, function(req, res) {
+  var username = req.user.username
     , msg = req.body
     , convo_id = req.params.convo_id
 
@@ -374,6 +443,25 @@ app.post('/reply/:convo_id', restrict, function(req, res) {
 */  
 })
 
-http.createServer(app).listen(8010);
+function email(opts) {
+  var message = {
+      from: 'Website <website@rubyrate.com>',
+      // Comma separated list of recipients
+      to: 'bobby.chambers33@gmail.com',
+  }
+  message.subject = opts.subject
+  message.html = opts.html
 
-console.log("Express server listening on port 3000");
+  smtpTransport.sendMail(message, function(error, response){
+    if(error)
+      console.log(error);
+    else
+      console.log("Email sent: " + response.message);
+    smtpTransport.close(); // shut down the connection pool, no more messages
+  })
+}
+
+
+var server = http.createServer(app).listen(8010);
+
+console.log("Express server listening on port %d in %s mode", server.address().port, app.settings.env);

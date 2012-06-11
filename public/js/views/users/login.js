@@ -16,7 +16,7 @@ var LoginView = Backbone.View.extend({
     Backbone.Validation.bind(this);
     this.model.bind('validated:valid', this.post, this) 
     if (options.context == 'main')
-      $(this.el).addClass('span3 offset4 body-content-small')
+      $(this.el).addClass('span3 offset4 small-content')
     if (options.passThru)          
       this.passThru = options.passThru
   },
@@ -34,7 +34,7 @@ var LoginView = Backbone.View.extend({
 
   post: function(model){
    var that = this
-   $.post('/session', model.toJSON(), function(data){
+   $.post('/login', model.toJSON(), function(data){
       if (data._id) {
       window.user.set(data)
       that.close()

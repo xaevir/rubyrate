@@ -6,8 +6,12 @@ var tpl = require('text!templates/users/signup.html')
 require('libs/jquery-validation/jquery.validate')  
 
 $.validator.addMethod("alphanumeric", function(value, element) {
-    return this.optional(element) || /^[a-z0-9\-]+$/i.test(value);
-}, "Username must contain only letters, numbers, or dashes.");
+    return this.optional(element) || /^[a-z0-9_\-\s]+$/i.test(value);
+}, "Username must contain only letters, numbers, dashes, underscores, or spaces.");
+
+$.validator.addMethod("singleSpace", function(value, element) {
+    return this.optional(element) || !(/\s{2,}/g.test(value));
+}, "Username must contain only single spaces.");
 
 
 $.validator.addMethod("uniqueUsername", function(value, element) {
@@ -41,6 +45,7 @@ var validationRules = {
     minlength: 2,
     maxlength: 60,
     alphanumeric: true,
+    singleSpace: true,
     uniqueUsername: true,
   },
   email: {
@@ -79,7 +84,7 @@ return Backbone.View.extend({
     _.bindAll(this, 'render', 'submitHandler', 'xhr'); 
     this.context = options.context
     if (options.context == 'main')
-      this.el = $('<div class="span3 offset4 body-content-small">');
+      this.el = $('<div class="span3 offset4 small-content">');
     if (options.passThru)          
       this.passThru = options.passThru
   },

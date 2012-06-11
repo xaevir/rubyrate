@@ -4,17 +4,17 @@ var SignupView = require('views/users/signup')
   , homeTpl = require('text!templates/home.mustache')
   , LoginView = require('views/users/login')         
   , SubjectsNav = require('views/subjects_nav')
-  , WishesView = require('views/wishes/wishes')
   , Wishes = require('collections/wishes')
   , Subjects = require('collections/subjects')
   , Subject = require('models/subject')
-  , StackConvos = require('views/stackConvos')
-  , SingleConvo = require('views/singleConvo')
-  , MessageView = require('views/message')
-  , WishView = require('views/wish')
+  , ChatColumns = require('views/chatColumns')
+  , MessageBodyView = require('views/messageBody')
+  , MessagesView = require('views/messages')
   , ProfileView = require('views/users/profile')
   , ProfileEditView = require('views/users/profile-edit')
-  , ContextualMenuView = require('views/contextual-menu')
+  , ProfileMenuView = require('views/profile-menu')
+  , WishSetupView = require('views/wishes/setup')
+  , ChatCompositeView = require('views/chatComposite')         
 
 function showStatic(path) {
   $.get(path, function(obj) {
@@ -25,7 +25,7 @@ function showStatic(path) {
 
 var alreadyLoggedIn = function(callback) { 
   if (window.user.isLoggedIn()) 
-    return this.navigate('/', true)
+    return this.navigate('/', true) 
   callback.apply(this, Array.prototype.slice.call(arguments,1)); 
 }
 
@@ -35,23 +35,36 @@ var restrict = function(callback) {
   callback.apply(this, Array.prototype.slice.call(arguments,1)); 
 }
 
-function autoResetRouter(){ 
-  _(this.routes).each(function(destination) {
-    _(this.routes).each(function(other) {
-      if (destination === other) return;
-      // route:x => reset_y
-      if(_.has(this, 'reset_'+other))
-        this.bind('route:'+destination, this['reset_'+other]);
-    }, this);
-  }, this);
+var rp = Backbone.Router.prototype
+var _route = rp.route;
+rp.route = function(route, name, callback) {
+  return _route.call(this, route, name, function() {
+    //this.trigger.apply(this, ['beforeroute:' + name].concat(_.toArray(arguments)));
+    this.reset(name)
+    callback.apply(this, arguments);
+  });
+};
+
+/*
+var rp = Backbone.Router.prototype
+rp.routeWithoutEvents = rp.route
+rp.route = function(route, name, handler){
+  var that = this
+  this.routeWithoutEvents(route, name, function(){
+    that.trigger("route:before")
+    handler()
+    that.trigger("route:after")
+  })
 }
+*/
 
 return Backbone.Router.extend({
 
   initialize: function() {
     _.bindAll(this); 
     this.on('all', this.highlight)
-    this.on('all', this.reset)
+    this.getUser()
+    //this.on('all', this.reset)
     //autoResetRouter.call(this)
     window.dispatcher.on('session:logout', this.logout, this)
     this.router = new Backbone.Router()
@@ -64,11 +77,23 @@ return Backbone.Router.extend({
     , 'profile/:username/edit':     'profile_edit'
     , 'wishes':                     'wishes' 
     , 'wishes/:id':                 'wish' 
+    , 'wishes/:id/setup':           'wish_setup' 
     , 'subjects/:id':               'subject'
     , '*actions':                   'home'
+    , 'admin':                      'admin'
     //'*actions': his    'defaultAction'
   },
-  
+ 
+  getUser: function(){
+    $.ajax({ 
+      url: "/user", 
+      async: false, 
+      success: function(user) {   
+        if (user) window.user.set(user)
+      }
+    });
+  },
+
   reset: function(route, section) {
     route = route.replace('route:', '');
     if(this.prev_route)
@@ -87,7 +112,12 @@ return Backbone.Router.extend({
     document.title = 'Ruby Rate' 
   },
 
+  'reset_home': function(){
+    $('body').removeClass('app')
+  },
+
   subjects: function(){
+    $('body').addClass('app')
     this.wishNavIsSet = true
     $.get('/subjects', function(res) {
       var view = new SubjectsNav()
@@ -96,16 +126,22 @@ return Backbone.Router.extend({
     });
   },
 
+  'reset_subjects': function(){
+    $('body').removeClass('app')
+  },
+
   subject: function(id) {
+    $('body').addClass('app')
     if (!this.wishNavIsSet)
       return this.router.navigate('subjects', {trigger: true})
     var that = this
     $.get('/subjects/'+id, function(res) {
-      if (res.single_convo)
-        var view = new SingleConvo(res.conversations)
-      else 
-        var view = new StackConvos(res.conversations)
-      var header = new MessageView(res.subject)
+      res.conversations.truncate = {length: 200}
+      var opts = (res.single_convo) ? {singleChat: res.conversations} : {manyChats: res.conversations}
+      opts.columns = 2
+      opts.context = 'appView'
+      var view = new ChatColumns(opts)
+      var header = new MessageBodyView({message: res.subject, tagName: 'h1'})
       var header_html = header.render().el
       $('#conversations #header').html(header_html)
       $('#conversations #body').html(view.render().el);
@@ -113,41 +149,85 @@ return Backbone.Router.extend({
     });
   },
 
-  'wishes': function(e) {
-    var that = this
-    var collection = new Wishes()
-    collection.fetch({success: function(collection, res){
-      $('body').addClass('no-app')
-      var view = new WishesView({collection: collection})
-      $('#app').html(view.render().el);
-      document.title = 'Wishes';
-    }})
+  'reset_subject': function(){
+    $('body').removeClass('app')
   },
 
-  'reset_wishes': function(){
-    $('body').removeClass('no-app')
+  'wishes': function(e) {
+    $.get('/wishes', function(wishes) {
+      var views = []
+      _.each(wishes, function(wish){
+        var messagesView = new MessagesView({messagesOfChat: wish, truncate: 200})
+        var chatCompositeView = new ChatCompositeView()
+        $(chatCompositeView.el).html(messagesView.render().el)
+        var subject_id = wish[0]._id
+        $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
+        // change to user.role =admin
+        // if (window.admin)
+        //   $(this.el).prepend('<div class="admin-options"><a href="/wishes/'+this.subject_id+'/setup">setup</a></div>')
+        views.push(chatCompositeView);
+     }, this);
+      var view = new ChatColumns(views)
+      var html =  view.render().el
+      $('#app').html(html);
+      document.title = 'Wishes';
+    });
   },
 
   'wish': function(id) {
     var that = this
     $.get('/wishes/'+id, function(res) {
-      var view = new WishView({subject: res.subject, replies: res.replies})
-      $('#app').html(view.render().el);
+      // header
+      var header = new MessageBodyView({message: res.subject, tagName: 'h1'})
+      $('#app').html(header.render().el);
+      // body
+      //
+      var views = []
+      _.each(res.replies, function(reply){
+        var messagesView = new MessagesView({messagesOfChat: reply})
+        var chatCompositeView = new ChatCompositeView({context: 'wish', subject_id: wish[0]._id })
+        $(chatCompositeView.el).html(messagesView.render().el)
+        views.push(chatCompositeView);
+     }, this);
+      var view = new ChatColumns(views)
+      var html =  view.render().el
+      $('#app').html(html);
+      document.title = 'Wishes';
+     
+      
+      
+      var view = new ChatColumns({manyChats: res.replies})
+      $('#app').append(view.render().el);
       document.title = 'Ruby Rate';
     });
   },
 
-  contextualMenu: function(model){
+  
+  'wish_setup': function(id) {
+    $.get('/wishes/'+id+'/setup', function(res) {
+      // header
+      var wishHeader = new MessageBodyView({message: res.wish, tagName: 'h1'})
+      $('#app').html(wishHeader.render().el);
+
+      // body
+      var view = new WishSetupView(res)
+      $('#app').append(view.render().el);
+
+      document.title = 'Ruby Rate';
+    });
+
+  },
+
+  profileMenu: function(model){
     if (window.user.isLoggedIn()){ 
-      this.contextualMenuView = new ContextualMenuView()
-      var template = this.contextualMenuView.render().el
+      this.profileMenuView = new ProfileMenuView()
+      var template = this.profileMenuView.render().el
       $('.nav.main-menu').after(template)
     }
   },
 
   profile: function(username){
-    $('body').addClass('no-app')
-    this.contextualMenu() 
+    this.profileMenu() 
     $.get('/profile/'+username, function(user) {
       var view = new ProfileView()
       $('#app').html(view.render(user).el)
@@ -156,22 +236,16 @@ return Backbone.Router.extend({
   },
 
   'reset_profile': function(){
-    $('body').removeClass('no-app')
-    if (this.contextualMenuView)
-      this.contextualMenuView.remove()
+    if (this.profileMenuView)
+      this.profileMenuView.remove()
   },
 
   profile_edit: function(username){
-    $('body').addClass('no-app')
     $.get('/profile/'+username+'/edit', function(user) {
       var view = new ProfileEditView()
       $('#app').html(view.render(user).el)
-      document.title = 'user.username' + 'on Rubyrate'
+      document.title = user.username + ' on Rubyrate'
     })
-  },
-
-  'reset_profile': function(){
-    $('body').removeClass('no-app')
   },
 
   login: _.wrap(function(){
