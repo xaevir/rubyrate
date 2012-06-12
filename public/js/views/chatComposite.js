@@ -1,10 +1,6 @@
 define(function(require) {
 
-var tpl = require('text!templates/reply.mustache')
-  , ReplyView = require('views/reply')
-  , MessagesView = require('views/messages') 
-  , Messages = require('collections/messages')
-  , RestrictedView = require('views/site/restricted')         
+var RestrictedView = require('views/site/restricted')         
 
 return Backbone.View.extend({
 

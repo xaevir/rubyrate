@@ -198,11 +198,15 @@ return Backbone.Router.extend({
       $('#app').html(header.render().el);
       // body
       var views = []
-      _.each(res.replies, function(reply){
-        var subject_id = reply[0].subject_id
+      _.each(res.conversations, function(convo){
         var chatCompositeView = new ChatCompositeView({noReply: true})
-        chatCompositeView.messagesView = new MessagesView({messagesOfChat: reply})
-        chatCompositeView.replyView = new ReplyView({subject_id: subject_id, parentView: chatCompositeView, context: 'wish'})
+        chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments})
+        var opts = {
+          convo_id: convo._id,
+          subject_id: convo.value.comments[0].subject_id,
+          parentView: chatCompositeView
+        }
+        chatCompositeView.replyView = new ReplyView(opts)
         views.push(chatCompositeView);
      }, this);
       var view = new ChatColumns({views: views})

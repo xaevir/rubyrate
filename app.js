@@ -240,7 +240,7 @@ app.post('/wishes', loadUser, function(req, res) {
 app.get('/helper/:id', function(req, res) {
   // email
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
-    var html = '<h1>First reply to wish</h1><p><b>author:</b>'+message.author+'</p><h3>Message</h3><p>'+message.body+'</p>'
+    var html = '<h1>User checked out the page</h1>'
         html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
     email({subject: 'First reply from wishes page', html: html})
   })
@@ -287,14 +287,40 @@ app.get('/helper/:id', function(req, res) {
 
 app.get('/wishes/:id', function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
-    db.messages.find({subject_id: req.params.id}).toArray(function(err, replies) {
-      if (err) throw err;
-      for (i=0; i<replies.length; i++) {
-        replies[i] = new Array(replies[i])
-      }
-      res.send({
-        subject: subject, 
-        replies: replies
+    function map() {
+      var values = {comments: new Array(this), count: 1}
+      emit(this.convo_id, values);        
+    }
+
+    var reduce = function(key, values) {
+      var result = {comments: new Array(), count: 0};
+      values.forEach(function(value) {
+        result.count += value.count;
+        if (value.comments.length > 0)
+          result.comments = result.comments.concat(value.comments);
+        else
+          result.comments.push(value.comments[0]) 
+      });
+      return result;
+    }
+
+    var finalize = function(key, value){
+      if (value.comments.length > 0) 
+          value.comments = new Array(value.comments[0])
+        return value;
+    }
+
+    var options = {
+      "query": {subject_id: subject._id.toHexString()}, 
+      "sort": {_id: 1 },
+      "out" : {replace : 'tempCollection'},
+      "finalize": finalize
+    };
+
+    db.messages.mapReduce(map, reduce, options, function(err, collection) {
+      collection.find().toArray(function(err, conversations) {
+          if (err) throw err;
+          res.send({subject: subject, conversations: conversations})
       })
     })
   })
