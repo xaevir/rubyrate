@@ -11,19 +11,9 @@ return Backbone.View.extend({
 
   initialize: function(options) {
     _.bindAll(this)
-    this.views = options
-    /*
-    this.manyChats = options.manyChats
-    this.singleChat = options.singleChat
-    this.columns = options.columns || this.columns
-    this.context = options.context
-    this.truncate = options.truncate
-    /*
-    if (this.manyChats)
-      this.render = this.renderMany
-    else
-      this.render = this.renderOne
-    */
+    this.views = options.views
+    if (options.columns)
+      this.columns = options.columns 
   },
 
   changeCounter: function(){

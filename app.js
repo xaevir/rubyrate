@@ -169,9 +169,8 @@ app.post('/signup', function(req, res){
       req.body.password = hash;
       db.collection('users').insert(req.body, function(err, result){
         var user = result[0]
-        req.session.user = user;
-        user.password = '';
-        res.send(user);
+        var userData = setUser(req, user)
+        res.send(userData);
       })
     })
   }) 
@@ -238,6 +237,54 @@ app.post('/wishes', loadUser, function(req, res) {
   })
 });
 
+app.get('/helper/:id', function(req, res) {
+  // email
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
+    var html = '<h1>First reply to wish</h1><p><b>author:</b>'+message.author+'</p><h3>Message</h3><p>'+message.body+'</p>'
+        html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
+    email({subject: 'First reply from wishes page', html: html})
+  })
+
+  db.subjects.findOne({shortId: req.params.id}, function(err, subject) {
+    db.users.findOne({'username': subject.author}, function(err, user){
+      setUser(req, user)
+      var subject_id = subject._id.toHexString() 
+
+        function map() {
+          var values = {comments: new Array(this), count: 1}
+          emit(this.convo_id, values);        
+        }
+        //var map = function() {
+        //} 
+
+        var reduce = function(key, values) {
+          var result = {comments: new Array(), count: 0};
+          values.forEach(function(value) {
+            result.count += value.count;
+            if (value.comments.length > 0)
+              result.comments = result.comments.concat(value.comments);
+            else
+              result.comments.push(value.comments[0]) 
+          });
+          return result;
+        }
+
+        var options = {
+          "query": {subject_id: subject._id.toHexString()}, 
+          "sort": {_id: 1 },
+          "out" : {replace : 'tempCollection'},
+        };
+
+        db.messages.mapReduce(map, reduce, options, function(err, collection) {
+          collection.find().toArray(function(err, conversations) {
+              if (err) throw err;
+              res.send({subject: subject, conversations: conversations})
+          })
+        })
+      })
+    })
+  })
+
 app.get('/wishes/:id', function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
     db.messages.find({subject_id: req.params.id}).toArray(function(err, replies) {
@@ -272,10 +319,7 @@ app.post('/halfUser/:id', loadUser, function(req, res) {
   res.send({success: false, message: 'user updated'})
 })
 
-
-
 app.get('/subjects/:id', loadUser, function(req, res) {
-  // check authorized first 
   var username = req.user.username
 
   // reset unread
@@ -377,7 +421,7 @@ app.post('/first-reply/:id', loadUser, function(req, res) {
   message.first = true 
   db.messages.insert(message, function(err, message){
     if (err) throw err;
-    res.send({success: true, message: 'message inserted', data: message})
+    res.send({success: true, message: 'message inserted', data: message[0]})
   })
 
 
@@ -385,12 +429,7 @@ app.post('/first-reply/:id', loadUser, function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
     var html = '<h1>First reply to wish</h1><p><b>author:</b>'+message.author+'</p><h3>Message</h3><p>'+message.body+'</p>'
         html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
-
-    var options = {
-        subject: 'First reply from wishes page', 
-        html: html 
-    }
-    email(message)
+    email({subject: 'First reply from wishes page', html: html})
   })
 
 })
@@ -404,7 +443,7 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
   msg.author = username
   db.messages.insert(req.body, function(err, msg){
     if (err) throw err;
-    res.send({success: true, message: 'message inserted', data: msg})
+    res.send({success: true, message: 'message inserted', data: msg[0]})
   })
   
   db.subjects.findOne({_id: new ObjectID(msg.subject_id)}, function(err, subject){
@@ -420,7 +459,16 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
         {$inc: {'users.0.unread': 1, 'users.0.total': 1, 'users.$.total': 1}}
       )   
     }
+   email
+    var html = '<h1>Reply</h1><p><b>author:</b>'+msg.author+'</p><h3>Message</h3><p>'+msg.body+'</p>'
+        html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
+    email({subject: 'Reply from special page', html: html})
+
   })
+
+
+
+
 /*
     if author is me, send to person matching the convo_id
     i'm = 'xaevir' 

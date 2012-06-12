@@ -18,7 +18,7 @@ var MessageItem = Backbone.View.extend({
  
     // add color if not you
     var username = window.user.get('username')    
-    if (username != this.message.author)
+    if (this.message.author != 'Me' )
       $(this.el).addClass('colored')
 
     return this;

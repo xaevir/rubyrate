@@ -15,6 +15,8 @@ var SignupView = require('views/users/signup')
   , ProfileMenuView = require('views/profile-menu')
   , WishSetupView = require('views/wishes/setup')
   , ChatCompositeView = require('views/chatComposite')         
+  , ReplyView = require('views/reply')
+  , instructionsTpl = require('text!templates/instructions.mustache')
 
 function showStatic(path) {
   $.get(path, function(obj) {
@@ -64,10 +66,13 @@ return Backbone.Router.extend({
     _.bindAll(this); 
     this.on('all', this.highlight)
     this.getUser()
-    //this.on('all', this.reset)
-    //autoResetRouter.call(this)
+    window.events = _.clone(Backbone.Events)
     window.dispatcher.on('session:logout', this.logout, this)
     this.router = new Backbone.Router()
+
+    events.on("messageAdded", function(chatCompositeView, message) {
+      chatCompositeView.messagesView.addOne(message)
+    }); 
   },
 
   routes: {
@@ -77,6 +82,7 @@ return Backbone.Router.extend({
     , 'profile/:username/edit':     'profile_edit'
     , 'wishes':                     'wishes' 
     , 'wishes/:id':                 'wish' 
+    , 'helper/:id':                 'helper' 
     , 'wishes/:id/setup':           'wish_setup' 
     , 'subjects/:id':               'subject'
     , '*actions':                   'home'
@@ -105,8 +111,8 @@ return Backbone.Router.extend({
   },
 
   home: function() { 
-    if (window.user.isLoggedIn())
-      return this.subjects()
+    //if (window.user.isLoggedIn())
+    //  return this.subjects()
     var template = Hogan.compile(homeTpl)
     $('#app').html(template.render())
     document.title = 'Ruby Rate' 
@@ -136,14 +142,25 @@ return Backbone.Router.extend({
       return this.router.navigate('subjects', {trigger: true})
     var that = this
     $.get('/subjects/'+id, function(res) {
-      res.conversations.truncate = {length: 200}
-      var opts = (res.single_convo) ? {singleChat: res.conversations} : {manyChats: res.conversations}
-      opts.columns = 2
-      opts.context = 'appView'
-      var view = new ChatColumns(opts)
+      // header
       var header = new MessageBodyView({message: res.subject, tagName: 'h1'})
       var header_html = header.render().el
       $('#conversations #header').html(header_html)
+
+      // body
+      var views = []
+      _.each(res.conversations, function(convo){
+        var chatCompositeView = new ChatCompositeView()
+        chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments})
+        var opts = {
+          convo_id: convo._id,
+          subject_id: convo.value.comments[0].subject_id,
+          parentView: chatCompositeView
+        }
+        chatCompositeView.replyView = new ReplyView(opts)
+        views.push(chatCompositeView);
+     }, this);
+      var view = new ChatColumns({views: views, columns: 2})
       $('#conversations #body').html(view.render().el);
       document.title = 'Ruby Rate';
     });
@@ -157,17 +174,16 @@ return Backbone.Router.extend({
     $.get('/wishes', function(wishes) {
       var views = []
       _.each(wishes, function(wish){
-        var messagesView = new MessagesView({messagesOfChat: wish, truncate: 200})
-        var chatCompositeView = new ChatCompositeView()
-        $(chatCompositeView.el).html(messagesView.render().el)
         var subject_id = wish[0]._id
+        var chatCompositeView = new ChatCompositeView()
+        chatCompositeView.messagesView = new MessagesView({messagesOfChat: wish, truncate: 200})
+        chatCompositeView.replyView = new ReplyView({subject_id: subject_id, parentView: chatCompositeView, context: 'wish'})
         $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
         // change to user.role =admin
-        // if (window.admin)
-        //   $(this.el).prepend('<div class="admin-options"><a href="/wishes/'+this.subject_id+'/setup">setup</a></div>')
+        // if (window.admin) $(this.el).prepend('<div class="admin-options"><a href="/wishes/'+this.subject_id+'/setup">setup</a></div>')
         views.push(chatCompositeView);
      }, this);
-      var view = new ChatColumns(views)
+      var view = new ChatColumns({views: views})
       var html =  view.render().el
       $('#app').html(html);
       document.title = 'Wishes';
@@ -181,28 +197,52 @@ return Backbone.Router.extend({
       var header = new MessageBodyView({message: res.subject, tagName: 'h1'})
       $('#app').html(header.render().el);
       // body
-      //
       var views = []
       _.each(res.replies, function(reply){
-        var messagesView = new MessagesView({messagesOfChat: reply})
-        var chatCompositeView = new ChatCompositeView({context: 'wish', subject_id: wish[0]._id })
-        $(chatCompositeView.el).html(messagesView.render().el)
+        var subject_id = reply[0].subject_id
+        var chatCompositeView = new ChatCompositeView({noReply: true})
+        chatCompositeView.messagesView = new MessagesView({messagesOfChat: reply})
+        chatCompositeView.replyView = new ReplyView({subject_id: subject_id, parentView: chatCompositeView, context: 'wish'})
         views.push(chatCompositeView);
      }, this);
-      var view = new ChatColumns(views)
+      var view = new ChatColumns({views: views})
       var html =  view.render().el
-      $('#app').html(html);
-      document.title = 'Wishes';
-     
-      
-      
-      var view = new ChatColumns({manyChats: res.replies})
-      $('#app').append(view.render().el);
-      document.title = 'Ruby Rate';
+      $('#app').append(html);
+      document.title = 'Wish';
     });
   },
 
-  
+  'helper': function(id) {
+    var self = this
+    $.get('/helper/'+id, function(res) {
+      self.getUser()
+      // Instructions
+      var template = Hogan.compile(instructionsTpl)
+      $('#app').html(template.render());
+
+      // header
+      var header = new MessageBodyView({message: res.subject, tagName: 'h1'})
+      $('#app').append(header.render().el);
+      // body
+      var views = []
+      _.each(res.conversations, function(convo){
+        var chatCompositeView = new ChatCompositeView()
+        chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments})
+        var opts = {
+          convo_id: convo._id,
+          subject_id: convo.value.comments[0].subject_id,
+          parentView: chatCompositeView
+        }
+        chatCompositeView.replyView = new ReplyView(opts)
+        views.push(chatCompositeView);
+     }, this);
+      var view = new ChatColumns({views: views})
+      var html =  view.render().el
+      $('#app').append(html);
+      document.title = 'Wish';
+    });
+  },
+
   'wish_setup': function(id) {
     $.get('/wishes/'+id+'/setup', function(res) {
       // header

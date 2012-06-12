@@ -25,8 +25,9 @@ var ReplyView = Backbone.View.extend({
 
   initialize: function(options) {
     _.bindAll(this)
-    this.context = options.wish
+    this.context = options.context
     this.subject_id = options.subject_id
+    this.convo_id = options.convo_id
     this.parentView = options.parentView
     this.model = new Message()
     Backbone.Validation.bind(this);
@@ -59,7 +60,7 @@ var ReplyView = Backbone.View.extend({
   },
 
   render: function () {
-    $(this.el).append(this.template);
+    $(this.el).html(this.template);
     this.button = $('button[type="submit"]', this.el);
     var textarea = $('textarea', this.el)
     var t = setTimeout(function(){
@@ -83,12 +84,13 @@ var ReplyView = Backbone.View.extend({
 
     $.post(url, data, function(res) {
       //self.collection.add(res.data)
+      window.events.trigger("messageAdded", self.parentView, res.data);
       self.reset()
       self.notice('Message sent')
     // only one reply allowed
     //if (this.context == 'wish') 
     //  this.parentView.closeReplyForm() 
-    //});
+    });
   },
 
   notice: function(msg){
