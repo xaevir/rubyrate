@@ -238,14 +238,11 @@ app.post('/wishes', loadUser, function(req, res) {
 });
 
 app.get('/helper/:id', function(req, res) {
-  // email
-  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
-    var html = '<h1>User checked out the page</h1>'
-        html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
-    email({subject: 'First reply from wishes page', html: html})
-  })
 
   db.subjects.findOne({shortId: req.params.id}, function(err, subject) {
+    var html = '<h1>Special page</h1>'
+        html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
+    email({subject: 'Somebody checked out the special page', html: html})
     db.users.findOne({'username': subject.author}, function(err, user){
       setUser(req, user)
       var subject_id = subject._id.toHexString() 
