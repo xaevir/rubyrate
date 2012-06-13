@@ -136,7 +136,7 @@ app.post('/login', function(req, res) {
     return spec
   }
 
-  var spec =isEmailorUsername(req.body.login)  
+  var spec = isEmailorUsername(req.body.login)  
 
   db.collection('users').findOne(spec, function(err, user){
     if (!user)
@@ -163,6 +163,7 @@ app.get('/signup', function(req, res) { });
 
 app.post('/signup', function(req, res){ 
   // slug 
+  req.body.slug = req.body.username.replace(/[^a-zA-z0-9_\-]+/g, '-')
   req.body.email = req.body.email.toLowerCase() 
   bcrypt.genSalt(10, function(err, salt){
     bcrypt.hash(req.body.password, salt, function(err, hash){
@@ -224,10 +225,19 @@ app.get('/wishes', function(req, res) {
   })
 })
 
+ function makeShortId() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}
+
 app.post('/wishes', loadUser, function(req, res) {
-  // TODO validate wish 
-  var username = req.session.user.username
-  req.body.author = username
+  //slug
+  req.body.shortId = makeShortId() 
+  req.body.author = req.user.username
+  req.body.authorSlug = req.user.slug
   req.body.users = [{
     username: req.user.username, 
   }]
@@ -440,6 +450,7 @@ app.post('/first-reply/:id', loadUser, function(req, res) {
   var message = req.body 
   message.convo_id = convo_id
   message.author = username
+  message.authorSlug = req.user.slug
   message.subject_id = req.params.id
   message.first = true 
   db.messages.insert(message, function(err, message){
@@ -464,6 +475,7 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
 
   msg.convo_id = convo_id
   msg.author = username
+  msg.authorSlug = req.user.slug
   db.messages.insert(req.body, function(err, msg){
     if (err) throw err;
     res.send({success: true, message: 'message inserted', data: msg[0]})

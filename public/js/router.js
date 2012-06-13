@@ -84,6 +84,7 @@ return Backbone.Router.extend({
     , 'wishes/:id':                 'wish' 
     , 'helper/:id':                 'helper' 
     , 'wishes/:id/setup':           'wish_setup' 
+    , 'subjects':                   'subjects'
     , 'subjects/:id':               'subject'
     , '*actions':                   'home'
     , 'admin':                      'admin'
