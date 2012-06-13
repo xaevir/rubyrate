@@ -163,7 +163,7 @@ app.get('/signup', function(req, res) { });
 
 app.post('/signup', function(req, res){ 
   // slug 
-  req.body.slug = req.body.username.replace(/[^a-zA-z0-9_\-]+/g, '-')
+  req.body.slug = req.body.username.replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
   req.body.email = req.body.email.toLowerCase() 
   bcrypt.genSalt(10, function(err, salt){
     bcrypt.hash(req.body.password, salt, function(err, hash){
