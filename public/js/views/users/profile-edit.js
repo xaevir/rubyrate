@@ -21,6 +21,9 @@ return Backbone.View.extend({
     e.preventDefault()
     var params = this.$('form').serializeObject();
     $.post("/profile", params);
+    var router = new Backbone.Router()
+    var slug = window.user.get('slug')
+    router.navigate('/profile/'+slug, true);
     this.notice()
   },
 

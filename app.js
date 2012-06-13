@@ -211,7 +211,7 @@ app.get('/profile/:slug/edit', loadUser, function(req, res) {
 
 app.post('/profile', loadUser, function(req, res) {
   db.users.update({username: req.user.username}, {$set: req.body})
-  res.send({success: false, message: 'user updated'})
+  res.send({success: true, message: 'user updated'})
 })
 
 app.get('/wishes', function(req, res) {
