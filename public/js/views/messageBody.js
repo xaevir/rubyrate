@@ -27,7 +27,6 @@ return Backbone.View.extend({
     else 
       locals.makeProfileLink = true
 
-    locals.userSlug = locals.author.replace(/[^a-zA-z0-9_\s\-]+/g, '-') 
     var prettyTime = $.shortDate(locals._id)
     locals.time = prettyTime
     var template = this.template.render(locals)

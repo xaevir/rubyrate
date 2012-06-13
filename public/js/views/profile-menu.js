@@ -5,7 +5,7 @@ return Backbone.View.extend({
   className: 'contextual-menu',
   tagName: 'ul',
 
-  template: Hogan.compile('<li><a href="/profile/{{username}}/edit" class="btn">Edit</a></li>'),
+  template: Hogan.compile('<li><a href="/profile/{{slug}}/edit" class="btn">Edit</a></li>'),
 
   events: {
     "click a": "preventDefault",
@@ -28,8 +28,8 @@ return Backbone.View.extend({
   },
 
   render: function() {
-    var username =window.user.get('username')
-    var template = this.template.render({username: username})
+    var user = window.user.toJSON()
+    var template = this.template.render(user)
     $(this.el).html(template)
     return this
   },

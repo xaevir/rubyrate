@@ -273,7 +273,7 @@ return Backbone.Router.extend({
   profile: function(username){
     this.profileMenu() 
     $.get('/profile/'+username, function(user) {
-      var view = new ProfileView()
+      var view = new ProfileView(user)
       $('#app').html(view.render(user).el)
       document.title = 'user.username' + 'on Rubyrate'
     })
