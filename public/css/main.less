@@ -45,36 +45,40 @@ li {
 
 .ir { border:0; font: 0/0 a; text-shadow: none; color: transparent; background-color: transparent; }
 
-#home #main-nav {
-  width: 700px;
-}
-
 #main-nav {
   .clearfix();
-  width: 940px;
+  width: 700px;
   margin: 0 auto;
   #gradient > .vertical(#fff, #eee);
   box-shadow: 0 1px 1px rgba(0, 0, 0, .3);
   .border-radius(0  0 6px 6px);
   padding: 0 10px;
-  ul {
+  #main-menu, #user-menu {
     list-style: none; 
     margin: 0;
     margin-top: 7px;
-  }
-  li {
-    float: left;
-    a {
-      //color: #333;
-      padding: 10px;
-      display: block;
-    }
-  }
-  #main-menu {
     float: left; 
+    li {
+      float: left;
+      a {
+        //color: #333;
+        padding: 10px;
+        display: block;
+      }
+    }
   }
   #user-menu {
     float: right; 
+  }
+  .contextual-menu {
+    float: left;
+    margin: 0;
+    margin-top: 10px;
+    list-style: none;
+    li {
+      float: left; 
+      margin-left: 10px;
+    }  
   }
 }
 
@@ -227,14 +231,7 @@ form {
   display: block;
 }
 
-.contextual-menu {
-  margin: 0;
-  list-style: none;
-  li {
-    float: left; 
-    margin-left: 10px;
-  }  
-}
+
 
 img {
   max-width: none !important;

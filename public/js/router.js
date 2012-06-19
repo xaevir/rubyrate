@@ -114,14 +114,9 @@ return Backbone.Router.extend({
   home: function() { 
     //if (window.user.isLoggedIn())
     //  return this.subjects()
-    $('body').attr('id', 'home')
     var template = Hogan.compile(homeTpl)
     $('#app').html(template.render())
     document.title = 'Ruby Rate' 
-  },
-
-  'reset_home': function(){
-    $('body').removeAttr('id')
   },
 
   subjects: function(){
@@ -268,7 +263,7 @@ return Backbone.Router.extend({
     if (window.user.isLoggedIn()){ 
       this.profileMenuView = new ProfileMenuView()
       var template = this.profileMenuView.render().el
-      $('.nav.main-menu').after(template)
+      $('#main-menu').after(template)
     }
   },
 
