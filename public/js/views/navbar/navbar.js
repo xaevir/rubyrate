@@ -6,7 +6,7 @@ var tpl = require('text!templates/navbar/main-menu.mustache')
 
 return Backbone.View.extend({
   
-  el: '.navbar',
+  el: '#main-nav',
 
   events: {
     "click a": "preventDefault",
@@ -29,9 +29,9 @@ return Backbone.View.extend({
   },
 
   render: function() {
-    var mainMenu = new MainMenu({ el: this.$(".main-menu") });
+    var mainMenu = new MainMenu({ el: this.$("#main-menu") });
     mainMenu.render()
-    var userMenu = new UserMenu({ el: this.$(".user-menu") });
+    var userMenu = new UserMenu({ el: this.$("#user-menu") });
     userMenu.render()
   },
 

@@ -4263,10 +4263,6 @@ h3 {
 }
 body {
   line-height: 1.3em;
-  padding-top: 60px;
-  /* 60px to make the container go all the way to the bottom of the topbar */
-
-  background-color: #cfcfcf;
 }
 p {
   line-height: 1.3em;
@@ -4286,42 +4282,61 @@ li {
   color: transparent;
   background-color: transparent;
 }
-.navbar-inner {
-  /*
-    background-image: -moz-linear-gradient(top, #595959, #333 50%); // FF 3.6+
-    background-image: -ms-linear-gradient(top, #595959, #333 50%); // IE10
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#595959), to(#333 50%)); // Safari 4+, Chrome 2+
-    background-image: -webkit-linear-gradient(top, #595959, #333 50%); // Safari 5.1+, Chrome 10+
-    background-image: -o-linear-gradient(top, #595959, #333 50%); // Opera 11.10
-    background-image: linear-gradient(top, #595959, #333 50%); // The standard
-    background-repeat: repeat-x;
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",#595959,#333 50%)); // IE9 and down
-*/
-
-  background-color: #636363;
-  background-image: -moz-linear-gradient(top, #777777, #444444);
-  background-image: -ms-linear-gradient(top, #777777, #444444);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#777777), to(#444444));
-  background-image: -webkit-linear-gradient(top, #777777, #444444);
-  background-image: -o-linear-gradient(top, #777777, #444444);
-  background-image: linear-gradient(top, #777777, #444444);
+#home #main-nav {
+  width: 700px;
+}
+#main-nav {
+  *zoom: 1;
+  width: 940px;
+  margin: 0 auto;
+  background-color: #f8f8f8;
+  background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
+  background-image: -ms-linear-gradient(top, #ffffff, #eeeeee);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#eeeeee));
+  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
+  background-image: -o-linear-gradient(top, #ffffff, #eeeeee);
+  background-image: linear-gradient(top, #ffffff, #eeeeee);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#777777', endColorstr='#444444', GradientType=0);
-  border-top: 1px solid #4A4A4A;
-  border-bottom: 1px solid #2A2A2A;
-  border: solid 1px #333;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 0 0 6px 6px;
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  padding: 0 10px;
 }
-.navbar-inner .nav > li > a {
-  color: #fff;
+#main-nav:before,
+#main-nav:after {
+  display: table;
+  content: "";
 }
-.navbar .brand {
+#main-nav:after {
+  clear: both;
+}
+#main-nav ul {
+  list-style: none;
+  margin: 0;
+  margin-top: 7px;
+}
+#main-nav li {
+  float: left;
+}
+#main-nav li a {
+  padding: 10px;
+  display: block;
+}
+#main-nav #main-menu {
+  float: left;
+}
+#main-nav #user-menu {
+  float: right;
+}
+#main-nav .brand {
   border: 0;
   font: 0/0 a;
   text-shadow: none;
   color: transparent;
   background-color: transparent;
-  width: 214px;
+  width: 174px;
   height: 45px;
   margin: 0 auto;
   padding: 0 20px 0 0;
@@ -4641,12 +4656,12 @@ img {
   border-radius: 10px;
   float: left;
   padding: 10px;
-  background: #fff;
+  background-color: #bcdcf4;
   position: relative;
   margin: 20px;
-  -webkit-box-shadow: 0px 0px 6px #6fa1d9;
-  -moz-box-shadow: 0px 0px 6px #6fa1d9;
-  box-shadow: 0px 0px 6px #6fa1d9;
+  -webkit-box-shadow: 0px 1px 1px #6fa1d9;
+  -moz-box-shadow: 0px 1px 1px #6fa1d9;
+  box-shadow: 0px 1px 1px #6fa1d9;
 }
 .chat-composite:hover .admin-options {
   display: block;
@@ -4703,6 +4718,8 @@ img {
   display: block;
 }
 .chat-composite .reply {
+  background-color: #fff;
+  padding: 3px;
   display: block;
   float: left;
   font-size: 12px;

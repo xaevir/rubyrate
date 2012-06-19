@@ -114,13 +114,14 @@ return Backbone.Router.extend({
   home: function() { 
     //if (window.user.isLoggedIn())
     //  return this.subjects()
+    $('body').attr('id', 'home')
     var template = Hogan.compile(homeTpl)
     $('#app').html(template.render())
     document.title = 'Ruby Rate' 
   },
 
   'reset_home': function(){
-    $('body').removeClass('app')
+    $('body').removeAttr('id')
   },
 
   subjects: function(){
