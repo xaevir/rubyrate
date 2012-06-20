@@ -8,7 +8,18 @@ return Backbone.View.extend({
 
   events: {
     'click .reply' : 'renderReplyForm',
+    'click .view-reply' : 'pushState',
   },
+
+  pushState: function(e) {
+    e.preventDefault() 
+    var linkEl = $(e.currentTarget);
+    var href = linkEl.attr("href");
+    var router = new Backbone.Router();
+    router.navigate(href.substr(1), true)
+  },
+
+
 
   initialize: function(options) {
     _.bindAll(this)

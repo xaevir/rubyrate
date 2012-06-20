@@ -168,6 +168,8 @@ return Backbone.Router.extend({
   },
 
   'wishes': function(e) {
+    var hi = pSUPERFLY
+    pSUPERFLY.virtualPage("/wishes", "Wishes");
     $.get('/wishes', function(wishes) {
       var views = []
       _.each(wishes, function(wish){

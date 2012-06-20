@@ -4650,7 +4650,17 @@ img {
   box-shadow: inset 0px 0px 6px #6fa1d9;
 }
 .chat-composite {
+  background-color: #f8fbfd;
+  background-image: -moz-linear-gradient(top, #fcfcfe, #f2f9fc);
+  background-image: -ms-linear-gradient(top, #fcfcfe, #f2f9fc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fcfcfe), to(#f2f9fc));
+  background-image: -webkit-linear-gradient(top, #fcfcfe, #f2f9fc);
+  background-image: -o-linear-gradient(top, #fcfcfe, #f2f9fc);
+  background-image: linear-gradient(top, #fcfcfe, #f2f9fc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfe', endColorstr='#f2f9fc', GradientType=0);
   width: 250px;
+  border: 1px solid #DCECFC;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -4796,7 +4806,7 @@ img {
   padding: 5px;
 }
 .messages li.colored {
-  background-color: #EDF7FF;
+  background-color: #fff;
 }
 #wish #subject h1 {
   font-weight: normal;
