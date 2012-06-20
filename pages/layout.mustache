@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
     <meta charset="utf-8">
     {{#pageTitle}}
       <title>{{pageTitle}}</title>
@@ -11,10 +10,12 @@
       <meta name="description" content="{{metaDescription}}">
     {{/metaDescription}}
 
+    <link rel="stylesheet" href="/js/libs/bootstrap-wysihtml5/src/bootstrap-wysihtml5.css">
     <link rel="stylesheet" href="/css/main.css">
+
     <link rel="Shortcut Icon" href="/img/favicon.png">
-    <link href='http://fonts.googleapis.com/css?family=Ovo' rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
     {{#development}}
       <script data-main="/js/main" src="/js/libs/require/require.js"></script>
       <script>
@@ -23,8 +24,11 @@
       </script>
     {{/development}}
     {{^development}}
+      <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
       <script data-main="/js/main-built" src="/js/libs/require/require.js"></script>
     {{/development}}
+
+
   </head>
   <body>
     <div id="main-nav">
@@ -41,24 +45,25 @@
         </div>
       </footer>
     </div>
-    <script type="text/javascript">
-    var _sf_async_config={uid:38524,domain:"rubyrate.com"};
-    (function(){
-      function loadChartbeat() {
-        window._sf_endpt=(new Date()).getTime();
-        var e = document.createElement('script');
-        e.setAttribute('language', 'javascript');
-        e.setAttribute('type', 'text/javascript');
-        e.setAttribute('src',
-           (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
-           "js/chartbeat.js");
-        document.body.appendChild(e);
-      }
-      var oldonload = window.onload;
-      window.onload = (typeof window.onload != 'function') ?
-         loadChartbeat : function() { oldonload(); loadChartbeat(); };
-    })();
-
-    </script>
+    {{^development}}
+      <script type="text/javascript">
+      var _sf_async_config={uid:38524,domain:"rubyrate.com"};
+      (function(){
+        function loadChartbeat() {
+          window._sf_endpt=(new Date()).getTime();
+          var e = document.createElement('script');
+          e.setAttribute('language', 'javascript');
+          e.setAttribute('type', 'text/javascript');
+          e.setAttribute('src',
+             (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+             "js/chartbeat.js");
+          document.body.appendChild(e);
+        }
+        var oldonload = window.onload;
+        window.onload = (typeof window.onload != 'function') ?
+           loadChartbeat : function() { oldonload(); loadChartbeat(); };
+      })();
+      </script>
+    {{/development}}
   </body>
 </html>

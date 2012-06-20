@@ -7,6 +7,7 @@ var express = require('express')
   , bcrypt = require('bcrypt')
   , imagemagick = require('imagemagick')
   , check = require('validator').check
+  , sanitize = require('validator').sanitize
   , _ = require('underscore')
   , nodemailer = require("nodemailer")
 
@@ -235,6 +236,8 @@ app.get('/wishes', function(req, res) {
 
 app.post('/wishes', loadUser, function(req, res) {
   //slug
+  
+  // str = sanitize(large_input_str).xss();
   req.body.shortId = makeShortId() 
   req.body.author = req.user.username
   req.body.authorSlug = req.user.slug

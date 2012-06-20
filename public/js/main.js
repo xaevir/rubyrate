@@ -10,6 +10,8 @@ define(function(require) {
   require('order!libs/bootstrap/js/bootstrap-tab')
   require('order!libs/bootstrap/js/bootstrap-alert')
   require('order!libs/jquery-iframe-transport/jquery.iframe-transport')  
+  require('order!libs/bootstrap-wysihtml5/lib/js/wysihtml5-0.3.0')  
+  require('order!libs/bootstrap-wysihtml5/src/bootstrap-wysihtml5')  
   
   var App = require('order!app')
                                                 

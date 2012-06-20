@@ -366,6 +366,12 @@ img {
   }
 }
 
+#active-chat {
+  width: 600px;  
+  position: relative;
+  z-index: 1;
+  .box-shadow(0px 3px 6px #666);
+}
 
 .chat-composite {
   #gradient > .vertical(#FCFCFE, #F2F9FC);
@@ -432,7 +438,18 @@ img {
     float: left;
     font-size: 12px;
   }
-
+  .reply-form{
+    margin-top: 10px;
+    display: none;
+    textarea {
+      height: 300px;
+      width:100%;
+      -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+  }
 }
 
 .chat-columns {
@@ -490,18 +507,7 @@ img {
   display: inline-block;
 }
 
-.reply-form{
-  margin-top: 10px;
-  display: none;
-  textarea {
-    height: 100px;
-    width:100%;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-}
+
 
 .messages {
   list-style-type: none;
