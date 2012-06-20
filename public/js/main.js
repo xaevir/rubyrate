@@ -12,7 +12,8 @@ define(function(require) {
   require('order!libs/jquery-iframe-transport/jquery.iframe-transport')  
   require('order!libs/bootstrap-wysihtml5/lib/js/wysihtml5-0.3.0')  
   require('order!libs/bootstrap-wysihtml5/src/bootstrap-wysihtml5')  
-  
+  require('order!http://static.chartbeat.com/js/chartbeat.js')  
+
   var App = require('order!app')
                                                 
   $.ajaxSetup({ cache: false });

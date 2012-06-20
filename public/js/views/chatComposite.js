@@ -27,6 +27,7 @@ return Backbone.View.extend({
 
   render: function(){
     $(this.el).append(this.messagesView.render().el)
+
     if (this.noReply == undefined)
       this.$el.append('<a href="#" class="reply">Reply</a><i class="bubble-lrg"></i><i class="bubble-sml"></i>')
     return this
@@ -38,15 +39,7 @@ return Backbone.View.extend({
     //this.replyView = new ReplyView({subject_id: this.subject_id, context: this.context, parentView: this})
     this.replyView.render()
     $(this.el).append(this.replyView.el)
-    var tArea = $('textarea', this.el) 
-    tArea.wysihtml5({
-      "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
-      "emphasis": true, //Italics, bold, etc. Default true
-      "lists": false, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
-      "html": true, //Button which allows you to edit the generated HTML. Default false
-      "link": true, //Button to insert a link. Default true
-      "image": true //Button to insert an image. Default true
-    });
+
     //movement
     $('i', this.el).fadeOut() 
     $('.reply', this.el).slideUp()

@@ -11,8 +11,8 @@ var ReplyView = Backbone.View.extend({
   className: 'reply-form',
 
   events: {
-    'keyup :input': 'setAttr',
-    'paste :input': 'onPaste',
+    //'keyup :input': 'setAttr',
+    //'paste :input': 'onPaste',
     'submit form' : 'submit'
   },
 
@@ -29,15 +29,15 @@ var ReplyView = Backbone.View.extend({
     this.subject_id = options.subject_id
     this.convo_id = options.convo_id
     this.parentView = options.parentView
-    this.model = new Message()
-    Backbone.Validation.bind(this);
-    this.model.on("validated:valid", this.valid, this)
-    this.model.on("validated:invalid", this.invalid, this);
+    //this.model = new Message()
+    //Backbone.Validation.bind(this);
+    //this.model.on("validated:valid", this.valid, this)
+    //this.model.on("validated:invalid", this.invalid, this);
   },
 
   reset: function() {
     //this.model.off()
-    this.model.clear()
+    //this.model.clear()
     this.render()
   },
 
@@ -61,22 +61,35 @@ var ReplyView = Backbone.View.extend({
 
   render: function () {
     $(this.el).html(this.template);
-    this.button = $('button[type="submit"]', this.el);
+    var tArea = $('textarea', this.el) 
+    tArea.wysihtml5({
+      "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
+      "emphasis": true, //Italics, bold, etc. Default true
+      "lists": false, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+      "html": true, //Button which allows you to edit the generated HTML. Default false
+      "link": true, //Button to insert a link. Default true
+      "image": true //Button to insert an image. Default true
+    });
+
+    /*    
     var textarea = $('textarea', this.el)
     var t = setTimeout(function(){
       textarea.focus()
     }, 500);
+    */
     return this
   },
 
   submit: function (e) {
     e.preventDefault()
+    var tArea = $('#textarea-modal')
+    if (tArea.val() == '') return
     var self = this
-    var data = {
-      author: window.user.get('username'),
-      subject_id: this.subject_id,
-      body: this.model.get('body')
-    }
+    var data = {}
+    data.author = window.user.get('username'),
+    data.subject_id = this.subject_id,
+    data.body =  tArea.val() 
+    
     if (this.context == 'wish') 
       var url = '/first-reply/' + this.subject_id
     else
@@ -84,9 +97,10 @@ var ReplyView = Backbone.View.extend({
 
     $.post(url, data, function(res) {
       //self.collection.add(res.data)
-      window.events.trigger("messageAdded", self.parentView, res.data);
-      self.reset()
       self.notice('Message sent')
+      self.render()
+      $('#textarea-modal').val('')
+      window.events.trigger("messageAdded-Reply.js", self.parentView, res.data);
     // only one reply allowed
     //if (this.context == 'wish') 
     //  this.parentView.closeReplyForm() 

@@ -6,6 +6,17 @@ var MessageItem = Backbone.View.extend({
 
   tagName:  "li",
 
+  events: {
+    'click .reply' : 'edit',
+  },
+
+  edit: function(e) {
+    e.preventDefault() 
+    var linkEl = $(e.currentTarget);
+    var href = linkEl.attr("href");
+  },
+
+
   initialize: function(options) {
     this.message = options.message
     this.truncate = options.truncate
@@ -20,6 +31,9 @@ var MessageItem = Backbone.View.extend({
     var username = window.user.get('username')    
     if (this.message.author == 'Me' )
       $(this.el).addClass('colored')
+
+    if (window.user.get('role') == 'admin')
+      $(this.el).prepend('<div class="admin-options"><a href="/messages/'+this.message._id+'/edit">edit</a></div>')
 
     return this;
   },

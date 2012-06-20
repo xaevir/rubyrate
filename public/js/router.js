@@ -70,7 +70,7 @@ return Backbone.Router.extend({
     window.dispatcher.on('session:logout', this.logout, this)
     this.router = new Backbone.Router()
 
-    events.on("messageAdded", function(chatCompositeView, message) {
+    events.on("messageAdded-Reply.js", function(chatCompositeView, message) {
       chatCompositeView.messagesView.addOne(message)
     }); 
   },
@@ -179,7 +179,7 @@ return Backbone.Router.extend({
         chatCompositeView.replyView = new ReplyView({subject_id: subject_id, parentView: chatCompositeView, context: 'wish'})
         $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
         // change to user.role =admin
-        // if (window.admin) $(this.el).prepend('<div class="admin-options"><a href="/wishes/'+this.subject_id+'/setup">setup</a></div>')
+
         views.push(chatCompositeView);
      }, this);
       var view = new ChatColumns({views: views})
@@ -264,17 +264,19 @@ return Backbone.Router.extend({
 
   },
 
-  profileMenu: function(model){
+  profileMenu: function(userSlug){
     if (window.user.isLoggedIn()){ 
-      this.profileMenuView = new ProfileMenuView()
-      var template = this.profileMenuView.render().el
-      $('#main-menu').after(template)
+      if (window.user.get('slug') == userSlug){
+        this.profileMenuView = new ProfileMenuView()
+        var template = this.profileMenuView.render().el
+        $('#main-menu').after(template)
+      }
     }
   },
 
-  profile: function(username){
-    this.profileMenu() 
-    $.get('/profile/'+username, function(user) {
+  profile: function(userSlug){
+    this.profileMenu(userSlug) 
+    $.get('/profile/'+userSlug, function(user) {
       var view = new ProfileView(user)
       $('#app').html(view.render(user).el)
       pSUPERFLY.virtualPage("/profile/" + user.slug, 'Profile for '+user.username);
