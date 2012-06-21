@@ -289,6 +289,7 @@ app.get('/helper/:id', function(req, res) {
 
         var options = {
           "query": {subject_id: subject._id.toHexString()}, 
+          "sort": {_id: 1},
           "out" : {replace : 'tempCollection'},
         };
 
