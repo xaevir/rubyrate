@@ -4867,6 +4867,7 @@ table.setup td.editing .edit {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
   margin: 0 auto;
+  margin-top: 20px;
 }
 #instructions p {
   font-size: 14px;

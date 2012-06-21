@@ -231,8 +231,8 @@ return Backbone.Router.extend({
       $('#app').html(template.render());
 
       // header
-      var header = new MessageBodyView({message: res.subject, tagName: 'h1'})
-      $('#app').append(header.render().el);
+      var header = '<h2 style="float:left;margin-right: 10px">Your wish was:</h2><h1>'+ res.subject.body+'</h1>'
+      $('#app').append(header);
       // body
       var views = []
       _.each(res.conversations, function(convo){
@@ -246,7 +246,7 @@ return Backbone.Router.extend({
         chatCompositeView.replyView = new ReplyView(opts)
         views.push(chatCompositeView);
      }, this);
-      var view = new ChatColumns({views: views})
+      var view = new ChatColumns({views: views, columns: 2, span: 6})
       var html =  view.render().el
       $('#app').append(html);
       pSUPERFLY.virtualPage("/helper/" + res.subject._id, res.subject.body);
