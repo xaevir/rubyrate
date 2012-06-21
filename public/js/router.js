@@ -285,7 +285,7 @@ return Backbone.Router.extend({
       var view = new ProfileView(user)
       $('#app').html(view.render(user).el)
       pSUPERFLY.virtualPage("/profile/" + user.slug, 'Profile for '+user.username);
-      document.title = user.username + 'on Rubyrate'
+      document.title = user.username + ' on Rubyrate'
     })
   },
 
