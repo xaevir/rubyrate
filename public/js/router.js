@@ -116,7 +116,7 @@ return Backbone.Router.extend({
     //  return this.subjects()
     var template = Hogan.compile(homeTpl)
     $('#app').html(template.render())
-    pSUPERFLY.virtualPage("/home", "Home");
+    _gaq.push(['_trackPageview', '/home'])
     document.title = 'Ruby Rate' 
   },
 
@@ -169,7 +169,6 @@ return Backbone.Router.extend({
   },
 
   'wishes': function(e) {
-    var hi = pSUPERFLY
     $.get('/wishes', function(wishes) {
       var views = []
       _.each(wishes, function(wish){
@@ -185,7 +184,7 @@ return Backbone.Router.extend({
       var view = new ChatColumns({views: views})
       var html =  view.render().el
       $('#app').html(html);
-      pSUPERFLY.virtualPage("/wishes", "Wishes");
+      _gaq.push(['_trackPageview', '/wishes'])
       document.title = 'Wishes';
     });
   },
@@ -213,7 +212,7 @@ return Backbone.Router.extend({
       var view = new ChatColumns({views: views, columns: 2, span: 6})
       var html =  view.render().el
       $('#app').append(html);
-      pSUPERFLY.virtualPage("/wishes/" + res.subject._id, res.subject.body);
+      _gaq.push(['_trackPageview', '/wishes/'+ res.subject.body])
       document.title = 'Wish';
     });
   },
@@ -250,7 +249,7 @@ return Backbone.Router.extend({
       var view = new ChatColumns({views: views, columns: 2, span: 6})
       var html =  view.render().el
       $('#app').append(html);
-      pSUPERFLY.virtualPage("/helper/" + res.subject._id, res.subject.body);
+      _gaq.push(['_trackPageview', '/helper/'+ res.subject.body])
       document.title = 'Wish';
     });
   },
@@ -290,7 +289,7 @@ return Backbone.Router.extend({
     $.get('/profile/'+userSlug, function(user) {
       var view = new ProfileView(user)
       $('#app').html(view.render(user).el)
-      pSUPERFLY.virtualPage("/profile/" + user.slug, 'Profile for '+user.username);
+      _gaq.push(['_trackPageview', '/profile/'+ user.slug])
       document.title = user.username + ' on Rubyrate'
     })
   },
@@ -304,7 +303,7 @@ return Backbone.Router.extend({
     $.get('/profile/'+username+'/edit', function(user) {
       var view = new ProfileEditView()
       $('#app').html(view.render(user).el)
-      pSUPERFLY.virtualPage('/profile/'+user.slug+'/edit', 'Edit profile for '+user.username);
+      _gaq.push(['_trackPageview', '/profile/'+ user.slug+'/edit'])
       document.title = 'Editing '+user.username+ ' on Rubyrate'
     })
   },
@@ -314,7 +313,7 @@ return Backbone.Router.extend({
     this.loginView.render()
     $('#app').html(this.loginView.el)
     document.title = 'Login'
-    pSUPERFLY.virtualPage('/login', 'Login');
+    _gaq.push(['_trackPageview', '/login'])
   }, alreadyLoggedIn),
 
   signup: _.wrap(function(){ 
@@ -322,7 +321,7 @@ return Backbone.Router.extend({
     this.signupView.render();
     $('#app').html(this.signupView.el)
     document.title = 'Sign Up'
-    pSUPERFLY.virtualPage('/signup', 'SignUp');
+    _gaq.push(['_trackPageview', '/signup'])
   }, alreadyLoggedIn),
 
   logout: function(){
