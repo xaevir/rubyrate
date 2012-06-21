@@ -224,6 +224,7 @@ return Backbone.Router.extend({
 
   'helper': function(id) {
     var self = this
+    $('body').attr('id','wish')
     $.get('/helper/'+id, function(res) {
       self.getUser()
       // Instructions
@@ -253,6 +254,11 @@ return Backbone.Router.extend({
       document.title = 'Wish';
     });
   },
+
+  'reset_helper': function(){
+    $('body').removeAttr('id')
+  },
+
 
   'wish_setup': function(id) {
     $.get('/wishes/'+id+'/setup', function(res) {
