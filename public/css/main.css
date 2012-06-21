@@ -4764,7 +4764,7 @@ img {
 .chat-columns .span4 {
   width: 290px;
 }
-.msg span {
+.msg .sent {
   display: block;
   font-size: 10px;
 }

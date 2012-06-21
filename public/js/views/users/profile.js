@@ -15,6 +15,9 @@ return Backbone.View.extend({
   render: function(user) {
     var template = this.template.render(user)
     $(this.el).html(template);
+    var loc = $('#location', this.el)
+    var newLined = loc.html().replace(/\n/g, '<br />')
+    loc.html(newLined)
     return this;
   },
 
