@@ -191,6 +191,7 @@ return Backbone.Router.extend({
   },
 
   'wish': function(id) {
+    $('body').attr('id','wish')
     var that = this
     $.get('/wishes/'+id, function(res) {
       // header
@@ -209,12 +210,16 @@ return Backbone.Router.extend({
         chatCompositeView.replyView = new ReplyView(opts)
         views.push(chatCompositeView);
      }, this);
-      var view = new ChatColumns({views: views})
+      var view = new ChatColumns({views: views, columns: 2, span: 6})
       var html =  view.render().el
       $('#app').append(html);
       pSUPERFLY.virtualPage("/wishes/" + res.subject._id, res.subject.body);
       document.title = 'Wish';
     });
+  },
+
+  'reset_wish': function(){
+    $('body').removeAttr('id')
   },
 
   'helper': function(id) {

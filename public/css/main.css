@@ -4652,10 +4652,13 @@ img {
 #active-chat {
   width: 600px;
   position: relative;
-  z-index: 3;
+  z-index: 1041;
   -webkit-box-shadow: 0px 3px 6px #666666;
   -moz-box-shadow: 0px 3px 6px #666666;
   box-shadow: 0px 3px 6px #666666;
+}
+#wish .chat-composite {
+  width: 400px;
 }
 .chat-composite {
   background-color: #f8fbfd;

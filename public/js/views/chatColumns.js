@@ -12,6 +12,7 @@ return Backbone.View.extend({
   initialize: function(options) {
     _.bindAll(this)
     this.views = options.views
+    this.span = options.span || 4
     if (options.columns)
       this.columns = options.columns 
   },
@@ -35,7 +36,7 @@ return Backbone.View.extend({
 
   render: function(){
     for (i=1; i<this.columns+1; i++){
-      $(this.el).append('<div class="span4 col-'+i+'">')
+      $(this.el).append('<div class="span'+this.span+' col-'+i+'">')
     }
      _.each(this.views, this.addOne, this);
     return this
