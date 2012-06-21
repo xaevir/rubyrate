@@ -15,7 +15,7 @@ return Backbone.View.extend({
     _.bindAll(this, 'fadeOut', 'render') 
     this.message = options.message
     this.type = options.type
-    //this.collection.on('add', this.render, this)
+    this.container = options.container
     this.render() 
   },
 
@@ -26,6 +26,9 @@ return Backbone.View.extend({
   render: function(){
     $(this.el).html(this.message)
     this.addClassName(this.type)
+    if (this.container)
+      this.container.prepend(this.el)
+    else
     $('body').prepend(this.el)
     $(this.el).center()
     return this

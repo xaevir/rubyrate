@@ -29,6 +29,8 @@ var ReplyView = Backbone.View.extend({
     this.subject_id = options.subject_id
     this.convo_id = options.convo_id
     this.parentView = options.parentView
+    if (options && options.bigTextarea)
+      this.bigTextarea = options.bigTextarea
     //this.model = new Message()
     //Backbone.Validation.bind(this);
     //this.model.on("validated:valid", this.valid, this)
@@ -61,16 +63,27 @@ var ReplyView = Backbone.View.extend({
 
   render: function () {
     $(this.el).html(this.template);
-    var tArea = $('textarea', this.el) 
-    tArea.wysihtml5({
-      "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
-      "emphasis": true, //Italics, bold, etc. Default true
-      "lists": false, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
-      "html": true, //Button which allows you to edit the generated HTML. Default false
-      "link": true, //Button to insert a link. Default true
-      "image": true //Button to insert an image. Default true
-    });
-
+    if (this.bigTextarea) {
+      var tArea = $('textarea', this.el) 
+      tArea.wysihtml5({
+        "font-styles": false, //Font styling, e.g. h1, h2, etc. Default true
+        "emphasis": true, //Italics, bold, etc. Default true
+        "lists": false, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+        "html": true, //Button which allows you to edit the generated HTML. Default false
+        "link": true, //Button to insert a link. Default true
+        "image": false //Button to insert an image. Default true
+      });
+    } else {
+      var tArea = $('textarea', this.el) 
+      tArea.wysihtml5({
+        "font-styles": false, //Font styling, e.g. h1, h2, etc. Default true
+        "emphasis": true, //Italics, bold, etc. Default true
+        "lists": false, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+        "html": false, //Button which allows you to edit the generated HTML. Default false
+        "link": true, //Button to insert a link. Default true
+        "image": false //Button to insert an image. Default true
+      });
+    }
     /*    
     var textarea = $('textarea', this.el)
     var t = setTimeout(function(){
@@ -97,8 +110,15 @@ var ReplyView = Backbone.View.extend({
 
     $.post(url, data, function(res) {
       //self.collection.add(res.data)
-      self.notice('Message sent')
-      self.render()
+      var msg =  '<p>Hello,</p>'
+          msg += '<p>Thank you for your message. '
+          msg += 'It may take some time before we get a reply. ' 
+          msg += 'However as soon as we do we will, we will contact you.</p>'
+          msg += '<p>Thank you,<br>'
+          msg += 'Ruby</p>'
+      self.notice(msg)
+      //self.render()
+      self.parentView.closeReplyForm()
       $('#textarea-modal').val('')
       window.events.trigger("messageAdded-Reply.js", self.parentView, res.data);
     // only one reply allowed
@@ -109,10 +129,11 @@ var ReplyView = Backbone.View.extend({
 
   notice: function(msg){
     var successAlert = new AlertView({
-      message: '<strong>'+msg+'</strong>',
-      type: 'info'
+      message: '<span class="big">'+msg+'</span>',
+      type: 'info',
+      container: $('#app') 
     })
-    successAlert.fadeOut()
+    //successAlert.fadeOut()
   },
 
 

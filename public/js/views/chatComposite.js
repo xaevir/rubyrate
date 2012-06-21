@@ -23,13 +23,15 @@ return Backbone.View.extend({
     _.bindAll(this)
     if (options && options.noReply)
       this.noReply = options.noReply
+    if (options && options.bigTextarea)
+      this.bigTextarea = options.bigTextarea
   },
 
   render: function(){
     $(this.el).append(this.messagesView.render().el)
 
     if (this.noReply == undefined)
-      this.$el.append('<a href="#" class="reply">Reply</a><i class="bubble-lrg"></i><i class="bubble-sml"></i>')
+      this.$el.append('<a href="#" class="reply">Reply</a><span class="point"></span><span class="point-under"></span>')
     return this
   },
 
@@ -41,16 +43,22 @@ return Backbone.View.extend({
     $(this.el).append(this.replyView.el)
 
     //movement
-    $('i', this.el).fadeOut() 
+    $('.point', this.el).fadeOut() 
+    $('.point-under', this.el).fadeOut() 
     $('.reply', this.el).slideUp()
     $(this.replyView.el).slideDown()
-    $(this.el).attr('id','active-chat')
+    if (this.bigTextarea) 
+      $(this.el).attr('id','bigTextarea')
   },
   
   closeReplyForm: function(e) {
     $(this.replyView.el).slideUp()
-    $('.reply', this.el).slideDown()
-    $('i', this.el).fadeIn() 
+    //$('.reply', this.el).slideDown()
+    $('.point', this.el).fadeIn() 
+    $('.point-under', this.el).fadeIn() 
+    if (this.bigTextarea) 
+      $(this.el).removeAttr('id')
+
   }
 
 

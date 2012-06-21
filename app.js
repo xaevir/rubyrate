@@ -226,12 +226,12 @@ app.get('/wishes', function(req, res) {
   })
 })
 
- function makeShortId() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for( var i=0; i < 5; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
+function makeShortId() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for( var i=0; i < 5; i++ )
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
 }
 
 app.post('/wishes', loadUser, function(req, res) {
@@ -261,32 +261,39 @@ app.get('/helper/:id', function(req, res) {
       var subject_id = subject._id.toHexString() 
 
         function map() {
-          var values = {comments: new Array(this), count: 1}
+          var values = {comments: new Array(this), count: 1, modified: this._id.getTimestamp()}
           emit(this.convo_id, values);        
         }
-        //var map = function() {
-        //} 
 
         var reduce = function(key, values) {
-          var result = {comments: new Array(), count: 0};
+          var result = {
+            comments: new Array(), 
+            count: 0,
+            modified: ''
+          };
           values.forEach(function(value) {
             result.count += value.count;
+
             if (value.comments.length > 0)
               result.comments = result.comments.concat(value.comments);
             else
               result.comments.push(value.comments[0]) 
+
+            if (value.modified && value.modified > result.modified)
+              result.modified = value.modified 
+            else
+              result.modified = value.modified
           });
           return result;
         }
 
         var options = {
           "query": {subject_id: subject._id.toHexString()}, 
-          "sort": {_id: 1 },
           "out" : {replace : 'tempCollection'},
         };
 
         db.messages.mapReduce(map, reduce, options, function(err, collection) {
-          collection.find().toArray(function(err, conversations) {
+          collection.find().sort({'value.modified': -1}).toArray(function(err, conversations) {
               if (err) throw err;
               res.send({subject: subject, conversations: conversations})
           })
@@ -447,7 +454,7 @@ app.post('/first-reply/:id', loadUser, function(req, res) {
     total: 1
   } 
 
-  db.subjects.update({_id: new ObjectID(req.params.id)}, {$push: {users: user}}) 
+  db.subjects.update({_id: new ObjectID(req.params.id)}, {$push: {users: user}, $set:{modified: new Date() }}) 
   db.subjects.update({_id: new ObjectID(req.params.id)}, {$inc: {'users.0.unread': 1, 'users.0.total': 1}}) 
 
   var message = req.body 
@@ -487,14 +494,15 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
   db.subjects.findOne({_id: new ObjectID(msg.subject_id)}, function(err, subject){
     var to = _.find(subject.users, function(user){ return user.convo_id == convo_id })
     if (subject.author == username) {
-      db.subjects.update(
-        {_id: new ObjectID(msg.subject_id), 'users.username': to.username }, 
-        {$inc: {'users.$.unread': 1, 'users.$.total': 1, 'users.0.total': 1}}
+      db.subjects.update({_id: new ObjectID(msg.subject_id), 'users.username': to.username }, 
+        {$inc: {'users.$.unread': 1, 'users.$.total': 1, 'users.0.total': 1},
+         $set: {modified: new Date()}}
       ) 
     } else {
       db.subjects.update(
         {_id: new ObjectID(msg.subject_id), 'users.username': to.username}, 
-        {$inc: {'users.0.unread': 1, 'users.0.total': 1, 'users.$.total': 1}}
+        {$inc: {'users.0.unread': 1, 'users.0.total': 1, 'users.$.total': 1},
+         $set: {modified: new Date()}}
       )   
     }
    email
