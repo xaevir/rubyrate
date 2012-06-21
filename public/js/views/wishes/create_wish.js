@@ -38,13 +38,14 @@ var AlertView = require('views/site/alert')
         $('.modal-backdrop').remove();
         $('.modal').remove();
         self.notice('Wish created')
+        window.events.trigger("wishCreated-create_wish.js");
       }) 
     },
 
     notice: function(msg){
       var successAlert = new AlertView({
         message: '<strong>'+msg+'</strong>',
-        type: 'info'
+        type: 'info',
       })
       successAlert.fadeOut()
     },

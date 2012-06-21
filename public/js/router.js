@@ -73,6 +73,12 @@ return Backbone.Router.extend({
     events.on("messageAdded-Reply.js", function(chatCompositeView, message) {
       chatCompositeView.messagesView.addOne(message)
     }); 
+
+    var self = this
+    events.on("wishCreated-create_wish.js", function() {
+      self.wishes()
+    });
+
   },
 
   routes: {
@@ -168,14 +174,17 @@ return Backbone.Router.extend({
     $('body').removeClass('app')
   },
 
-  'wishes': function(e) {
+  wishes: function(e) {
     $.get('/wishes', function(wishes) {
       var views = []
       _.each(wishes, function(wish){
         var subject_id = wish[0]._id
-        var chatCompositeView = new ChatCompositeView()
+        var chatCompositeView = new ChatCompositeView({bigTextarea: true})
         chatCompositeView.messagesView = new MessagesView({messagesOfChat: wish, truncate: 200})
-        chatCompositeView.replyView = new ReplyView({subject_id: subject_id, parentView: chatCompositeView, context: 'wish'})
+        chatCompositeView.replyView = new ReplyView({subject_id: subject_id, 
+                                                     parentView: chatCompositeView, 
+                                                     context: 'wish',
+                                                     bigTextarea: true})
         $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
         // change to user.role =admin
 
