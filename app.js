@@ -63,6 +63,18 @@ function loadUser(req, res, next) {
   }
 }
 
+function loadSubject(req, res, next) {
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
+    if (subject) {
+      req.subject = subject;
+      next();
+    } else {
+      next(new Error('Subject does not exist: Show 404'));
+    }
+  })
+
+}
+
 
 /* redirect from www */
 app.get('/*', function(req, res, next) {
@@ -330,43 +342,43 @@ app.get('/helper/:id', function(req, res) {
     })
   })
 
-app.get('/wishes/:id', function(req, res) {
-  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
-    function map() {
-      var values = {comments: new Array(this), count: 1}
-      emit(this.convo_id, values);        
-    }
 
-    var reduce = function(key, values) {
-      var result = {comments: new Array(), count: 0};
-      values.forEach(function(value) {
-        result.count += value.count;
-        if (value.comments.length > 0)
-          result.comments = result.comments.concat(value.comments);
-        else
-          result.comments.push(value.comments[0]) 
-      });
-      return result;
-    }
+app.get('/wishes/:id', loadSubject, function(req, res) {
+  var subject = req.subject
+  function map() {
+    var values = {comments: new Array(this), count: 1}
+    emit(this.convo_id, values);        
+  }
 
-    var finalize = function(key, value){
-      if (value.comments.length > 0) 
-          value.comments = new Array(value.comments[0])
-        return value;
-    }
+  var reduce = function(key, values) {
+    var result = {comments: new Array(), count: 0};
+    values.forEach(function(value) {
+      result.count += value.count;
+      if (value.comments.length > 0)
+        result.comments = result.comments.concat(value.comments);
+      else
+        result.comments.push(value.comments[0]) 
+    });
+    return result;
+  }
 
-    var options = {
-      "query": {subject_id: subject._id.toHexString()}, 
-      "sort": {_id: 1 },
-      "out" : {replace : 'tempCollection'},
-      "finalize": finalize
-    };
+  var finalize = function(key, value){
+    if (value.comments.length > 0) 
+        value.comments = new Array(value.comments[0])
+      return value;
+  }
 
-    db.messages.mapReduce(map, reduce, options, function(err, collection) {
-      collection.find().toArray(function(err, conversations) {
-          if (err) throw err;
-          res.send({subject: subject, conversations: conversations})
-      })
+  var options = {
+    "query": {subject_id: subject._id.toHexString()}, 
+    "sort": {_id: 1 },
+    "out" : {replace : 'tempCollection'},
+    "finalize": finalize
+  };
+
+  db.messages.mapReduce(map, reduce, options, function(err, collection) {
+    collection.find().toArray(function(err, conversations) {
+        if (err) throw err;
+        res.send({subject: subject, conversations: conversations})
     })
   })
 })
@@ -566,6 +578,7 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
 })
 
 function email(opts) {
+  if (app.settings.env == 'development') return
   var message = {
       from: 'Website <website@rubyrate.com>',
       // Comma separated list of recipients

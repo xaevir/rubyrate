@@ -236,6 +236,50 @@ return Backbone.Router.extend({
 
     $.get('/lead/'+id+'/'+slug, function(res) {
       self.getUser()
+      // Instructions
+      var template = Hogan.compile(instructionsTpl)
+      $('#app').html(template.render());
+      // header
+      var header = '<h2 style="float:left;margin-right: 10px">Your convo with this wish:</h2><h1>'+ res.subject.body+'</h1>'
+      $('#app').append(header);
+      // Convo 
+      var chatCompositeView = new ChatCompositeView({id:'lead-chat'})
+      chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.messages})
+      var opts = {
+        convo_id: res.messages[0].convo_id,
+        subject_id: res.messages[0].subject_id,
+        parentView: chatCompositeView
+      }
+      chatCompositeView.replyView = new ReplyView(opts)
+      var html = chatCompositeView.render().el
+      $('#app').append(html);
+
+      // otherMessage
+      var header = '<h1>Other people that replied to this wish:<h1>'
+      $('#app').append(header);
+
+      var views = []
+      _.each(res.otherMessages, function(message){
+        var chatCompositeView = new ChatCompositeView({noReply: true})
+        chatCompositeView.messagesView = new MessagesView({messagesOfChat: message})
+        var opts = {
+          convo_id: message._id,
+          subject_id: message.subject_id,
+          parentView: chatCompositeView
+        }
+        chatCompositeView.replyView = new ReplyView(opts)
+        views.push(chatCompositeView);
+     }, this);
+      var view = new ChatColumns({views: views, columns: 3})
+      var html =  view.render().el
+      $('#app').append(html);
+      $.each($('.scrollable'), function(index, ul) { 
+        var height = ul.scrollHeight
+        ul.scrollTop = height
+      });
+      _gaq.push(['_trackPageview', '/lead/'+ res.subject.body])
+      document.title = 'helper';
+
     })
   },
 
@@ -273,7 +317,7 @@ return Backbone.Router.extend({
         ul.scrollTop = height
       });
       _gaq.push(['_trackPageview', '/helper/'+ res.subject.body])
-      document.title = 'Wish';
+      document.title = 'helper';
     });
   },
 

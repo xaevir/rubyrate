@@ -49,7 +49,7 @@ return  Backbone.View.extend({
   //counter: 1,
 
   initialize: function(options) {
-    _.bindAll(this, 'render');
+    _.bindAll(this);
 //    this.collection.bind('add', this.addOne, this)
     this.truncate = options.truncate
     this.messagesOfChat = options.messagesOfChat
@@ -66,7 +66,11 @@ return  Backbone.View.extend({
   },
 
   render: function() {
-    _.each(this.messagesOfChat, this.addOne, this);
+    if (_.isArray(this.messagesOfChat)) 
+      _.each(this.messagesOfChat, this.addOne, this);
+    else
+      this.addOne(this.messagesOfChat)
+
     if(this.messagesOfChat.length > 1) 
       $(this.el).addClass('scrollable')
     return this

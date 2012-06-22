@@ -4629,6 +4629,19 @@ img {
   border-bottom: 1px solid #E5E8EA;
   background-color: #F0F0F3;
 }
+#lead-chat {
+  *zoom: 1;
+  float: none;
+  width: 400px;
+}
+#lead-chat:before,
+#lead-chat:after {
+  display: table;
+  content: "";
+}
+#lead-chat:after {
+  clear: both;
+}
 #conversations #header {
   position: relative;
 }
