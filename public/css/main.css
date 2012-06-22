@@ -4642,7 +4642,7 @@ img {
   box-shadow: inset 0px 0px 6px #6fa1d9;
 }
 #bigTextarea {
-  width: 600px;
+  width: 400px;
   position: relative;
   z-index: 1041;
   -webkit-box-shadow: 0px 3px 6px #666666;

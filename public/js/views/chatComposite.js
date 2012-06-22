@@ -29,9 +29,9 @@ return Backbone.View.extend({
 
   render: function(){
     $(this.el).append(this.messagesView.render().el)
-
+    this.$el.append('<span class="point"></span><span class="point-under"></span>')
     if (this.noReply == undefined)
-      this.$el.append('<a href="#" class="reply">Reply</a><span class="point"></span><span class="point-under"></span>')
+      this.$el.append('<a href="#" class="reply">Reply</a>')
     return this
   },
 
@@ -58,7 +58,7 @@ return Backbone.View.extend({
     $('.point-under', this.el).fadeIn() 
     if (this.bigTextarea) 
       $(this.el).removeAttr('id')
-  }
+  },
 })
  
 

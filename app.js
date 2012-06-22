@@ -250,12 +250,38 @@ app.post('/wishes', loadUser, function(req, res) {
   })
 });
 
+app.get('/lead/:id/:slug', function(req, res) {
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
+    db.users.findOne({'slug': req.params.slug}, function(err, user){
+      setUser(req, user)
+      db.messages.find({
+                      subject_id: subject._id.toHexString(), 
+                      label: 'first', 
+                      author:{$ne: user.username } })
+                      .toArray(function(err, otherMessages) {
+        var userInArray = _.find(subject.users, function(u){ 
+          if (u.username == user.username) return u 
+        });
+        db.messages.find({convo_id: userInArray.convo_id}).toArray(function(err, messages) {
+          res.send({
+                  subject: subject, 
+                  otherMessages: otherMessages,
+                  messages: messages})
+        })
+      })
+    })
+  })
+})
+
+
 app.get('/helper/:id', function(req, res) {
 
   db.subjects.findOne({shortId: req.params.id}, function(err, subject) {
+    // send email
     var html = '<h1>Special page</h1>'
         html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
     email({subject: 'Somebody checked out the special page', html: html})
+
     db.users.findOne({'username': subject.author}, function(err, user){
       setUser(req, user)
       var subject_id = subject._id.toHexString() 
@@ -463,7 +489,7 @@ app.post('/first-reply/:id', loadUser, function(req, res) {
   message.author = username
   message.authorSlug = req.user.slug
   message.subject_id = req.params.id
-  message.first = true 
+  message.label = ['first'] 
   db.messages.insert(message, function(err, message){
     if (err) throw err;
     res.send({success: true, message: 'message inserted', data: message[0]})

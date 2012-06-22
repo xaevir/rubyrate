@@ -92,6 +92,7 @@ return Backbone.Router.extend({
     , 'wishes/:id/setup':           'wish_setup' 
     , 'subjects':                   'subjects'
     , 'subjects/:id':               'subject'
+    , 'lead/:id/:slug':             'lead'
     , '*actions':                   'home'
     , 'admin':                      'admin'
     //'*actions': his    'defaultAction'
@@ -229,6 +230,15 @@ return Backbone.Router.extend({
   'reset_wish': function(){
     $('body').removeAttr('id')
   },
+  
+  lead: function(id, slug) {
+    var self = this
+
+    $.get('/lead/'+id+'/'+slug, function(res) {
+      self.getUser()
+    })
+  },
+
 
   'helper': function(id) {
     var self = this
