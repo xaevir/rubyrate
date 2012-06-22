@@ -49,7 +49,6 @@ var validationRules = {
     uniqueUsername: true,
   },
   email: {
-    required: true,
     email: true,
     uniqueEmail: true,
   },

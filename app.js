@@ -189,6 +189,7 @@ app.get("/is-username-valid", function(req, res) {
 })
 
 app.get("/check-email", function(req, res){
+  if (req.query.email == '')  return res.send(true)
   var email = req.query.email.toLowerCase()
   db.collection('users').findOne({email: email}, function(err, user){
     return user
