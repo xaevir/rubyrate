@@ -58,10 +58,7 @@ return Backbone.View.extend({
     $('.point-under', this.el).fadeIn() 
     if (this.bigTextarea) 
       $(this.el).removeAttr('id')
-
   }
-
-
 })
  
 

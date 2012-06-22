@@ -258,6 +258,10 @@ return Backbone.Router.extend({
       var view = new ChatColumns({views: views, columns: 2, span: 6})
       var html =  view.render().el
       $('#app').append(html);
+      $.each($('.scrollable'), function(index, ul) { 
+        var height = ul.scrollHeight
+        ul.scrollTop = height
+      });
       _gaq.push(['_trackPageview', '/helper/'+ res.subject.body])
       document.title = 'Wish';
     });

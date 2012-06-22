@@ -56,6 +56,8 @@ return  Backbone.View.extend({
   },
 
   addOne: function(message) {
+    if (message.unread == true)
+      this.unread() 
     var opts = {message: message}
     if (this.truncate)
       opts.truncate = this.truncate
@@ -64,9 +66,17 @@ return  Backbone.View.extend({
   },
 
   render: function() {
-      _.each(this.messagesOfChat, this.addOne, this);
+    _.each(this.messagesOfChat, this.addOne, this);
+    if(this.messagesOfChat.length > 1) 
+      $(this.el).addClass('scrollable')
     return this
   },
+  
+  unread: function(){
+    $(this.el).prepend('<div class="unread">New Message</div>')
+
+  },
+
 })
 
 })
