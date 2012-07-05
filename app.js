@@ -10,6 +10,7 @@ var express = require('express')
   , sanitize = require('validator').sanitize
   , _ = require('underscore')
   , nodemailer = require("nodemailer")
+  , spider = require('./routes/spider')
 
 var staticServer = express.static(__dirname + '/public')
 
@@ -22,13 +23,14 @@ var app = express();
 app.engine('mustache', cons.hogan);
 
 app.configure(function(){
+  app.set('port', process.env.PORT || 8010);
   app.set('views', __dirname + '/pages');
   app.set('view engine', 'mustache');
   app.set('view options', { layout: false });
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
-  app.use(express.cookieParser('robin'));
-  app.use(express.session({ secret: "batman", store: new RedisStore }));
+  app.use(express.cookieParser('shhhh, very secret'));
+  app.use(express.session({store: new RedisStore }));
   app.use(app.router);
   app.use(error);
 });
@@ -63,6 +65,14 @@ function loadUser(req, res, next) {
   }
 }
 
+function andRestrictTo(role) {
+  return function(req, res, next) {
+    req.session.user.role == role
+      ? next()
+      : next(new Error('Unauthorized'));
+  }
+}
+
 function loadSubject(req, res, next) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
     if (subject) {
@@ -72,9 +82,7 @@ function loadSubject(req, res, next) {
       next(new Error('Subject does not exist: Show 404'));
     }
   })
-
 }
-
 
 /* redirect from www */
 app.get('/*', function(req, res, next) {
@@ -101,6 +109,12 @@ app.get('/fonts/*', function(req, res, next) {
   staticServer(req, res, next)  
 })
 
+
+
+//app.post('/scraper', loadUser, andRestrictTo('admin'), routes.scraper)
+//app.post('/*', loadUser, andRestrictTo('admin'), routes.scraper)
+
+
 /* force xhr */
 app.get('/*', function(req, res, next) { 
   if (!(req.xhr)) {
@@ -113,11 +127,22 @@ app.get('/*', function(req, res, next) {
     next()
 })
 
+
+//app.post('/scraper', spider.scraper)  
+
+//app.get('/crawl', spider.crawl)
+
+
+
+
+/*
 app.get('/', function(req, res) {
   res.render('home', function(err, html){
     res.send({title: 'Ruby Rate', body: html});
   });
 })
+*/
+
 
 app.get('/user', function(req, res){
   res.send(req.session.user) 
@@ -209,6 +234,8 @@ app.get("/check-email", function(req, res){
       : res.send(true);
   })
 })
+
+
 
 app.get('/profile/:slug', function(req, res) {
   db.users.findOne({slug: req.params.slug}, {password: 0, email: 0}, function(err, user) {
@@ -596,7 +623,16 @@ function email(opts) {
   })
 }
 
+var server = http.createServer(app) 
+var io = require('socket.io').listen(server);
 
-var server = http.createServer(app).listen(8010);
+server.listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
+});
 
-console.log("Express server listening on port %d in %s mode", server.address().port, app.settings.env);
+io.sockets.on('connection', function (socket) {
+  socket.on('start scraper', function (data) {
+    spider.scrapeYelp(data, socket)
+  });
+})
+//io.sockets.on('startCrawling', function(spider.crawl) 

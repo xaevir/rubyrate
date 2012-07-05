@@ -1,91 +1,63 @@
 var spider = require('../routes/spider'),
-    fs = require('fs'),
-    JobClass = require('../node_modules/node.io/lib/node.io/job').JobClass,
-    job = new JobClass(),
     dom = __dirname + '/../routes/yelptest.html',
     http = require('http')
+    fs = require('fs')
 
-require('jasmine-node')
+var yelpPage = fs.readFileSync(dom, 'utf8');
+var yelpBiz = fs.readFileSync(__dirname+'/bizPage.html', 'utf8');
 
-var toggle = require('./toggle');
-toggle.toggle(function(){
+var server
+var port = 5000
 
+function setUpServer(){
+  server = http.createServer(function (req, res) {
+    console.log(req.url)
+    if (req.url == '/forbidden') {
+      res.writeHead(400, {'Content-Type': 'text/plain'});
+      res.end('Forbidden');
+    }
+    if (req.url == '/yelp') {
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end(yelpPage);
+    }
+    if (req.url == '/yelpBiz') {
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end(yelpPage);
+    }
+  })
+  server.listen(port)
+}
+setUpServer()
 
-
-/*        fs.readFile(dom, 'utf8', function(err, data) {
-          if (err) throw err;
-          job.parseHtml(data, function(err, $, data) {
-            if (err) throw err;
-          })
-        });
-
-      var res = {
-        send: function(){} 
-      }
-      var req = {
-        body: {
-          find_desc : 'massage',
-          zip: '33706'
-        } 
-      }
-*/
 describe('Spider', function(){
   it('should return formatted company name', function(){
     expect(spider.extractName('1. 	TheMassageSpa  ')).toEqual('TheMassageSpa');
   });
-
-  describe('Yelp Scraper', function(done){
-    beforeEach(function(done) {
-      var port = 24510
-      var server = http.createServer(function (req, res) {
-        res.writeHead(400, {'Content-Type': 'text/plain'});
-        res.end('Forbidden');
+  describe('Yelp Scraper', function(){
+    it("should return an error message in the array", function(done) {
+      spider.scrapeYelp(['http://127.0.0.1:'+port+'/forbidden'], function(err, output){
+        expect(output[0]).toContain('error');
+        done()
       })
-      server.listen(port)
     })
-    afterEach(function() {
-      server.close();
-    })
-    it("should return an error message", function(done) {
-      done = false
-      runs(function() {
-        var urls = ['http://127.0.0.1:'+port+'/']
-
-        spider.scrapeYelp(urls, function(output){
-          var output = output   
-          done=true
-        })
+    it("should return an array of length 10 with names and hrefs", function(done) {
+      spider.scrapeYelp(['http://127.0.0.1:'+port+'/yelp'], function(err, output){
+        expect(output.length).toEqual(10);
+        expect(output[0]).toEqual({ companyName: 'TheMassageSpa', href: 'http://www.yelp.com/biz/the-massage-spa-st-petersburg-2' })
+        for (i=0; i < output.length; i++) {
+          expect(output[i].companyName).toBeDefined()
+          expect(output[i].href).toBeDefined()
+        }
+        done()
       })
-      waitsFor(function() {
-        return done;
-      }, "yelp scraper never connected to url ", 750);
-      runs(function() {
-        expect(output).toContain('error');
-      });
+    })
+    it("should find the link on the biz page", function(done) {
+      var data = [ { companyName: 'TheMassageSpa', href: 'http://www.yelp.com/biz/the-massage-spa-st-petersburg-2' }]
+      spider.getUrlFromYelp(data, function(err, output){
+        expect(output).toEqual(['http://www.themassagespa.net'])
+        done()
+        server.close();
+      })
     })
   })
 })
-})
-/*
-describe("Asynchronous specs", function() {
-  var value, flag;
-
-  it("should support async execution of test preparation and exepectations", function() {
-    runs(function() {
-      flag = false;
-      value = 0;
-
-      setTimeout(function() {
-        flag = true;
-      }, 500);
-    });
-    waitsFor(function() {
-      value++;
-      return flag;
-    }, "The Value should be incremented", 750);
-    runs(function() {
-      expect(value).toBeGreaterThan(0);
-    });
-  });
-});
-*/
