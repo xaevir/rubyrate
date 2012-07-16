@@ -579,9 +579,6 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
 
   })
 
-
-
-
 /*
     if author is me, send to person matching the convo_id
     i'm = 'xaevir' 
@@ -632,7 +629,7 @@ server.listen(app.get('port'), function(){
 
 io.sockets.on('connection', function (socket) {
   socket.on('start scraper', function (data) {
-    spider.scrapeYelp(data, socket)
+    spider.spider(data, socket)
   });
 })
 //io.sockets.on('startCrawling', function(spider.crawl) 

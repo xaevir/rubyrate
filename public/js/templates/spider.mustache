@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="span4">
+    <h2>Spider</h2>
+    <form method="post" action="/signup">
+
+      <label>Search for</label>
+      <input class="span3" name="find_desc" type="text" value="massage">
+
+      <label>Zip</label>
+      <input class="span3" name="zip" type="text" value="33706">
+
+      <button class="btn btn-primary" type="submit">Run</button>
+    </form>
+    <div id="spinner" style="display: none">
+      <span>
+        Working
+      </span>
+    </div>
+    <p id="status-message"></p>
+  </div>
+  <div class="span8" id="results"></div>
+</div>

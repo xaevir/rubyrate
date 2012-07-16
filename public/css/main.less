@@ -605,5 +605,54 @@ table.setup {
   p {
     font-size: 14px;
   }
+}
 
+#spinner {
+  left: 50%;
+  position: fixed;
+  text-align: center;
+  top: 260px;
+  width: 200px;
+  z-index: 100;
+  .box-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+  span {
+    border-width: 7px; 
+    border-style: solid; 
+    background: url("/img/koala.gif") no-repeat scroll center 40px #f7f7f7;
+    .border-radius(10px);
+    height: 123px;   
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+    left: -100px;
+    padding: 5px 14px;
+    position: absolute;
+    text-align: center;
+    width: 200px;
+  }
+}
+
+.notice {
+  left: 50%;
+  position: fixed;
+  text-align: center;
+  top: 60px;
+  width: 200px;
+  z-index: 100;
+  .box-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+  .container {
+    border-width: 7px; 
+    border-style: solid; 
+    background-color: #ccc;
+    .border-radius(10px);
+    display: block;
+    left: -150px;
+    padding: 5px 14px;
+    position: absolute;
+    text-align: center;
+    width: 300px;
+    .msg {
+      font-size: 16px;
+    }
+  }
 }

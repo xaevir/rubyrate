@@ -1,5 +1,8 @@
 define(function(require) {
 
+
+require('spider-route')
+
 var SignupView = require('views/users/signup')
   , homeTpl = require('text!templates/home.mustache')
   , LoginView = require('views/users/login')         
@@ -84,7 +87,7 @@ return Backbone.Router.extend({
   routes: {
       'signup':                     'signup'
     , 'login':                      'login'
-    , 'profile/:username':          'profile'
+    , 'profile/:usernameBackbone.Router':          'profile'
     , 'profile/:username/edit':     'profile_edit'
     , 'wishes':                     'wishes' 
     , 'wishes/:id':                 'wish' 
@@ -93,6 +96,7 @@ return Backbone.Router.extend({
     , 'subjects':                   'subjects'
     , 'subjects/:id':               'subject'
     , 'lead/:id/:slug':             'lead'
+    , 'spider':                     'spider'
     , '*actions':                   'home'
     , 'admin':                      'admin'
     //'*actions': his    'defaultAction'
