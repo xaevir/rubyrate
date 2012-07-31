@@ -13,6 +13,7 @@ var LoginView = Backbone.View.extend({
   initialize: function(options){
     _.bindAll(this); 
     this.model = new Session();
+    this.user = options.user
     Backbone.Validation.bind(this);
     this.model.bind('validated:valid', this.post, this) 
     if (options.context == 'main')
@@ -33,18 +34,18 @@ var LoginView = Backbone.View.extend({
   },
 
   post: function(model){
-   var that = this
+   var self = this
    $.post('/login', model.toJSON(), function(data){
       if (data._id) {
-      window.user.set(data)
-      that.close()
+      self.user.set(data)
+      self.close()
       if (!this.passThru) {
         var router = new Backbone.Router()
         router.navigate('', true);
       }
     } 
     else {
-      that.renderErrorAlert()
+      self.renderErrorAlert()
     }
    }) 
   },

@@ -16,10 +16,10 @@ var MessageItem = Backbone.View.extend({
     var href = linkEl.attr("href");
   },
 
-
   initialize: function(options) {
     this.message = options.message
     this.truncate = options.truncate
+    this.user = options.user
     _.bindAll(this, 'render');
   },
 
@@ -28,11 +28,11 @@ var MessageItem = Backbone.View.extend({
     $(this.el).html(view.render().el)
  
     // add color if me 
-    var username = window.user.get('username')    
-    if (this.message.author == 'Me' )
+    var username = this.user.get('username')    
+    if (this.message.author == 'Me')
       $(this.el).addClass('colored')
 
-    if (window.user.get('role') == 'admin')
+    if (this.user.get('role') == 'admin')
       $(this.el).prepend('<div class="admin-options"><a href="/messages/'+this.message._id+'/edit">edit</a></div>')
 
     return this;
@@ -53,12 +53,13 @@ return  Backbone.View.extend({
 //    this.collection.bind('add', this.addOne, this)
     this.truncate = options.truncate
     this.messagesOfChat = options.messagesOfChat
+    this.user = options.user
   },
 
   addOne: function(message) {
     if (message.unread == true)
       this.unread() 
-    var opts = {message: message}
+    var opts = {message: message, user: this.user}
     if (this.truncate)
       opts.truncate = this.truncate
     var messageItem = new MessageItem(opts)

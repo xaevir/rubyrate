@@ -30,24 +30,16 @@ var AlertView = require('views/site/alert')
     submit: function (e) {
       e.preventDefault()
       var tArea = $('#textarea-modal')
-      if (tArea.val() == '') return
+      if (tArea.val() == '') 
+        return
       var params = this.$('form').serializeObject();
-      params.author = window.user.toJSON()
       var self = this
       $.post('/wishes', params, function(data){
         $('.modal-backdrop').remove();
         $('.modal').remove();
-        self.notice('Wish created')
+        AlertView.notice('Wish created')
         window.events.trigger("wishCreated-create_wish.js");
       }) 
-    },
-
-    notice: function(msg){
-      var successAlert = new AlertView({
-        message: '<strong>'+msg+'</strong>',
-        type: 'info',
-      })
-      successAlert.fadeOut()
     },
 
   });

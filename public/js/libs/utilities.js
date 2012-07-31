@@ -22,6 +22,12 @@ $.fn.center = function () {
     return this;
 }
 
+jQuery.fn.outerHTML = function(s) {
+    return s
+        ? this.before(s).remove()
+        : jQuery("<p>").append(this.eq(0).clone()).html();
+};
+
 var alertFallback = false;
   if (typeof console === "undefined" || typeof console.log === "undefined") {
     console = {};
@@ -34,10 +40,12 @@ var alertFallback = false;
   }
 }
 
-Backbone.Validation.configure({
-  forceUpdate: true
-});
+//Backbone.Validation.configure({
+//  forceUpdate: true
+//});
 
+
+// validation message when attr required
 Backbone.Validation.messages.required = 'required'
 
 _.extend(Backbone.Validation.callbacks, {
@@ -56,8 +64,6 @@ _.extend(Backbone.Validation.callbacks, {
       sibling.remove()
     el.after('<span class="error">' + error + '</span>')
   }
-
-
 })
 
 

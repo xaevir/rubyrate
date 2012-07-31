@@ -13,11 +13,12 @@ return Backbone.View.extend({
     _.bindAll(this, 'render');
     this.message = options.message
     this.truncate = options.truncate 
+    this.user = options.user
   },
 
   render: function() {
     var locals = this.message
-    var username = window.user.get('username')    
+    var username = this.user.get('username')    
 
     if (this.truncate && locals.body.length > this.truncate) 
         locals.body = locals.body.substr(0, this.truncate) + '...' 

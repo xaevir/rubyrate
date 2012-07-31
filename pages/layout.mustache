@@ -15,8 +15,8 @@
 
     <link rel="Shortcut Icon" href="/img/favicon.png">
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
-
+    
+    <script>var user = {{{user}}} </script>
     {{#development}}
       <script data-main="/js/main" src="/js/libs/require/require.js"></script>
       <script>
@@ -46,14 +46,14 @@
       <ul id="main-menu"> </ul>
       <ul id="user-menu"> </ul>
     </div>
-    <div class="container"> 
+    <div id="app-wrapper"> 
       <div id="app"></div>
-      <footer>
-        <div class="details">	
-          Copyright &copy;{{year}}
-          <br> ruby@rubyrate.com
-        </div>
-      </footer>
     </div>
+    <footer>
+      <div class="details">	
+        Copyright &copy;{{year}}
+        <br> ruby@rubyrate.com
+      </div>
+    </footer>
   </body>
 </html>

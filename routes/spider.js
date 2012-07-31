@@ -9,39 +9,10 @@ var Events = require('events').EventEmitter
 var events = new Events()
 
 
+function Spider(){}
+module.exports.Spider = Spider
 
-function getEmail(text) {
-  //example: t.s@d.com
-  pat = /[-a-zA-Z0-9._]+@[-a-zA-Z0-9_]+.[a-zA-Z0-9_.]+/g
-  var result = pat.match(emailPattern)
-  if (result)
-    return result
-  //example: <a href="mailto:t.s@d.com">
-  pat = /<a\s+href=\"mailto:([a-zA-Z0-9._@]*)\">/ig
-  var result = pat.match(emailPattern)
-  if (result)
-    return result
-  else return false
-}
-
-function extractName(name){
-    name = name.replace(/\d+\./i,'')
-    name = name.trim() 
-    return name
-}
-module.exports.extractName = extractName;
-
-var tempUrls = [
-  //var url = 'http://www.yelp.com/search?find_desc='+req.body.find_desc+'&find_loc='+req.body.zip
-  'http://localhost'
-] 
-
-var basicData;
-
-function doJsdom(body, fn) {
-}
-
-function getDomFromUrl(url, fn) {
+Spider.prototype.getDomFromUrl = function(url, fn){
   var headers = { 
     'accept': "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5",
     'accept-language': 'en-US,en;q=0.8',
@@ -77,142 +48,44 @@ function getDomFromUrl(url, fn) {
   })
 }
 
+function Yelp(){}
+module.exports.Yelp = Yelp
 
-exports.spider = function(data, socket){
-  doRequest('http://localhost/yelp', function(err, body){
-    doJsdom(body, function(err, $){
-      scrapeYelpFirst($)
-    })
-  })
+
+
+Yelp.prototype.setupEvents = function() {
   events.on('yelp first run done', function(res){
-    socket.emit('yelp first run', res) 
-    res.forEach(function(item) {
-      doRequest(item.href, function(err, body){
-        doJsdom(body, function(err, $){
-          var website = getWebsiteFromYelp($)
-          item.website = website     
-          socket.emit('got website from yelp', item)
-        })
-      })
+  })
+}
+
+Yelp.prototype.start = function(data, socket){
+  var spider = new Spider()
+  this.spider.getDomFromUrl('http://localhost/yelp', function(err, $){
+    getCompaniesFromYelp($, function(err, companies){
+      socket.emit('yelp first run', companies) 
+      events.emit('yelp first run done', res)
     })
   })
 }
 
 
-function getWebsiteFromYelp($){
-  var link = $('#bizUrl a').text()
-  return link
-}
-
-scrapeYelpFirst = function($) {
-  var res = []
+Yelp.prototype.getCompanies = function($, fn) {
+  var companies = []
+  var self = this
   $('.businessresult .itemheading a').each(function() {
     var a = $(this)
     var href = 'http://www.yelp.com'+ a.attr('href')
     var companyName = a.text()
-    var companyName = extractName(companyName)
-    res.push({companyName: companyName, href:href})
+    var companyName = self.formatCompanyName(companyName)
+    companies.push({companyName: companyName, href:href})
   });
-  events.emit('yelp first run done', res)
+  fn(null, companies)
+}
+
+Yelp.prototype.formatCompanyName = function(name) {
+  name = name.replace(/\d+\./i,'')
+  name = name.trim() 
+  return name
 }
 
 
-function doManyRequests(urls, fn) {
-  var bodies = []
-  urls.forEach(function(url){
-    doRequest(url, function(err, body){
-      bodies.push(body)
-    })
-  })
-  fn(null, bodies)
-}
-
-/*
-  var job =  new nodeio.Job({spoof: true}, {
-    input: data,
-    run: function(input) {
-      this.getHtml(input.href, function(err, $) {
-        if (err) 
-          return this.emit('<br>There was an error: '+err+'<br>address: '+input+'<br>')
-        try {
-          var linkNode = $('#bizUrl a')
-          var website = linkNode.text
-          console.log('website:'+ website)
-          this.emit(website)
-        }
-        catch(err) {
-          this.emit(err)
-        }
-      });
-    },
-  })
-  nodeio.start(job, function (err, output) {
-    fn(err, output)
-    return
-  }, true);
-};
-/*
-exports.getUrlFromYelp = function(data, fn) {
-  var job =  new nodeio.Job({spoof: true}, {
-    input: data,
-    run: function(input) {
-      this.getHtml(input.href, function(err, $) {
-        if (err) 
-          return this.emit('<br>There was an error: '+err+'<br>address: '+input+'<br>')
-        try {
-          var linkNode = $('#bizUrl a')
-          var website = linkNode.text
-          console.log('website:'+ website)
-          this.emit(website)
-        }
-        catch(err) {
-          this.emit(err)
-        }
-      });
-    },
-  })
-  nodeio.start(job, function (err, output) {
-    fn(err, output)
-    return
-  }, true);
-};
-*/
-
-
-/*
-exports.spider = function(req, res){
-  var url = 'http://www.yelp.com/search?find_desc='+req.body.find_desc+'&find_loc='+req.body.zip
-  var job =  new nodeio.Job(options, {
-    input: [url],
-    run: function(input) {
-      this.getHtml('http://savewaterproject.com/', function(err, $) {
-        if (err) this.exit(err);//Handle any request / parsing errors
-        var string = $('body').fulltext
-        var emails = getEmail(string)
-        if (emails) 
-          this.emit(emails);
-        else {
-          var output = new Array()
-          var links = $('a')
-          for (i=0; i < links.length; i++) {
-            var a = links[i]
-            var href = a.attribs.href
-            var pattern = /contact/i
-            if (pattern.test(href))
-              output.push(href)
-            //var url = input + href 
-            //this.add(url)
-            //url = url.split('#')[0] // remove location portion 
-            //if (url.match(/^http/) ) //and !isIndexed(url) 
-            this.emit(output);
-          } 
-        }
-      });
-    },
-  })
-  nodeio.start(job, function (err, output) {
-      console.log(output); 
-      res.send(output)
-  }, true);
-};
-*/

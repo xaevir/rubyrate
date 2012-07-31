@@ -4262,7 +4262,6 @@ h3 {
   font-family: arial, san-serif;
 }
 body {
-  background: url(/img/bg-blue.png) repeat-x top left;
   line-height: 1.3;
 }
 p {
@@ -4270,6 +4269,82 @@ p {
 }
 li {
   line-height: 1.3em;
+}
+#home #app {
+  background: url(/img/ruby.png) no-repeat 13px 27px;
+  min-height: 393px;
+}
+#home h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  color: #fff;
+  padding: 0 15px;
+}
+#home #content h2 {
+  float: left;
+  width: 370px;
+  font-size: 20px;
+  margin-left: 150px;
+  line-height: 1.3;
+  margin-top: 40px;
+}
+#home #content h3 {
+  float: left;
+  width: 370px;
+  font-size: 18px;
+  margin-left: 150px;
+  line-height: 1.3;
+  font-weight: normal;
+  margin-top: 0;
+}
+#home .home-form {
+  float: right;
+  width: 350px;
+  margin-bottom: 20px;
+}
+#home .home-form textarea {
+  height: 56px;
+}
+#home .home-form h2 {
+  width: 370px;
+  font-size: 20px;
+  line-height: 1.3;
+  margin-top: 40px;
+}
+#home .point-left {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 17px;
+  bottom: -25px;
+  display: block;
+  border-left: 25px solid #E73E36;
+  border-bottom: 25px solid #FFF;
+  /* IE fix */
+
+  border-bottom: 25px solid rgba(0, 0, 0, 0);
+  overflow: hidden;
+  /* IE fix */
+
+  z-index: 2;
+}
+#home .bubble {
+  margin-top: 23px;
+  margin-left: 133px;
+  background-color: #E73E36;
+  float: left;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  position: relative;
+}
+#home #app-wrapper {
+  width: 940px;
+  margin: 0 auto;
+  border: 5px solid #E73E36;
+  border: 10px solid #000;
 }
 #contact p {
   font-family: 'Ovo', serif;
@@ -4285,21 +4360,10 @@ li {
 }
 #main-nav {
   *zoom: 1;
-  width: 700px;
+  width: 940px;
   margin: 0 auto;
-  background-color: #f8f8f8;
-  background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -ms-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: -o-linear-gradient(top, #ffffff, #eeeeee);
-  background-image: linear-gradient(top, #ffffff, #eeeeee);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  -webkit-border-radius: 0 0 6px 6px;
-  -moz-border-radius: 0 0 6px 6px;
-  border-radius: 0 0 6px 6px;
+  margin-bottom: 20px;
+  margin-top: 10px;
   padding: 0 10px;
 }
 #main-nav:before,
@@ -4314,15 +4378,16 @@ li {
 #main-nav #user-menu {
   list-style: none;
   margin: 0;
-  margin-top: 7px;
+  margin-top: 5px;
   float: left;
 }
-#main-nav #main-menu li,
-#main-nav #user-menu li {
+#main-nav #main-menu > li,
+#main-nav #user-menu > li {
   float: left;
 }
-#main-nav #main-menu li a,
-#main-nav #user-menu li a {
+#main-nav #main-menu > li a,
+#main-nav #user-menu > li a {
+  color: #777;
   padding: 10px;
   display: block;
 }
@@ -4345,8 +4410,8 @@ li {
   text-shadow: none;
   color: transparent;
   background-color: transparent;
-  width: 174px;
-  height: 45px;
+  width: 182px;
+  height: 43px;
   margin: 0 auto;
   padding: 0 20px 0 0;
   display: block;
@@ -4388,15 +4453,11 @@ footer .details {
 }
 .small-content {
   padding: 50px;
-  -webkit-box-shadow: 0 0px 1px rgba(0, 0, 0, 0.35);
-  -moz-box-shadow: 0 0px 1px rgba(0, 0, 0, 0.35);
-  box-shadow: 0 0px 1px rgba(0, 0, 0, 0.35);
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  background-color: #F9F9F9;
   margin-top: 30px;
-  border: 10px solid #EEE;
+  border: 10px solid #000;
 }
 .body-content-small {
   min-height: 20px;
@@ -4430,6 +4491,8 @@ footer .details {
   box-shadow: 0 0px 5px 1px #b8b8b8;
 }
 #app {
+  margin: 0 auto;
+  width: 940px;
   *zoom: 1;
 }
 #app:before,
@@ -4465,6 +4528,8 @@ form .btn {
 form span.error {
   color: #b94a48;
   display: block;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 .loading {
   background: #eeeeee url(/img/spinner.gif) 5px 50% no-repeat;

@@ -3,7 +3,7 @@ define(function(require) {
 var hogan = require('libs/hogan.js/web/builds/2.0.0/hogan-2.0.0.min.amd')
 
 
-return Backbone.View.extend({
+var AlertView = Backbone.View.extend({
 
   className: 'alert',
 
@@ -13,7 +13,7 @@ return Backbone.View.extend({
 
   initialize: function(options){
     _.bindAll(this, 'fadeOut', 'render') 
-    this.message = options.message
+    this.message = options.message || undefined
     this.type = options.type
     this.container = options.container
     this.render() 
@@ -43,6 +43,19 @@ return Backbone.View.extend({
     }, 3000);
   },
 
+
+
+
 });
+
+AlertView.notice = function(msg){
+  var successAlert = new AlertView({
+    message: '<strong>'+msg+'</strong>',
+    type: 'info',
+  })
+  successAlert.fadeOut()
+}
+
+return AlertView
 
 });

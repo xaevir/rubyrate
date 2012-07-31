@@ -34,7 +34,7 @@ return Backbone.View.extend({
       var el = $("td:contains("+data.href+")", self.el).css("text-decoration", "underline");
       $(el).animate({ backgroundColor: "yellow" }, 1000)  , function(){
         $(el).animate({ backgroundColor: "#68BFEF" }, 500);
-      });
+      };
       $(el).text(data.href)
     })
    
