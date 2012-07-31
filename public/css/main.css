@@ -4270,7 +4270,7 @@ p {
 li {
   line-height: 1.3em;
 }
-#home #app {
+#home {
   background: url(/img/ruby.png) no-repeat 13px 27px;
   min-height: 393px;
 }
@@ -4339,12 +4339,6 @@ li {
   border-radius: 10px;
   padding: 10px;
   position: relative;
-}
-#home #app-wrapper {
-  width: 940px;
-  margin: 0 auto;
-  border: 5px solid #E73E36;
-  border: 10px solid #000;
 }
 #contact p {
   font-family: 'Ovo', serif;

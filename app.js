@@ -27,6 +27,8 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
 
 var app = express();
 
+//app.settings.env = 'production'
+
 app.engine('mustache', cons.hogan);
 
 app.configure(function(){
