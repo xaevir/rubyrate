@@ -13,26 +13,17 @@ return Backbone.View.extend({
     "click a:not([href^='#'])": "pushState",
   },
 
-  initialize: function(){
+  initialize: function(user){
     _.bindAll(this, 'render') 
+    this.user = user
   },
 
-  preventDefault: function(e) {
-    e.preventDefault() 
-  },
-
-  pushState: function(e) {
-    var linkEl = $(e.currentTarget);
-    var href = linkEl.attr("href");
-    var router = new Backbone.Router();
-    router.navigate(href.substr(1), true)
-  },
 
   render: function() {
     var mainMenu = new MainMenu({ el: this.$("#main-menu") });
     mainMenu.render()
-    var userMenu = new UserMenu({ el: this.$("#user-menu") });
-    userMenu.render()
+//    var userMenu = new UserMenu({ el: this.$("#user-menu") });
+//    userMenu.render()
   },
 
 })

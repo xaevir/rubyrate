@@ -4,15 +4,15 @@ define(function(require) {
 
     idAttribute: "_id",
 
-    validation: {
-      _id:        {required: true},
-      username:   {required: true}
-    },
+    url: '/user',
 
     isLoggedIn: function(){
-       return Boolean(this.get("username"))
-    }  
+      return Boolean(this.get("username"))
+    }, 
 
+    parse: function(res){
+    
+    },
 
   })
 

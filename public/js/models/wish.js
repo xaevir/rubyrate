@@ -1,3 +1,9 @@
+if (typeof exports === 'object' && typeof define !== 'function') {
+  define = function (factory) {
+    module.exports = factory(require, exports, module);
+  };
+}
+
 define(function(require) {
 
   var Wish = Backbone.Model.extend({
@@ -13,9 +19,9 @@ define(function(require) {
     validation: {
       author:      {required: true},
       body:        {required: true},
-      //postal_code: {required: true},
-      //urgence:     {required: true}
+      location:    {required: true},
     }
+
   })
 
   return Wish

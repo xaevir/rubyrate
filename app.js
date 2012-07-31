@@ -8,9 +8,16 @@ var express = require('express')
   , imagemagick = require('imagemagick')
   , check = require('validator').check
   , sanitize = require('validator').sanitize
-  , _ = require('underscore')
   , nodemailer = require("nodemailer")
-  , spider = require('./routes/spider')
+  , Spider = require('./routes/spider')
+ 
+
+// setup Backbone models    
+Backbone = require('backbone')
+_ = require('underscore')
+var Validation = require('./public/js/libs/backbone.validation/backbone.validation.js')
+_.extend(Backbone.Model.prototype, Backbone.Validation.mixin);
+var NewUser = require('./public/js/models/newUser')
 
 var staticServer = express.static(__dirname + '/public')
 
@@ -105,20 +112,24 @@ app.get('/img/*', function(req, res, next) {
   staticServer(req, res, next)  
 })
 
+app.get('/browser/*', function(req, res, next) {
+  var staticServer = express.static(__dirname + '/test')
+  staticServer(req, res, next)  
+
+})
+
 app.get('/fonts/*', function(req, res, next) {
   staticServer(req, res, next)  
 })
 
-
-
 //app.post('/scraper', loadUser, andRestrictTo('admin'), routes.scraper)
 //app.post('/*', loadUser, andRestrictTo('admin'), routes.scraper)
-
 
 /* force xhr */
 app.get('/*', function(req, res, next) { 
   if (!(req.xhr)) {
     var locals = { year: new Date().getFullYear() }
+    locals.user = req.session.user ? JSON.stringify(req.session.user) : JSON.stringify({})
     if (app.settings.env == 'development') 
       locals.development = true  
     res.render('layout', locals)
@@ -148,7 +159,7 @@ app.get('/user', function(req, res){
   res.send(req.session.user) 
 })
 
-function setUser(req, user){
+function setUserSession(req, user){
   var userOmittedData = {
     _id: user._id,
     username: user.username,
@@ -182,13 +193,13 @@ app.post('/login', function(req, res) {
     bcrypt.compare(req.body.password, user.password, function(err, match) {
       if (!match) 
         return res.send({message: 'user not found'});
-      var userData = setUser(req, user)
+      var userData = setUserSession(req, user)
       res.send(userData)
     })
   })
 })
 
-app.del('/session', function(req, res) {
+app.del('/user', function(req, res) {
   req.session.destroy(function(){
     res.send({success: true, 
               message: 'user logged out'
@@ -199,29 +210,36 @@ app.del('/session', function(req, res) {
 
 app.get('/signup', function(req, res) { });
 
-app.post('/signup', function(req, res){ 
-  // slug 
-  req.body.slug = req.body.username.replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
-  req.body.email = req.body.email.toLowerCase() 
-  bcrypt.genSalt(10, function(err, salt){
-    bcrypt.hash(req.body.password, salt, function(err, hash){
-      req.body.password = hash;
-      db.collection('users').insert(req.body, function(err, result){
-        var user = result[0]
-        var userData = setUser(req, user)
+app.post('/user', function(req, res){ 
+  var user = new NewUser(req.body)
+  var errors = user.validate()
+  if (errors) 
+    res.send({success: false, errors: errors})
+  else {
+    user.setPassword(function(){
+      db.collection('users').insert(user.toJSON(), function(err, result){
+        var userData = setUserSession(req, result[0])
         res.send(userData);
       })
     })
-  }) 
+  }
 })
 
-app.get("/is-username-valid", function(req, res) {
-  var username = req.query.username
-  username = username.toLowerCase()
+function isUniqueUsername(username, fn) {
+  var username = username.toLowerCase()
   db.collection('users').findOne({username: username}, function(err, user){
-    return user 
-      ? res.send(false) 
-      : res.send(true);
+    if (user)
+      fn(false)
+    else 
+      fn(true)
+  })
+}
+module.exports.isUniqueUsername = isUniqueUsername
+
+app.get("/is-unique-username", function(req, res) {
+  var username = req.query.username
+  isUniqueUsername(username, function(isUnique){
+    res.send(isUnique)
   })
 })
 
@@ -274,10 +292,18 @@ function makeShortId() {
   return text;
 }
 
+app.post('/wishes-home', function(req, res) {
+  req.body.shortId = makeShortId() 
+  req.body.users = [{
+    username: req.body.author, 
+  }]
+  db.collection('subjects').insert(req.body, function(err, id){
+    if (err) throw err;
+    res.send({success: true, message: 'wish inserted'})
+  })
+});
+
 app.post('/wishes', loadUser, function(req, res) {
-  //slug
-  
-  // str = sanitize(large_input_str).xss();
   req.body.shortId = makeShortId() 
   req.body.author = req.user.username
   req.body.authorSlug = req.user.slug
@@ -293,7 +319,7 @@ app.post('/wishes', loadUser, function(req, res) {
 app.get('/lead/:id/:slug', function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
     db.users.findOne({'slug': req.params.slug}, function(err, user){
-      setUser(req, user)
+      setUserSession(req, user)
       db.messages.find({
                       subject_id: subject._id.toHexString(), 
                       label: 'first', 
@@ -302,7 +328,7 @@ app.get('/lead/:id/:slug', function(req, res) {
         var userInArray = _.find(subject.users, function(u){ 
           if (u.username == user.username) return u 
         });
-        db.messages.find({convo_id: userInArray.convo_id}).toArray(function(err, messages) {
+        db.messages.find({convo_id: userInArray.convo_id}).sort({_id:1}).toArray(function(err, messages) {
           res.send({
                   subject: subject, 
                   otherMessages: otherMessages,
@@ -323,7 +349,7 @@ app.get('/helper/:id', function(req, res) {
     email({subject: 'Somebody checked out the special page', html: html})
 
     db.users.findOne({'username': subject.author}, function(err, user){
-      setUser(req, user)
+      setUserSession(req, user)
       var subject_id = subject._id.toHexString() 
 
         function map() {
@@ -629,6 +655,7 @@ server.listen(app.get('port'), function(){
 
 io.sockets.on('connection', function (socket) {
   socket.on('start scraper', function (data) {
+    var spider = new Spider()
     spider.spider(data, socket)
   });
 })

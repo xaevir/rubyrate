@@ -3,111 +3,39 @@ define(function(require) {
 var tpl = require('text!templates/users/signup.html')
   , AlertView = require('views/site/alert')
 
-require('libs/jquery-validation/jquery.validate')  
-
-$.validator.addMethod("alphanumeric", function(value, element) {
-    return this.optional(element) || /^[a-z0-9_\-\s]+$/i.test(value);
-}, "Username must contain only letters, numbers, dashes, underscores, or spaces.");
-
-$.validator.addMethod("singleSpace", function(value, element) {
-    return this.optional(element) || !(/\s{2,}/g.test(value));
-}, "Username must contain only single spaces.");
-
-
-$.validator.addMethod("uniqueUsername", function(value, element) {
-   var isSuccess = false;
-
-   $.ajax({ url: "/is-username-valid", 
-            data: {username: value}, 
-            async: false, 
-            success: 
-                function(res) { isSuccess = res === true ? true : false }
-          });
-    return isSuccess;
-}, "Please try another username. This one is taken.");
-
-
-$.validator.addMethod("uniqueEmail", function(value, element) {
-   var isSuccess = false;
-
-   $.ajax({ url: "/check-email", 
-            data: {email: value}, 
-            async: false, 
-            success: 
-                function(res) { isSuccess = res === true ? true : false }
-          });
-    return isSuccess;
-}, "This email is already taken. Please try another.");
-
-var validationRules = {
-  username: {
-    required: true,
-    minlength: 2,
-    maxlength: 60,
-    alphanumeric: true,
-    singleSpace: true,
-    uniqueUsername: true,
-  },
-  email: {
-    email: true,
-    uniqueEmail: true,
-  },
-  password: {
-    required: true,
-    minlength: 6 
-  },
-}
-
-var errorMessages = {
-  username: {
-    required: 'Please enter a username',
-    minlength: $.format("Enter at least {0} characters"),
-    maxlength: $.format("Please enter no more than {0} characters."),
-    alphanumeric: 'A username must contain only letters, numbers, or dashes.',
-    //remote: $.validator.format("{0} is taken. Please try another."),
-  },
-  email: {
-    required: 'Please enter an email',
-    email: "Please enter a valid email address.",
-    uniqueEmail: 'That email is already taken',
-  },
-  password: {
-    required: 'Please enter a password',
-    minlength: $.format("Enter at least {0} characters")
-  }
-}
-
 return Backbone.View.extend({
 
   initialize: function(options){
-    _.bindAll(this, 'render', 'submitHandler', 'xhr'); 
+    _.bindAll(this); 
+    this.user = options.user 
+    Backbone.Validation.bind(this);
     this.context = options.context
     if (options.context == 'main')
-      this.el = $('<div class="span3 offset4 small-content">');
+      $(this.el).addClass('span3 offset4 small-content')
     if (options.passThru)          
       this.passThru = options.passThru
   },
 
+  events: {
+    'submit form' : 'submit'
+  },
+
   render: function(){
     $(this.el).html(tpl);
-    // validate
-    var form = $('form', this.el); 
-    $(form).validate({
-        rules: validationRules,
-        messages: errorMessages,
-        submitHandler: this.submitHandler, 
-    });
     return this; 
   },
 
-  submitHandler: function(){
-    var params = $('form', this.el).serializeObject();
-    window.user.url = '/signup'
-    window.user.save(params, {success: this.xhr, wait: true})
+  submit: function(e) {
+    e.preventDefault()
+    var params = this.$('form').serializeObject();
+    var result = this.model.set(params)
+    if (result !== false)
+      $.post('/user', result.toJSON(), this.xhr_callback) // setting auto slug on model so use toJSON
   },
 
-  xhr: function(model, res, xhr){
-    if (model.id) {
+  xhr_callback: function(res){
+    if (res._id) {
+      this.user.set(res)
       this.renderSuccessMessage()
       if (!this.passThru) {
         router = new Backbone.Router();
