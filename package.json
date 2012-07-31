@@ -25,5 +25,6 @@
     , "mocha": "*" 
     , "sinon-chai": "*"
     , "sinon": "*"
+    , "request": "*"
   }
 }
