@@ -1,4 +1,5 @@
 define(function(require) {
+  require('order!libs/socket.io/socket.io')  
   require('order!libs/jquery/jquery-min')
   require('order!libs/underscore/underscore')
   require('order!libs/backbone/backbone')
@@ -12,7 +13,6 @@ define(function(require) {
   require('order!libs/jquery-iframe-transport/jquery.iframe-transport')  
   require('order!libs/bootstrap-wysihtml5/lib/js/wysihtml5-0.3.0')  
   require('order!libs/bootstrap-wysihtml5/src/bootstrap-wysihtml5')  
-  require('order!libs/socket.io/socket.io')  
   require('order!libs/jquery-color/jquery.color')  
   var App = require('order!app')
                                                 
