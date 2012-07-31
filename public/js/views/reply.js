@@ -25,6 +25,7 @@ var ReplyView = Backbone.View.extend({
 
   initialize: function(options) {
     _.bindAll(this)
+    this.user = options.user
     this.context = options.context
     this.subject_id = options.subject_id
     this.convo_id = options.convo_id
@@ -99,7 +100,7 @@ var ReplyView = Backbone.View.extend({
     if (tArea.val() == '') return
     var self = this
     var data = {}
-    data.author = window.user.get('username'),
+    data.author = this.user.get('username'),
     data.subject_id = this.subject_id,
     data.body =  tArea.val() 
     

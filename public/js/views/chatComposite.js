@@ -21,6 +21,7 @@ return Backbone.View.extend({
 
   initialize: function(options) {
     _.bindAll(this)
+    this.user = options.user
     if (options && options.noReply)
       this.noReply = options.noReply
     if (options && options.bigTextarea)
@@ -37,7 +38,7 @@ return Backbone.View.extend({
 
   renderReplyForm: function(e){
     e.preventDefault()
-    if (!window.user.isLoggedIn()) return new RestrictedView().render()  
+    if (!this.user.isLoggedIn()) return new RestrictedView().render()  
     //this.replyView = new ReplyView({subject_id: this.subject_id, context: this.context, parentView: this})
     this.replyView.render()
     $(this.el).append(this.replyView.el)

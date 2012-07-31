@@ -1,6 +1,7 @@
 define(function(require) {
 
 var tpl = require('text!templates/wishes/wish-homepage.html')
+  , thankyouTpl = require('text!templates/wish_thankyou.html')
   , Wish = require('models/wish') 
   , AlertView = require('views/site/alert')       
 
@@ -36,7 +37,7 @@ return Backbone.View.extend({
   },
 
   onSync: function(){
-    AlertView.notice('Wish created')
+    AlertView.notice(thankyouTpl)
     var router = new Backbone.Router();
     router.navigate('wishes', {trigger: true}) 
   }

@@ -168,12 +168,13 @@ AppRouter.prototype.subject = function(id) {
     // body
     var views = []
     _.each(res.conversations, function(convo){
-      var chatCompositeView = new ChatCompositeView()
+      var chatCompositeView = new ChatCompositeView({user: self.user})
       chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: self.user})
       var opts = {
         convo_id: convo._id,
         subject_id: convo.value.comments[0].subject_id,
-        parentView: chatCompositeView
+        parentView: chatCompositeView,
+        user: self.user
       }
       chatCompositeView.replyView = new ReplyView(opts)
       views.push(chatCompositeView);
@@ -194,12 +195,13 @@ AppRouter.prototype.wishes = function(e) {
     var views = []
     _.each(wishes, function(wish){
       var subject_id = wish[0]._id
-      var chatCompositeView = new ChatCompositeView({bigTextarea: true})
+      var chatCompositeView = new ChatCompositeView({bigTextarea: true, user: self.user})
       chatCompositeView.messagesView = new MessagesView({messagesOfChat: wish, truncate: 200, user: self.user})
       chatCompositeView.replyView = new ReplyView({subject_id: subject_id, 
                                                    parentView: chatCompositeView, 
                                                    context: 'wish',
-                                                   bigTextarea: true})
+                                                   bigTextarea: true,
+                                                   user: self.user})
       $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
       // change to user.role =admin
 
@@ -223,12 +225,13 @@ AppRouter.prototype.wish = function(id) {
     // body
     var views = []
     _.each(res.conversations, function(convo){
-      var chatCompositeView = new ChatCompositeView({noReply: true})
+      var chatCompositeView = new ChatCompositeView({noReply: true, user: self.user})
       chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: self.user})
       var opts = {
         convo_id: convo._id,
         subject_id: convo.value.comments[0].subject_id,
-        parentView: chatCompositeView
+        parentView: chatCompositeView,
+        user: self.user
       }
       chatCompositeView.replyView = new ReplyView(opts)
       views.push(chatCompositeView);
@@ -257,12 +260,13 @@ AppRouter.prototype.lead = function(id, slug) {
     var header = '<h2 style="float:left;margin-right: 10px">Your convo with this wish:</h2><h1>'+ res.subject.body+'</h1>'
     $('#app').append(header);
     // Convo 
-    var chatCompositeView = new ChatCompositeView({id:'lead-chat'})
+    var chatCompositeView = new ChatCompositeView({id:'lead-chat', user: self.user})
     chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.messages, user: self.user})
     var opts = {
       convo_id: res.messages[0].convo_id,
       subject_id: res.messages[0].subject_id,
-      parentView: chatCompositeView
+      parentView: chatCompositeView,
+      user: self.user
     }
     chatCompositeView.replyView = new ReplyView(opts)
     var html = chatCompositeView.render().el
@@ -274,12 +278,13 @@ AppRouter.prototype.lead = function(id, slug) {
 
     var views = []
     _.each(res.otherMessages, function(message){
-      var chatCompositeView = new ChatCompositeView({noReply: true})
+      var chatCompositeView = new ChatCompositeView({noReply: true, user: self.user})
       chatCompositeView.messagesView = new MessagesView({messagesOfChat: message, user: self.user})
       var opts = {
         convo_id: message._id,
         subject_id: message.subject_id,
-        parentView: chatCompositeView
+        parentView: chatCompositeView,
+        user: self.user
       }
       chatCompositeView.replyView = new ReplyView(opts)
       views.push(chatCompositeView);
@@ -313,12 +318,13 @@ AppRouter.prototype.helper = function(id) {
     // body
     var views = []
     _.each(res.conversations, function(convo){
-      var chatCompositeView = new ChatCompositeView()
+      var chatCompositeView = new ChatCompositeView({user: self.user})
       chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: self.user})
       var opts = {
         convo_id: convo._id,
         subject_id: convo.value.comments[0].subject_id,
-        parentView: chatCompositeView
+        parentView: chatCompositeView,
+        user: self.user
       }
       chatCompositeView.replyView = new ReplyView(opts)
       views.push(chatCompositeView);
@@ -423,18 +429,6 @@ AppRouter.prototype.signup = _.wrap(function(){
   AppRouter.prototype.alreadyLoggedIn
 ),
 
-
-
-
-
-/*
-AppRouter.prototype.logout = function(){
-  window.user.destroy({success: function(){
-    var router = new Backbone.Router();
-    router.navigate('login', {trigger: true})
-  }})
-}
-*/
 AppRouter.prototype.highlight = function(route, section) {
   route = route.replace('route:', '/');
   if (route === '/home') route = '/' 
