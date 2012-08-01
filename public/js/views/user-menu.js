@@ -18,7 +18,7 @@ return Backbone.View.extend({
     this.model.on('change', this.render, this); 
     this.model.on('destroy', this.clear, this)
   },
-
+  
   preventDefault: function(e) {
     e.preventDefault() 
   },
@@ -39,7 +39,7 @@ return Backbone.View.extend({
   },
 
   clear: function(model) {
-    model.clear({silent: true})// otherwise fires calls set and validates 
+    model.clear()// otherwise fires calls set and validates 
     this.render()
   },
 

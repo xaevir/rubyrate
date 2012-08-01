@@ -37,7 +37,7 @@ var AlertView = require('views/site/alert')
       $.post('/wishes', params, function(data){
         $('.modal-backdrop').remove();
         $('.modal').remove();
-        AlertView.notice('Wish created')
+        new AlertView('Wish created')
         window.events.trigger("wishCreated-create_wish.js");
       }) 
     },

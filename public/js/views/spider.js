@@ -3,7 +3,6 @@ define(function(require) {
 var tpl = require('text!templates/spider.mustache')
   , AlertView = require('views/site/alert')         
   , basicTpl = require('text!templates/spider/basic.mustache')
-  , AlertView = require('views/site/alert')
 
 return Backbone.View.extend({
   
@@ -18,9 +17,6 @@ return Backbone.View.extend({
 
   initialize: function(options){
     _.bindAll(this); 
-
-
-
     this.socket = io.connect();
     var self = this
     this.socket.on('yelp first run', function(data) {
@@ -37,9 +33,6 @@ return Backbone.View.extend({
       };
       $(el).text(data.href)
     })
-   
-
-
   },
 
   render: function(){

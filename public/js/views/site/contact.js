@@ -16,7 +16,7 @@ return Backbone.View.extend({
     _.bindAll(this); 
     this.model = new Contact()
     Backbone.Validation.bind(this)
-    this.model.on('sync', this.notice, this) 
+    this.model.on('sync', function(){new AlertView('Thank you for the message.')}) 
     this.model.on('sync', this.render, this) 
   },
 
@@ -30,15 +30,6 @@ return Backbone.View.extend({
     var params = this.$('form').serializeObject();
     this.model.save(params);
   },
-
-  notice: function(){
-    var successAlert = new AlertView({
-      message: '<strong>Thank you for the message.</strong>',
-      type: 'info'
-    })
-    successAlert.fadeOut()
-  },
-
 });
 
 

@@ -11,7 +11,7 @@ return Backbone.View.extend({
     Backbone.Validation.bind(this);
     this.context = options.context
     if (options.context == 'main')
-      $(this.el).addClass('span3 offset4 small-content')
+      $(this.el).addClass('small-content')
     if (options.passThru)          
       this.passThru = options.passThru
   },
@@ -36,7 +36,7 @@ return Backbone.View.extend({
   xhr_callback: function(res){
     if (res._id) {
       this.user.set(res)
-      this.renderSuccessMessage()
+      new AlertView('Thank you for signing up!')
       if (!this.passThru) {
         router = new Backbone.Router();
         router.navigate('/', true)
@@ -44,14 +44,6 @@ return Backbone.View.extend({
     } 
   },
 
-  renderSuccessMessage: function(){
-    var alertView = new AlertView({
-      message: '<strong>Thank you for signing up!</strong>',
-      type: 'success',
-    });
-    alertView.fadeOut()
-
-  }
 });
 
 

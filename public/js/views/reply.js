@@ -111,24 +111,20 @@ var ReplyView = Backbone.View.extend({
 
     $.post(url, data, function(res) {
       //self.collection.add(res.data)
-      var msg =  '<span class="big">'
-          msg +=  '<p>Hello,</p>'
+      var msg  = '<p>Hello,</p>'
           msg += '<p>Thank you for your message. '
           msg += 'It may take some time before we get a reply. ' 
           msg += 'However as soon as we do we will, we will contact you.</p>'
           msg += '<p>Thank you,<br>'
           msg += 'Ruby</p>'
-          msg += '</span>'
 
       var shortMsg = 'Message sent'
 
-
       if (window.firstNoticeShowed == undefined) {
-        self.notice(msg)
+        new AlertView({message: msg, duration: 5000, type:"letter", wrapperClass: 'letterWrapper'}) 
         window.firstNoticeShowed = true
-      } else {
-        self.notice(shortMsg)
-      }
+      } else 
+        new AlertView(shortMsg)
       //self.render()
       self.parentView.closeReplyForm()
       $('#textarea-modal').val('')
@@ -138,17 +134,6 @@ var ReplyView = Backbone.View.extend({
     //  this.parentView.closeReplyForm() 
     });
   },
-
-  notice: function(msg){
-    var successAlert = new AlertView({
-      message: msg,
-      type: 'info',
-      container: $('#app') 
-    })
-    successAlert.fadeOut()
-  },
-
-
 })
 
 return ReplyView

@@ -4,7 +4,7 @@ var tpl = require('text!templates/users/login.html')
   , Session = require('models/session') 
   , AlertView = require('views/site/alert')         
 
-var LoginView = Backbone.View.extend({
+return Backbone.View.extend({
 
   events: {
     'submit form' : 'submit'
@@ -15,9 +15,8 @@ var LoginView = Backbone.View.extend({
     this.model = new Session();
     this.user = options.user
     Backbone.Validation.bind(this);
-    this.model.bind('validated:valid', this.post, this) 
     if (options.context == 'main')
-      $(this.el).addClass('span3 offset4 small-content')
+      $(this.el).addClass('small-content')
     if (options.passThru)          
       this.passThru = options.passThru
   },
@@ -30,52 +29,32 @@ var LoginView = Backbone.View.extend({
   submit: function(e) {
     e.preventDefault()
     var params = this.$('form').serializeObject();
-    this.model.set(params)
+    this.model.save(params, {success: this.xhr_callback})
   },
 
-  post: function(model){
-   var self = this
-   $.post('/login', model.toJSON(), function(data){
-      if (data._id) {
-      self.user.set(data)
-      self.close()
-      if (!this.passThru) {
-        var router = new Backbone.Router()
-        router.navigate('', true);
-      }
-    } 
-    else {
-      self.renderErrorAlert()
+  xhr_callback: function(model, res){
+    if (res.success === false)
+      return this.renderError()
+    this.user.set(res)
+    // display hello and remove error
+    this.remove() 
+    new AlertView('Hello')
+    if (!this.passThru) {
+      var router = new Backbone.Router()
+      router.navigate('', true);
     }
-   }) 
   },
 
-  renderErrorAlert: function(){
+  renderError: function(){
     if (this.happened) return  
     this.happened = true 
-    this.errorAlert = new AlertView({
-      message: '<strong>Heads Up!</strong> Please check your email or password',
-      type: 'error'
-    }) 
-  },
-
-  close: function(){
-    this.remove()
-    if (this.errorAlert)
-      this.errorAlert.remove()
-    this.alertIntoNextView() 
-  },
-
-  alertIntoNextView: function(){
-    var successAlert = new AlertView({
-      message: '<strong>Hello</strong>',
-      type: 'info'
+    new AlertView({
+      message: 'Heads Up! Please check your email or password', 
+      type: 'error', 
+      doNotFadeOut: true,
+      doNotStickAround: true
     })
-    successAlert.fadeOut()
-  }
-
+  },
 });
-
-  return LoginView;
 
 });

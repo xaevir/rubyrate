@@ -7,8 +7,8 @@ return Backbone.View.extend({
   className: 'chat-composite',
 
   events: {
+    "click a:not(.reply)": "pushState",
     'click .reply' : 'renderReplyForm',
-    'click .view-reply' : 'pushState',
   },
 
   pushState: function(e) {
