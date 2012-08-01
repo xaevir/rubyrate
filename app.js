@@ -172,7 +172,7 @@ function setUserSession(req, user){
   return userOmittedData
 }
 
-app.post('/login', function(req, res) {
+app.post('/session', function(req, res) {
 
   function isEmailorUsername(){
     var key
@@ -191,10 +191,10 @@ app.post('/login', function(req, res) {
 
   db.collection('users').findOne(spec, function(err, user){
     if (!user)
-      return res.send({message: 'user not found'});
+      return res.send({success: false, message: 'user not found'});
     bcrypt.compare(req.body.password, user.password, function(err, match) {
       if (!match) 
-        return res.send({message: 'user not found'});
+        return res.send({success: false, message: 'user not found'});
       var userData = setUserSession(req, user)
       res.send(userData)
     })

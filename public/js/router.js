@@ -21,6 +21,7 @@ var SignupView = require('views/users/signup')
   , User = require('models/user')
   , NewUser = require('models/newUser')
   , MainMenu = require('views/main-menu')         
+  , Spider = require('views/spider')         
 
 function showStatic(path) {
   $.get(path, function(obj) {
@@ -57,8 +58,8 @@ var AppRouter = Backbone.Router.extend({
 
   initialize: function() {
     _.bindAll(this); 
+    this.setup()
     this.on('all', this.highlight)
-    this.getUser()
     window.events = _.clone(Backbone.Events)
     window.dispatcher.on('session:logout', this.logout, this)
     this.router = new Backbone.Router()
@@ -78,7 +79,7 @@ var AppRouter = Backbone.Router.extend({
       'signup':                     'signup'
     , 'login':                      'login'
     , 'how-it-works':               'how_it_works'
-    , 'profile/:usernameBackbone.Router':          'profile'
+    , 'profile/:username':          'profile'
     , 'profile/:username/edit':     'profile_edit'
     , 'wishes':                     'wishes' 
     , 'wishes/:id':                 'wish' 
@@ -90,7 +91,7 @@ var AppRouter = Backbone.Router.extend({
     , 'spider':                     'spider'
     , '':                           'home'
     , 'admin':                      'admin'
-    , '*actions':                     'notFound'
+    , '*actions':                   'notFound'
   },
 }) 
 
@@ -98,21 +99,10 @@ AppRouter.prototype.notFound = function(){
   $('#app').html('<h1>404: This url was not found</h1>')
 }
 
-AppRouter.prototype.getUser = function(){
-  var user = new User(window.user) 
-  this.user = user
-  var mainMenu = new MainMenu({ el: $("#main-menu"), user: user});
-  mainMenu.render()
-  var userMenu = new UserMenu({ el: $("#user-menu"), model: user})
-  userMenu.render()
-  // logo click
-  $("#main-nav .brand").click(function(e) {
-    e.preventDefault() 
-    var linkEl = $(e.currentTarget);
-    var href = linkEl.attr("href");
-    var router = new Backbone.Router();
-    router.navigate(href.substr(1), true)
-  });
+AppRouter.prototype.setup = function(){
+  this.user = new User(window.user) 
+  new MainMenu({ el: $("#main-menu"), user: this.user}).render()
+  new UserMenu({ el: $("#user-menu"), model: this.user}).render()
 }
 
 AppRouter.prototype.reset = function(route, section) {
@@ -133,7 +123,7 @@ AppRouter.prototype.how_it_works = function() {
 }
 
 AppRouter.prototype.spider = function(){
-  this.view = new View({context: 'main'})
+  this.view = new Spider({context: 'main'})
   this.view.render()
   $('#app').html(this.view.el)
   document.title = 'Spider'
@@ -361,9 +351,9 @@ AppRouter.prototype.wish_setup = function(id) {
 }
 
 AppRouter.prototype.profileMenu = function(userSlug){
-  if (window.user.isLoggedIn()){ 
-    if (window.user.get('slug') == userSlug){
-      this.profileMenuView = new ProfileMenuView()
+  if (this.user.isLoggedIn()){ 
+    if (this.user.get('slug') == userSlug){
+      this.profileMenuView = new ProfileMenuView({user: this.user})
       var template = this.profileMenuView.render().el
       $('#main-menu').after(template)
     }
@@ -386,8 +376,9 @@ AppRouter.prototype.reset_profile = function(){
 }
 
 AppRouter.prototype.profile_edit = function(username){
+  var self = this
   $.get('/profile/'+username+'/edit', function(user) {
-    var view = new ProfileEditView()
+    var view = new ProfileEditView({user: self.user})
     $('#app').html(view.render(user).el)
     _gaq.push(['_trackPageview', '/profile/'+ user.slug+'/edit'])
     document.title = 'Editing '+user.username+ ' on Rubyrate'
@@ -408,9 +399,8 @@ AppRouter.prototype.restrict = function(callback) {
 }
 
 AppRouter.prototype.login = _.wrap(function(){
-    this.loginView = new LoginView({context: 'main', user: this.user})
-    this.loginView.render()
-    $('#app').html(this.loginView.el)
+    var view = new LoginView({context: 'main', user: this.user}).render()
+    $('#app').html(view.el)
     document.title = 'Login'
     _gaq.push(['_trackPageview', '/login'])
   }, AppRouter.prototype.alreadyLoggedIn)

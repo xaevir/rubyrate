@@ -4,7 +4,7 @@ var tpl = require('text!templates/users/profile.mustache')
 
 return Backbone.View.extend({
 
-  className:  "span3 offset4 small-content",
+  className:  "small-content",
 
   template: Hogan.compile(tpl),
 

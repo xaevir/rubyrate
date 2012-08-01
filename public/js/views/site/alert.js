@@ -1,61 +1,69 @@
 define(function(require) {
 
-var hogan = require('libs/hogan.js/web/builds/2.0.0/hogan-2.0.0.min.amd')
+var tpl  = '<div class="wrapper {{wrapperClass}}">'
+    tpl += '<div class="content {{type}}">'
+    tpl += '<a class="close" href="#">×</a>'
+    tpl += '{{{message}}}</div></div>'
 
+return Backbone.View.extend({
 
-var AlertView = Backbone.View.extend({
+  template: Hogan.compile(tpl),
 
-  className: 'alert',
+  id: 'alert',
 
-  //template: hogan.compile('<div class="alert alert-{{type}}"> {{{message}}} </div>'),
-
-  events: { /* twitter bootstrap handles these*/ },
+  events: { 
+    'click .close' : 'close'
+  },
 
   initialize: function(options){
-    _.bindAll(this, 'fadeOut', 'render') 
-    this.message = options.message || undefined
-    this.type = options.type
-    this.container = options.container
+    _.bindAll(this) 
+    if (_.isObject(options)) {
+      this.message = options.message
+      this.container = options.container
+      this.doNotFadeOut = options.doNotFadeOut
+      this.type = options.type
+      this.duration = options.duration
+      this.wrapperClass = options.wrapperClass
+      this.doNotStickAround = options.doNotStickAround
+    } else {
+      this.message = options 
+    }
     this.render() 
   },
 
-  addClassName: function(type){
-    $(this.el).addClass('alert-' + type)
-  },
-
   render: function(){
-    $(this.el).html(this.message)
-    this.addClassName(this.type)
-    if (this.container)
-      this.container.prepend(this.el)
-    else
-    $('body').prepend(this.el)
-    $(this.el).center()
+    var template = this.template.render({
+      message: this.message, 
+      type: this.type,
+      wrapperClass: this.wrapperClass
+    })
+    $(this.el).html(template)
+    if (this.doNotStickAround)
+      $('#app').prepend(this.el)
+    else 
+      $('body').prepend(this.el)
+    $(this.el).animate({ top: '50'})
+    if (!this.doNotFadeOut)
+      this.fadeOut() 
     return this
   },
 
   fadeOut: function(){
-   var that = this
+   var self = this
+   var duration = this.duration || 3000
    var t = setTimeout(function(){
-    $(that.el).fadeOut('slow', function() {
-      $(that.el).remove();
+    $(self.el).fadeOut('slow', function() {
+      $(self.el).remove();
      });
-    }, 3000);
+    }, duration);
   },
-
-
-
+  
+  close: function(){
+    $(this.el).fadeOut('slow', function() {
+      $(this.el).remove();
+     });
+  }
 
 });
-
-AlertView.notice = function(msg){
-  var successAlert = new AlertView({
-    message: '<strong>'+msg+'</strong>',
-    type: 'info',
-  })
-  successAlert.fadeOut()
-}
-
-return AlertView
 
 });

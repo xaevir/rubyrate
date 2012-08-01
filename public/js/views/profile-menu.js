@@ -14,6 +14,7 @@ return Backbone.View.extend({
 
   initialize: function(options){
     _.bindAll(this, 'render') 
+    this.user = options.user
   },
 
   preventDefault: function(e) {
@@ -28,7 +29,7 @@ return Backbone.View.extend({
   },
 
   render: function() {
-    var user = window.user.toJSON()
+    var user = this.user.toJSON()
     var template = this.template.render(user)
     $(this.el).html(template)
     return this

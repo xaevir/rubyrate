@@ -5,7 +5,7 @@ var tpl = require('text!templates/users/profile-edit.mustache')
 
 return Backbone.View.extend({
 
-  className:  "profile-edit span3 offset4",
+  className:  "small-content",
 
   events: {
     'submit form' : 'submit'
@@ -13,8 +13,9 @@ return Backbone.View.extend({
 
   template: Hogan.compile(tpl),
 
-  initialize: function(){
+  initialize: function(options){
     _.bindAll(this) 
+    this.user = options.user
   },
 
   submit: function(e) {
@@ -22,9 +23,9 @@ return Backbone.View.extend({
     var params = this.$('form').serializeObject();
     $.post("/profile", params);
     var router = new Backbone.Router()
-    var slug = window.user.get('slug')
+    var slug = this.user.get('slug')
     router.navigate('/profile/'+slug, true);
-    this.notice()
+    new AlertView('Saved')
   },
 
   render: function(user) {
@@ -32,15 +33,6 @@ return Backbone.View.extend({
     $(this.el).html(template);
     return this;
   },
-
-  notice: function(){
-    var successAlert = new AlertView({
-      message: '<strong>Saved</strong>',
-      type: 'info'
-    })
-    successAlert.fadeOut()
-  },
-
 });
 
 })

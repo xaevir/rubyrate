@@ -37,7 +37,7 @@ return Backbone.View.extend({
   },
 
   onSync: function(){
-    AlertView.notice(thankyouTpl)
+    new AlertView({message: thankyouTpl, duration: 5000, type:"letter", wrapperClass: 'letterWrapper'}) 
     var router = new Backbone.Router();
     router.navigate('wishes', {trigger: true}) 
   }
