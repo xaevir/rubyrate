@@ -96,7 +96,7 @@ var AppRouter = Backbone.Router.extend({
 }) 
 
 AppRouter.prototype.notFound = function(){
-  $('#app').html('<h1>404: This url was not found</h1>')
+  $('#app').html('<h1 style="text-align: center">404 Error: This page was not found</h1>')
 }
 
 AppRouter.prototype.setup = function(){
@@ -193,7 +193,8 @@ AppRouter.prototype.wishes = function(e) {
                                                    bigTextarea: true,
                                                    user: self.user})
       $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
-      // change to user.role =admin
+      if (self.user.get('role') == 'admin')
+        $(chatCompositeView.el).prepend('<div class="admin-options"><a href="/wishes/'+subject_id+'/setup">setup</a></div>')
 
       views.push(chatCompositeView);
    }, this);
@@ -293,18 +294,28 @@ AppRouter.prototype.lead = function(id, slug) {
 }
 
 
+AppRouter.prototype.getUser = function() {
+  var self = this
+  $.ajax({ 
+    url: "/user", 
+    async: false, 
+    success: function(user) {   
+      if (user) self.user.set(user)
+    }
+  });
+}
+
 AppRouter.prototype.helper = function(id) {
   var self = this
   $('body').attr('id','wish')
   $.get('/helper/'+id, function(res) {
+    if (res.success === false)
+      return self.notFound()
     self.getUser()
     // Instructions
     var template = Hogan.compile(instructionsTpl)
-    $('#app').html(template.render());
+    $('#app').html(template.render({wish: res.subject.body}));
 
-    // header
-    var header = '<h2 style="float:left;margin-right: 10px">Your wish was:</h2><h1>'+ res.subject.body+'</h1>'
-    $('#app').append(header);
     // body
     var views = []
     _.each(res.conversations, function(convo){
@@ -327,7 +338,7 @@ AppRouter.prototype.helper = function(id) {
       ul.scrollTop = height
     });
     _gaq.push(['_trackPageview', '/helper/'+ res.subject.body])
-    document.title = 'helper';
+    document.title = 'Ruby Rate - Helper';
   });
 }
 
@@ -337,16 +348,16 @@ AppRouter.prototype.reset_helper = function(){
 
 
 AppRouter.prototype.wish_setup = function(id) {
+  var self = this
   $.get('/wishes/'+id+'/setup', function(res) {
     // header
-    var wishHeader = new MessageBodyView({message: res.wish, tagName: 'h1', user: this.user})
+    var wishHeader = new MessageBodyView({message: res.wish, tagName: 'h1', user: self.user})
     $('#app').html(wishHeader.render().el);
 
     // body
     var view = new WishSetupView(res)
     $('#app').append(view.render().el);
 
-    document.title = 'Ruby Rate';
   });
 }
 

@@ -32,6 +32,7 @@ var app = express();
 app.engine('mustache', cons.hogan);
 
 app.configure(function(){
+  app.set("trust proxy", true)
   app.set('port', process.env.PORT || 8010);
   app.set('views', __dirname + '/pages');
   app.set('view engine', 'mustache');
@@ -41,15 +42,14 @@ app.configure(function(){
   app.use(express.cookieParser('shhhh, very secret'));
   app.use(express.session({store: new RedisStore }));
   app.use(app.router);
-  app.use(error);
 });
 
-function error(err, req, res, next) {
-  var html = '<h2>Error</h2><p>'+err.message+'</p>'
-  var opts = { subject: 'Error', html: html }
-  email(opts)
-  next(err);
-}
+app.use(function(err, req, res, next) {
+  if (err.status == 404) 
+    err.message = 'Page not found at: '+err.message
+  email({ subject: 'Error', html: err.message})
+  res.send({success: false, status: err.status, message: err.message});
+});
 
 app.configure('development', function(){
   app.use(express.errorHandler());
@@ -70,7 +70,7 @@ function loadUser(req, res, next) {
     req.user = user;
     next();
   } else {
-    next(new Error('Failed to load user'));
+    next(new _500('Failed to load user'));
   }
 }
 
@@ -301,6 +301,10 @@ app.post('/wishes-home', function(req, res) {
   }]
   db.collection('subjects').insert(req.body, function(err, id){
     if (err) throw err;
+    var html  = '<p>Ip address: '+req.ip+'</p>'
+        html += '<p>'+req.body.body+'</p>'
+    email({subject: 'Homepage wish created', html: html})
+
     res.send({success: true, message: 'wish inserted'})
   })
 });
@@ -342,13 +346,15 @@ app.get('/lead/:id/:slug', function(req, res) {
 })
 
 
-app.get('/helper/:id', function(req, res) {
-
+app.get('/helper/:id', function(req, res, next) {
   db.subjects.findOne({shortId: req.params.id}, function(err, subject) {
+    if (!subject) 
+      return next({status: 404, message: '/helper/'+req.params.id})
+
     // send email
-    var html = '<h1>Special page</h1>'
-        html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
-    email({subject: 'Somebody checked out the special page', html: html})
+    var html  = '<p>Ip address: '+req.ip+'</p>'
+        html += '<p>In response to this wish:</p><p>'+subject.body+'</p>'
+    email({subject: 'Helper Page', html: html})
 
     db.users.findOne({'username': subject.author}, function(err, user){
       setUserSession(req, user)
@@ -440,13 +446,9 @@ app.get('/wishes/:id', loadSubject, function(req, res) {
 
 app.get('/wishes/:id/setup', loadUser, function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, wish) {
-    db.users.find({wish_id: req.params.id}).toArray(function(err, halfUsers) {
-      if (err) throw err;
       res.send({
         wish: wish, 
-        halfUsers: halfUsers
       })
-    })
   })
 })
 
@@ -538,6 +540,34 @@ app.get('/subjects', loadUser, function(req, res) {
     res.send(arr)
   })
 })
+
+app.post('/wishes/:id/messages', function(req, res) {
+  var convo_id = new ObjectID().toString()
+
+  var user = {
+    username: req.body.username, 
+    convo_id: convo_id,
+    total: 1
+  } 
+
+  db.subjects.update({_id: new ObjectID(req.params.id)}, {$push: {users: user}, $set:{modified: new Date() }}) 
+  db.subjects.update({_id: new ObjectID(req.params.id)}, {$inc: {'users.0.unread': 1, 'users.0.total': 1}}) 
+
+
+  var message = req.body 
+  message.convo_id = convo_id
+  message.author = username
+  message.authorSlug = req.body.username.replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
+  message.subject_id = req.params.id
+  message.label = ['first'] 
+  db.messages.insert(message, function(err, message){
+    if (err) throw err;
+    res.send({success: true, message: 'message inserted', data: message[0]})
+  })
+
+})
+
+
 
 app.post('/first-reply/:id', loadUser, function(req, res) {
   var username = req.user.username

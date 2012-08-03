@@ -73,9 +73,9 @@ define(function(require) {
         fn: 'isUniqueUsername'
       },
       email: {
-        required: true,
-        pattern: 'email',
-        fn: 'isUniqueEmail'
+        //required: true,
+        //pattern: 'email',
+        //fn: 'isUniqueEmail'
       },
       password: {
         required: true,

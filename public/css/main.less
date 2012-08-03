@@ -108,6 +108,89 @@ li {
 
 }
 
+#instructions {
+  background: url(/img/ruby.png) no-repeat 13px 27px;
+  min-height: 393px;
+  .bubble {
+    background-color: #E73E36;
+    float: left;
+    .border-radius(10px);
+    padding: 10px; 
+    position: relative;
+  }
+  .point-left {
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: 17px;
+    bottom: -25px;
+    display: block;
+    border-left: 25px solid #E73E36; 
+    border-bottom: 25px solid #FFF; /* IE fix */
+    border-bottom: 25px solid rgba(0,0,0,0); 
+    overflow: hidden; /* IE fix */
+    z-index: 2;
+  }
+  .triangle-isosceles {
+    position: relative;
+    background-color: #5656ff; 
+    .border-radius(10px);
+    padding: 10px; 
+    color:#fff;
+  }
+  /* creates triangle */
+  .triangle-isosceles.top:after {
+    content:"";
+    position:absolute;
+    top:-15px; /* value = - border-top-width - border-bottom-width */
+    bottom:auto;
+    left: 745px;
+    border-width:0 15px 15px; /* vary these values to change the angle of the vertex */
+    border-style:solid;
+    border-color:#5656ff #fff;
+  }
+  .clear {
+    .clearfix(); 
+  }
+  blockquote {
+    font-size: 24px;
+    color: #fff;
+    padding: 0 15px;
+    border-left: none;
+    margin: 0;
+  } 
+  .bubble {
+    margin-top: 23px;
+    margin-left: 133px;
+  }
+  h2 {
+    float: left;    
+    width: 370px;
+    font-size: 20px;
+    margin-left: 150px;
+    line-height: 1.3;
+    margin-top: 40px;
+    //color: #666;
+  }
+  h3 {
+    font-size: 20px;
+  }
+  p.how-works {
+    float: left;    
+    width: 370px;
+    font-size: 18px;
+    margin-left: 150px;
+    line-height: 1.3;
+    //color: #666;
+    font-weight: normal;
+    margin-top: 0;
+  }
+
+}
+
+
+
+
 #contact {
   p {
     font-family: 'Ovo', serif;
@@ -121,7 +204,7 @@ li {
 
 #main-nav {
   .clearfix();
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
   margin-top: 10px;
   //#gradient > .vertical(#fff, #eee);
   //box-shadow: 0 1px 1px rgba(0, 0, 0, .3);
@@ -224,6 +307,7 @@ footer {
 }
 
 #app {
+  min-height: 400px;
   margin: 0 auto;
   width: 940px;
   .clearfix();
@@ -673,21 +757,6 @@ table.setup {
   }
 
 }
-#instructions {
-  //width: 400px;
-  background: #fff;
-  .border-radius(10px);
-  padding: 5px; 
-  background: #fff; 
-  .box-shadow(0px 0px 6px #666);
-  #gradient > .vertical(#fff, #eee);
-  margin: 0 auto;
-  margin-top: 20px;
-  p {
-    font-size: 14px;
-  }
-}
-
 #spinner {
   left: 50%;
   position: fixed;
