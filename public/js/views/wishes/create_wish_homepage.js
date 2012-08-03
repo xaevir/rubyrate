@@ -2,8 +2,9 @@ define(function(require) {
 
 var tpl = require('text!templates/wishes/wish-homepage.html')
   , thankyouTpl = require('text!templates/wish_thankyou.html')
-  , Wish = require('models/wish') 
+  , Wish = require('models/homepage_wish') 
   , AlertView = require('views/site/alert')       
+  , NewUser = require('models/newUser')
 
 return Backbone.View.extend({
 
@@ -27,13 +28,7 @@ return Backbone.View.extend({
     e.preventDefault()
     var self = this
     var params = this.$('form').serializeObject();
-    this.model.url = '/wishes-home'
-    var result = this.model.set(params) 
-    if (result === false) 
-      return
-    var slug =  this.model.get('author').replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
-    this.model.set('slug', slug)
-    this.model.save()
+    this.model.save(params)
   },
 
   onSync: function(){
