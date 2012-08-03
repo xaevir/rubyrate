@@ -45,10 +45,17 @@ app.configure(function(){
 });
 
 app.use(function(err, req, res, next) {
-  if (err.status == 404) 
+  if (err.status == 404) {
     err.message = 'Page not found at: '+err.message
-  email({ subject: 'Error', html: err.message})
-  res.send({success: false, status: err.status, message: err.message});
+    email({ subject: 'Error', html: err.message})
+    res.send({success: false, status: err.status, message: err.message});
+  }
+  else {
+    if (app.settings.env == 'development')  
+      console.log(err.stack)
+    else 
+      email({ subject: 'Error', html: err.stack})
+  }
 });
 
 app.configure('development', function(){
@@ -229,6 +236,7 @@ app.post('/user', function(req, res){
 
 function isUniqueUsername(username, fn) {
   var username = username.toLowerCase()
+  username = username.replace(/^@/, '')  //twitter @
   db.collection('users').findOne({username: username}, function(err, user){
     if (user)
       fn(false)
@@ -295,16 +303,24 @@ function makeShortId() {
 }
 
 app.post('/wishes-home', function(req, res) {
-  req.body.shortId = makeShortId() 
-  req.body.users = [{
-    username: req.body.author, 
-  }]
-  db.collection('subjects').insert(req.body, function(err, id){
-    if (err) throw err;
-    var html  = '<p>Ip address: '+req.ip+'</p>'
-        html += '<p>'+req.body.body+'</p>'
-    email({subject: 'Homepage wish created', html: html})
-
+  email({
+    subject: 'Homepage wish created', 
+    html: '<p>Ip address: '+req.ip+'</p><p>'+req.body.body+'</p>'
+  })
+  var subject = {
+    author : req.body.username,
+    authorSlug : req.body.slug,
+    body: req.body.body,
+    shortId: makeShortId(),
+    users: [{username: req.body.username}]
+  }
+  var user = new NewUser({
+    username: req.body.username,
+    password: 'animeeverything'
+  })
+  user.setPassword(function(){
+    db.users.insert(user.toJSON())
+    db.subjects.insert(subject)
     res.send({success: true, message: 'wish inserted'})
   })
 });

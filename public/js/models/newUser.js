@@ -15,15 +15,13 @@ define(function(require) {
     initialize: function() {
       this.on("change:username", function(model, value, options) {
         if (!value) return
-        var slug =  model.get('username').replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
-        model.set({'slug': slug}, {silent: true})
+        this.setSlug(model.get('username'))
       })
     },
 
     idAttribute: "_id",
 
     isUniqueUsername: function(value, attr, computedState){
-      // to this to the prototype later on
       var isUnique;
       if (typeof exports === 'object') {
         app.isUniqueUsername(value, function(resUnique){
@@ -73,9 +71,9 @@ define(function(require) {
         fn: 'isUniqueUsername'
       },
       email: {
-        //required: true,
-        //pattern: 'email',
-        //fn: 'isUniqueEmail'
+        required: true,
+        pattern: 'email',
+        fn: 'isUniqueEmail'
       },
       password: {
         required: true,
@@ -89,15 +87,16 @@ define(function(require) {
     },
 
     setSlug: function(name) {
-      var slug =  name.replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
-      this.set('slug', slug)
+      var slug = name.replace(/^@/, '')  //twitter
+      slug = slug.replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
+      this.set({'slug': slug}, {silent: true})
     },
   
     setPassword: function(fn){
       var user = this
       bcrypt.genSalt(10, function(err, salt){
         bcrypt.hash(user.get('password'), salt, function(err, hash){
-          user.set('password', hash)
+          user.set({password: hash}, {silent: true})
           fn()
         })
       }) 
