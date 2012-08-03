@@ -303,6 +303,7 @@ function makeShortId() {
 }
 
 app.post('/wishes-home', function(req, res) {
+  req.body.username = req.body.username.trim()
   email({
     subject: 'Homepage wish created', 
     html: '<p>Ip address: '+req.ip+'</p><p>'+req.body.body+'</p>'
@@ -314,6 +315,7 @@ app.post('/wishes-home', function(req, res) {
     shortId: makeShortId(),
     users: [{username: req.body.username}]
   }
+  //validate next time to make sure you have all the necessary attrs
   var user = new NewUser({
     username: req.body.username,
     password: 'animeeverything',
