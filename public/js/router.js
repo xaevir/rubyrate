@@ -288,7 +288,7 @@ AppRouter.prototype.lead = function(id, slug) {
       ul.scrollTop = height
     });
     _gaq.push(['_trackPageview', '/lead/'+ res.subject.body])
-    document.title = 'helper';
+    document.title = 'Ruby Rate';
 
   })
 }
