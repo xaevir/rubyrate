@@ -45,17 +45,17 @@ app.configure(function(){
 });
 
 app.use(function(err, req, res, next) {
-  if (err.status == 404) {
-    err.message = 'Page not found at: '+err.message
-    email({ subject: 'Error', html: err.message})
-    res.send({success: false, status: err.status, message: err.message});
+  if (err.statusCode == 404) {
+    res.send({
+      success: false, 
+      statusCode: err.status, 
+      message: 'Page not found'
+    });
   }
-  else {
-    if (app.settings.env == 'development')  
-      console.log(err.stack)
-    else 
-      email({ subject: 'Error', html: err.stack})
-  }
+  email({ 
+    subject: 'Error', 
+    html: '<p><b>url:</b> '+req.url+'</p><p><b>message:</b> '+err.message+'</p><p>'+err.stack+'</p>'
+  })
 });
 
 app.configure('development', function(){
@@ -77,7 +77,7 @@ function loadUser(req, res, next) {
     req.user = user;
     next();
   } else {
-    next(new _500('Failed to load user'));
+    next(new Error('Failed to load user'));
   }
 }
 
@@ -90,12 +90,17 @@ function andRestrictTo(role) {
 }
 
 function loadSubject(req, res, next) {
-  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
+  try { 
+    var _id = new ObjectID(req.params.id) 
+  } catch(err) { 
+    return next({statusCode: 404, message: err}) 
+  }
+  db.subjects.findOne({_id: _id}, function(err, subject) {
     if (subject) {
       req.subject = subject;
       next();
     } else {
-      next(new Error('Subject does not exist: Show 404'));
+      return next({statusCode: 404, message: 'bad object_id'})
     }
   })
 }
@@ -124,7 +129,6 @@ app.get('/img/*', function(req, res, next) {
 app.get('/browser/*', function(req, res, next) {
   var staticServer = express.static(__dirname + '/test')
   staticServer(req, res, next)  
-
 })
 
 app.get('/fonts/*', function(req, res, next) {
@@ -368,12 +372,12 @@ app.get('/lead/:id/:slug', function(req, res) {
 app.get('/helper/:id', function(req, res, next) {
   db.subjects.findOne({shortId: req.params.id}, function(err, subject) {
     if (!subject) 
-      return next({status: 404, message: '/helper/'+req.params.id})
+      return next({statusCode: 404, message: 'bad helper page'})
 
     // send email
     var html  = '<p>Ip address: '+req.ip+'</p>'
-        html += '<p>In response to this wish:</p><p>'+subject.body+'</p>'
-    email({subject: 'Helper Page', html: html})
+        html += '<p>Viewed for this wish:</p><p>'+subject.body+'</p>'
+    email({subject: 'Helper Page Viewed', html: html})
 
     db.users.findOne({'username': subject.author}, function(err, user){
       setUserSession(req, user)
@@ -649,7 +653,6 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
          $set: {modified: new Date()}}
       )   
     }
-   email
     var html = '<h1>Reply</h1><p><b>author:</b>'+msg.author+'</p><h3>Message</h3><p>'+msg.body+'</p>'
         html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
     email({subject: 'Reply from special page', html: html})
@@ -679,7 +682,9 @@ app.post('/reply/:convo_id', loadUser, function(req, res) {
 })
 
 function email(opts) {
-  if (app.settings.env == 'development') return
+  if (app.settings.env === 'development')
+    return console.log(opts.html)
+
   var message = {
       from: 'Website <website@rubyrate.com>',
       // Comma separated list of recipients

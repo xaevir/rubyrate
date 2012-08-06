@@ -210,6 +210,8 @@ AppRouter.prototype.wish = function(id) {
   $('body').attr('id','wish')
   var self = this
   $.get('/wishes/'+id, function(res) {
+    if (res.success === false)
+      return self.notFound()
     // header
     var header = new MessageBodyView({message: res.subject, tagName: 'h1', user: self.user})
     $('#app').html(header.render().el);
