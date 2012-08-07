@@ -4304,7 +4304,7 @@ li {
   margin-bottom: 20px;
 }
 #home .home-form textarea {
-  height: 56px;
+  height: 95px;
 }
 #home .home-form h2 {
   width: 370px;
@@ -4340,11 +4340,11 @@ li {
   padding: 10px;
   position: relative;
 }
-#instructions {
+#mock-homepage {
   background: url(/img/ruby.png) no-repeat 13px 27px;
   min-height: 393px;
 }
-#instructions .bubble {
+#mock-homepage .bubble {
   background-color: #E73E36;
   float: left;
   -webkit-border-radius: 10px;
@@ -4353,7 +4353,7 @@ li {
   padding: 10px;
   position: relative;
 }
-#instructions .point-left {
+#mock-homepage .point-left {
   width: 0;
   height: 0;
   position: absolute;
@@ -4370,7 +4370,7 @@ li {
 
   z-index: 2;
 }
-#instructions .bubble.right:after {
+#mock-homepage .bubble.right:after {
   content: "";
   position: absolute;
   right: 17px;
@@ -4381,45 +4381,45 @@ li {
 
   border-bottom: 25px solid rgba(0, 0, 0, 0);
 }
-#instructions .clear {
+#mock-homepage .clear {
   *zoom: 1;
 }
-#instructions .clear:before,
-#instructions .clear:after {
+#mock-homepage .clear:before,
+#mock-homepage .clear:after {
   display: table;
   content: "";
 }
-#instructions .clear:after {
+#mock-homepage .clear:after {
   clear: both;
 }
-#instructions blockquote {
+#mock-homepage blockquote {
   font-size: 24px;
   color: #fff;
   padding: 10px;
   border-left: none;
   margin: 0;
 }
-#instructions h2 {
+#mock-homepage h2 {
   font-size: 20px;
 }
-#instructions #how-works {
+#mock-homepage #how-works {
   *zoom: 1;
 }
-#instructions #how-works:before,
-#instructions #how-works:after {
+#mock-homepage #how-works:before,
+#mock-homepage #how-works:after {
   display: table;
   content: "";
 }
-#instructions #how-works:after {
+#mock-homepage #how-works:after {
   clear: both;
 }
-#instructions #how-works h2 {
+#mock-homepage #how-works h2 {
   float: left;
   width: 370px;
   margin-left: 150px;
   margin-top: 40px;
 }
-#instructions #how-works p {
+#mock-homepage #how-works p {
   float: left;
   width: 370px;
   font-size: 18px;
@@ -4428,31 +4428,31 @@ li {
   font-weight: normal;
   margin-top: 0;
 }
-#instructions #you-said {
+#mock-homepage #you-said {
   *zoom: 1;
   margin-top: -185px;
 }
-#instructions #you-said:before,
-#instructions #you-said:after {
+#mock-homepage #you-said:before,
+#mock-homepage #you-said:after {
   display: table;
   content: "";
 }
-#instructions #you-said:after {
+#mock-homepage #you-said:after {
   clear: both;
 }
-#instructions #you-said h2 {
+#mock-homepage #you-said h2 {
   float: right;
   clear: right;
   margin-top: 20px;
   font-size: 30px;
 }
-#instructions #you-said .bubble {
+#mock-homepage #you-said .bubble {
   background: black;
   color: #fff;
   float: right;
   width: 350px;
 }
-#instructions .replies {
+#mock-homepage .replies {
   clear: both;
   font-size: 30px;
 }

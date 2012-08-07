@@ -288,7 +288,7 @@ app.post('/profile', loadUser, function(req, res) {
 })
 
 app.get('/wishes', function(req, res) {
-  db.collection('subjects').find().sort({_id: -1}).toArray(function(err, wishes) {
+  db.collection('subjects').find({pending: {$ne: true}}).sort({_id: -1}).toArray(function(err, wishes) {
     if (err) throw err;
     for (i=0; i<wishes.length; i++) {
       wishes[i] = new Array(wishes[i])

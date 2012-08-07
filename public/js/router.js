@@ -17,6 +17,7 @@ var SignupView = require('views/users/signup')
   , ChatCompositeView = require('views/chatComposite')         
   , ReplyView = require('views/reply')
   , instructionsTpl = require('text!templates/instructions.mustache')
+  , sellerTpl = require('text!templates/seller.mustache')
   , UserMenu = require('views/user-menu')
   , User = require('models/user')
   , NewUser = require('models/newUser')
@@ -85,6 +86,7 @@ var AppRouter = Backbone.Router.extend({
     , 'wishes/:id':                 'wish' 
     , 'helper/:id':                 'helper' 
     , 'wishes/:id/setup':           'wish_setup' 
+    , 'wishes/:id/seller':             'seller' 
     , 'subjects':                   'subjects'
     , 'subjects/:id':               'subject'
     , 'lead/:id/:slug':             'lead'
@@ -307,6 +309,12 @@ AppRouter.prototype.getUser = function() {
   });
 }
 
+
+AppRouter.prototype.seller = function(id) {
+  var template = Hogan.compile(sellerTpl)
+  $('#app').html(template.render());
+
+}
 AppRouter.prototype.helper = function(id) {
   var self = this
   $('body').attr('id','wish')
