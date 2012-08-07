@@ -316,6 +316,7 @@ app.post('/wishes-home', function(req, res) {
     author : req.body.username,
     authorSlug : req.body.slug,
     body: req.body.body,
+    location: req.body.location,
     shortId: makeShortId(),
     users: [{username: req.body.username}]
   }
