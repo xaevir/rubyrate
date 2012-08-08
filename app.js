@@ -27,7 +27,6 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
 
 var app = express();
 
-//app.settings.env = 'production'
 
 app.engine('mustache', cons.hogan);
 
@@ -66,6 +65,8 @@ app.configure('development', function(){
 app.configure('production', function(){
   db = mongo.db('localhost/rubyrate?auto_reconnect');
 })
+
+app.settings.env = 'production'
 
 db.bind('messages')
 db.bind('subjects')
@@ -288,7 +289,7 @@ app.post('/profile', loadUser, function(req, res) {
 })
 
 app.get('/wishes', function(req, res) {
-  db.collection('subjects').find({pending: {$ne: true}}).sort({_id: -1}).toArray(function(err, wishes) {
+  db.subjects.find({pending: {$ne: true}}).sort({_id: -1}).toArray(function(err, wishes) {
     if (err) throw err;
     for (i=0; i<wishes.length; i++) {
       wishes[i] = new Array(wishes[i])
