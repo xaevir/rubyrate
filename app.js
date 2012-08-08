@@ -350,20 +350,14 @@ app.get('/lead/:id/:slug', function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
     db.users.findOne({'slug': req.params.slug}, function(err, user){
       setUserSession(req, user)
-      db.messages.find({
-                      subject_id: subject._id.toHexString(), 
-                      label: 'first', 
-                      author:{$ne: user.username } })
-                      .toArray(function(err, otherMessages) {
-        var userInArray = _.find(subject.users, function(u){ 
-          if (u.username == user.username) return u 
-        });
-        db.messages.find({convo_id: userInArray.convo_id}).sort({_id:1}).toArray(function(err, messages) {
-          res.send({
-                  subject: subject, 
-                  otherMessages: otherMessages,
-                  messages: messages})
-        })
+      var userInArray = _.find(subject.users, function(u){ 
+        if (u.username == user.username) return u 
+      });
+      db.messages.find({convo_id: userInArray.convo_id}).sort({_id:1}).toArray(function(err, messages) {
+        messages.unshift(subject)
+        res.send({messages: messages,
+                  subject_id: req.params.id,   
+                  convo_id: userInArray.convo_id})
       })
     })
   })

@@ -4345,65 +4345,64 @@ li {
   min-height: 393px;
 }
 #mock-homepage .bubble {
-  background-color: #E73E36;
-  float: left;
+  background-color: #000;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
   padding: 10px;
   position: relative;
 }
-#mock-homepage .point-left {
-  width: 0;
-  height: 0;
+#mock-homepage .bubble.header {
+  margin-left: 143px;
+  background: #E73E36;
+  width: 326px;
+  float: left;
+}
+#mock-homepage .bubble.header:after {
+  content: "";
   position: absolute;
   left: 17px;
-  bottom: -25px;
+  bottom: -20px;
   display: block;
-  border-left: 25px solid #E73E36;
-  border-bottom: 25px solid #FFF;
+  border-left: 20px solid #E73E36;
+  border-bottom: 20px solid #FFF;
   /* IE fix */
 
-  border-bottom: 25px solid rgba(0, 0, 0, 0);
-  overflow: hidden;
-  /* IE fix */
-
-  z-index: 2;
+  border-bottom: 20px solid rgba(0, 0, 0, 0);
 }
-#mock-homepage .bubble.right:after {
+#mock-homepage .bubble.second {
+  color: #fff;
+  width: 350px;
+  margin: 0 auto;
+}
+#mock-homepage .bubble.second blockquote {
+  overflow: auto;
+  max-height: 165px;
+}
+#mock-homepage .bubble.second:after {
   content: "";
   position: absolute;
-  right: 17px;
+  right: 100px;
   bottom: -20px;
-  border-right: 25px solid black;
+  border-left: 25px solid #000;
   border-bottom: 25px solid #FFF;
   /* IE fix */
 
   border-bottom: 25px solid rgba(0, 0, 0, 0);
 }
-#mock-homepage .clear {
-  *zoom: 1;
-}
-#mock-homepage .clear:before,
-#mock-homepage .clear:after {
-  display: table;
-  content: "";
-}
-#mock-homepage .clear:after {
-  clear: both;
-}
 #mock-homepage blockquote {
-  font-size: 24px;
+  font-size: 18px;
   color: #fff;
-  padding: 10px;
+  padding: 0px;
   border-left: none;
   margin: 0;
 }
 #mock-homepage h2 {
-  font-size: 20px;
+  font-size: 24px;
 }
 #mock-homepage #how-works {
   *zoom: 1;
+  clear: both;
 }
 #mock-homepage #how-works:before,
 #mock-homepage #how-works:after {
@@ -4414,23 +4413,19 @@ li {
   clear: both;
 }
 #mock-homepage #how-works h2 {
-  float: left;
-  width: 370px;
+  text-align: center;
   margin-left: 150px;
-  margin-top: 40px;
+  margin-top: 25px;
 }
 #mock-homepage #how-works p {
-  float: left;
-  width: 370px;
   font-size: 18px;
   margin-left: 150px;
-  line-height: 1.3;
-  font-weight: normal;
   margin-top: 0;
 }
 #mock-homepage #you-said {
   *zoom: 1;
-  margin-top: -185px;
+  margin-left: 150px;
+  margin-top: 20px;
 }
 #mock-homepage #you-said:before,
 #mock-homepage #you-said:after {
@@ -4441,20 +4436,8 @@ li {
   clear: both;
 }
 #mock-homepage #you-said h2 {
-  float: right;
-  clear: right;
   margin-top: 20px;
-  font-size: 30px;
-}
-#mock-homepage #you-said .bubble {
-  background: black;
-  color: #fff;
-  float: right;
-  width: 350px;
-}
-#mock-homepage .replies {
-  clear: both;
-  font-size: 30px;
+  text-align: center;
 }
 #contact p {
   font-family: 'Ovo', serif;
@@ -4848,7 +4831,7 @@ img {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  background-color: #fff;
+  background-color: #f7f7f7;
   float: left;
   padding: 10px;
   position: relative;
@@ -4874,7 +4857,7 @@ img {
   right: 17px;
   bottom: -20px;
   display: block;
-  border-right: 25px solid #fff;
+  border-right: 25px solid #f7f7f7;
   border-bottom: 25px solid #FFF;
   /* IE fix */
 
@@ -4913,12 +4896,8 @@ img {
   display: block;
 }
 .chat-composite .reply {
-  background-color: #fff;
-  padding: 3px;
-  display: block;
-  float: left;
-  font-size: 12px;
   margin-top: 5px;
+  padding: 2px 6px;
 }
 .chat-composite .reply-form {
   margin-top: 10px;

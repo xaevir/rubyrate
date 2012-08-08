@@ -17,6 +17,7 @@ var SignupView = require('views/users/signup')
   , ChatCompositeView = require('views/chatComposite')         
   , ReplyView = require('views/reply')
   , instructionsTpl = require('text!templates/instructions.mustache')
+  , leadTpl = require('text!templates/lead.mustache')
   , sellerTpl = require('text!templates/seller.mustache')
   , UserMenu = require('views/user-menu')
   , User = require('models/user')
@@ -248,45 +249,19 @@ AppRouter.prototype.lead = function(id, slug) {
 
   $.get('/lead/'+id+'/'+slug, function(res) {
     self.getUser()
-    // Instructions
-    var template = Hogan.compile(instructionsTpl)
+    var template = Hogan.compile(leadTpl)
     $('#app').html(template.render());
-    // header
-    var header = '<h2 style="float:left;margin-right: 10px">Your convo with this wish:</h2><h1>'+ res.subject.body+'</h1>'
-    $('#app').append(header);
-    // Convo 
+
     var chatCompositeView = new ChatCompositeView({id:'lead-chat', user: self.user})
     chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.messages, user: self.user})
-    var opts = {
-      convo_id: res.messages[0].convo_id,
-      subject_id: res.messages[0].subject_id,
-      parentView: chatCompositeView,
-      user: self.user
-    }
+    var opts = {convo_id: res.convo_id,
+                subject_id: res.subject_id,
+                parentView: chatCompositeView,
+                user: self.user}
     chatCompositeView.replyView = new ReplyView(opts)
     var html = chatCompositeView.render().el
     $('#app').append(html);
 
-    // otherMessage
-    var header = '<h1>Other people that replied to this wish:<h1>'
-    $('#app').append(header);
-
-    var views = []
-    _.each(res.otherMessages, function(message){
-      var chatCompositeView = new ChatCompositeView({noReply: true, user: self.user})
-      chatCompositeView.messagesView = new MessagesView({messagesOfChat: message, user: self.user})
-      var opts = {
-        convo_id: message._id,
-        subject_id: message.subject_id,
-        parentView: chatCompositeView,
-        user: self.user
-      }
-      chatCompositeView.replyView = new ReplyView(opts)
-      views.push(chatCompositeView);
-   }, this);
-    var view = new ChatColumns({views: views, columns: 3})
-    var html =  view.render().el
-    $('#app').append(html);
     $.each($('.scrollable'), function(index, ul) { 
       var height = ul.scrollHeight
       ul.scrollTop = height

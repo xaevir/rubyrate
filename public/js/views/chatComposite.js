@@ -32,7 +32,7 @@ return Backbone.View.extend({
     $(this.el).append(this.messagesView.render().el)
     this.$el.append('<span class="point"></span><span class="point-under"></span>')
     if (this.noReply == undefined)
-      this.$el.append('<a href="#" class="reply">Reply</a>')
+      this.$el.append('<a href="#" class="btn btn-warning reply">Reply</a>')
     return this
   },
 
