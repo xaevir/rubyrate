@@ -4330,79 +4330,237 @@ li {
   z-index: 2;
 }
 #home .bubble {
-  margin-top: 23px;
+  margin-bottom: 15px;
+  background-color: #000;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  padding: 10px;
+  position: relative;
+  color: #fff;
+  width: 350px;
   margin-left: 133px;
-  background-color: #E73E36;
-  float: left;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  background-color: #faa732;
+  background-image: -moz-linear-gradient(top, #fbb450, #f89406);
+  background-image: -ms-linear-gradient(top, #fbb450, #f89406);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbb450), to(#f89406));
+  background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
+  background-image: -o-linear-gradient(top, #fbb450, #f89406);
+  background-image: linear-gradient(top, #fbb450, #f89406);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89406', GradientType=0);
+  border: 1px solid #f89406;
+}
+#home .bubble blockquote {
+  overflow: auto;
+  max-height: 165px;
+}
+#home .bubble:after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  bottom: -18px;
+  border-left: 17px solid #f89406;
+  border-bottom: 17px solid #fff;
+  /* ie fix */
+
+}
+#home blockquote {
+  font-size: 18px;
+  color: #fff;
+  padding: 5px 10px;
+  border-left: none;
+  margin: 0;
+  line-height: 1.3;
+}
+#lead .reply-form {
+  clear: both;
+  background: #ccc;
+  width: 350px;
+  margin: 0 auto;
+  padding: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+#lead .reply-form textarea {
+  height: 100px;
+  width: 100%;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#lead .bubbles {
+  width: 575px;
+  margin: 0 auto;
+  list-style: none;
+}
+#lead .bubbles .bubble {
+  margin-bottom: 15px;
+  background-color: #000;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
   padding: 10px;
   position: relative;
 }
+#lead .bubbles .author {
+  clear: both;
+  font-size: 16px;
+}
+#lead .bubbles blockquote {
+  font-size: 18px;
+  color: #fff;
+  padding: 5px 10px;
+  border-left: none;
+  margin: 0;
+  line-height: 1.3;
+}
+#lead .bubbles .buyer .bubble {
+  color: #fff;
+  float: left;
+  width: 350px;
+  background-color: #21bdef;
+  background-image: -moz-linear-gradient(top, #31c9f7, #08ace2);
+  background-image: -ms-linear-gradient(top, #31c9f7, #08ace2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#31c9f7), to(#08ace2));
+  background-image: -webkit-linear-gradient(top, #31c9f7, #08ace2);
+  background-image: -o-linear-gradient(top, #31c9f7, #08ace2);
+  background-image: linear-gradient(top, #31c9f7, #08ace2);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#31c9f7', endColorstr='#08ace2', GradientType=0);
+  border: 1px solid #08ace2;
+}
+#lead .bubbles .buyer .bubble blockquote {
+  overflow: auto;
+  max-height: 165px;
+}
+#lead .bubbles .buyer .bubble:after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  bottom: -18px;
+  border-left: 17px solid #08ace2;
+  border-bottom: 17px solid #FFF;
+  /* IE fix */
+
+}
+#lead .bubbles .seller {
+  *zoom: 1;
+}
+#lead .bubbles .seller:before,
+#lead .bubbles .seller:after {
+  display: table;
+  content: "";
+}
+#lead .bubbles .seller:after {
+  clear: both;
+}
+#lead .bubbles .seller .bubble {
+  color: #fff;
+  float: right;
+  width: 350px;
+  background-color: #faa732;
+  background-image: -moz-linear-gradient(top, #fbb450, #f89406);
+  background-image: -ms-linear-gradient(top, #fbb450, #f89406);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbb450), to(#f89406));
+  background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
+  background-image: -o-linear-gradient(top, #fbb450, #f89406);
+  background-image: linear-gradient(top, #fbb450, #f89406);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89406', GradientType=0);
+  border: 1px solid #f89406;
+}
+#lead .bubbles .seller .bubble blockquote {
+  overflow: auto;
+  max-height: 165px;
+}
+#lead .bubbles .seller .bubble:after {
+  content: "";
+  position: absolute;
+  right: 17px;
+  bottom: -18px;
+  border-right: 17px solid #f89406;
+  border-bottom: 17px solid #fff;
+  /* ie fix */
+
+}
+#lead .bubbles .seller .author {
+  float: right;
+}
 #mock-homepage {
-  background: url(/img/ruby.png) no-repeat 13px 27px;
   min-height: 393px;
 }
+#mock-homepage .wrapper {
+  width: 575px;
+  margin: 0 auto;
+}
+#mock-homepage .avatar {
+  border: 1px solid #E73E36;
+  float: left;
+}
 #mock-homepage .bubble {
+  margin-bottom: 13px;
   background-color: #000;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
   padding: 10px;
   position: relative;
 }
 #mock-homepage .bubble.header {
-  margin-left: 143px;
-  background: #E73E36;
+  margin-right: 15px;
+  border: 1px solid #c4211b;
+  background-color: #f55953;
+  background-image: -moz-linear-gradient(top, #ff6b66, #e73e36);
+  background-image: -ms-linear-gradient(top, #ff6b66, #e73e36);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ff6b66), to(#e73e36));
+  background-image: -webkit-linear-gradient(top, #ff6b66, #e73e36);
+  background-image: -o-linear-gradient(top, #ff6b66, #e73e36);
+  background-image: linear-gradient(top, #ff6b66, #e73e36);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff6b66', endColorstr='#e73e36', GradientType=0);
   width: 326px;
   float: left;
 }
 #mock-homepage .bubble.header:after {
   content: "";
   position: absolute;
-  left: 17px;
+  right: 17px;
   bottom: -20px;
   display: block;
-  border-left: 20px solid #E73E36;
+  border-right: 20px solid #E73E36;
   border-bottom: 20px solid #FFF;
   /* IE fix */
 
   border-bottom: 20px solid rgba(0, 0, 0, 0);
 }
-#mock-homepage .bubble.second {
-  color: #fff;
-  width: 350px;
-  margin: 0 auto;
-}
-#mock-homepage .bubble.second blockquote {
-  overflow: auto;
-  max-height: 165px;
-}
-#mock-homepage .bubble.second:after {
-  content: "";
-  position: absolute;
-  right: 100px;
-  bottom: -20px;
-  border-left: 25px solid #000;
-  border-bottom: 25px solid #FFF;
-  /* IE fix */
-
-  border-bottom: 25px solid rgba(0, 0, 0, 0);
-}
 #mock-homepage blockquote {
   font-size: 18px;
   color: #fff;
-  padding: 0px;
+  padding: 5px 10px;
   border-left: none;
   margin: 0;
 }
 #mock-homepage h2 {
   font-size: 24px;
 }
+#mock-homepage .message-wrapper {
+  *zoom: 1;
+}
+#mock-homepage .message-wrapper:before,
+#mock-homepage .message-wrapper:after {
+  display: table;
+  content: "";
+}
+#mock-homepage .message-wrapper:after {
+  clear: both;
+}
 #mock-homepage #how-works {
   *zoom: 1;
   clear: both;
+  margin-bottom: 15px;
 }
 #mock-homepage #how-works:before,
 #mock-homepage #how-works:after {
@@ -4413,31 +4571,54 @@ li {
   clear: both;
 }
 #mock-homepage #how-works h2 {
-  text-align: center;
-  margin-left: 150px;
-  margin-top: 25px;
+  margin-top: 5px;
 }
 #mock-homepage #how-works p {
   font-size: 18px;
-  margin-left: 150px;
   margin-top: 0;
+  width: 500px;
 }
-#mock-homepage #you-said {
+#mock-homepage .buyer {
+  float: left;
+  font-size: 20px;
+  clear: both;
+}
+#mock-homepage .seller {
+  float: right;
+  font-size: 20px;
+  clear: both;
+}
+#mock-homepage #blue-guy {
   *zoom: 1;
-  margin-left: 150px;
   margin-top: 20px;
 }
-#mock-homepage #you-said:before,
-#mock-homepage #you-said:after {
+#mock-homepage #blue-guy:before,
+#mock-homepage #blue-guy:after {
   display: table;
   content: "";
 }
-#mock-homepage #you-said:after {
+#mock-homepage #blue-guy:after {
   clear: both;
 }
-#mock-homepage #you-said h2 {
-  margin-top: 20px;
+#mock-homepage #blue-guy .you {
+  background: url(/img/user.png) no-repeat top center;
+  width: 130px;
+  height: 113px;
+  border: 1px solid #29bbea;
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 15px;
+  color: #fff;
+}
+#mock-homepage #blue-guy .you span {
+  display: block;
+  padding-top: 75px;
   text-align: center;
+}
+#mock-homepage .replies {
+  margin-top: 25px;
+  border-bottom: 1px solid #000;
 }
 #contact p {
   font-family: 'Ovo', serif;
@@ -4595,25 +4776,25 @@ footer .details {
 #app:after {
   clear: both;
 }
+/*
 .alert {
   position: fixed !important;
   top: 30px !important;
   z-index: 9999;
-  border-width: 7px;
-  border-style: solid;
+  border-width: 7px; 
+  border-style: solid; 
   padding: 8px 14px;
   background-color: #fff;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  .box-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+  .big {
+    width: 400px;
+    display: block;
+    p{
+      font-size: 24px;
+    }
+  }
 }
-.alert .big {
-  width: 400px;
-  display: block;
-}
-.alert .big p {
-  font-size: 24px;
-}
+*/
 form .btn {
   display: block;
 }
@@ -4827,18 +5008,39 @@ img {
 }
 .chat-composite {
   width: 250px;
-  border: 1px solid #000;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  background-color: #f7f7f7;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  background-color: #faa732;
+  background-image: -moz-linear-gradient(top, #fbb450, #f89406);
+  background-image: -ms-linear-gradient(top, #fbb450, #f89406);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbb450), to(#f89406));
+  background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
+  background-image: -o-linear-gradient(top, #fbb450, #f89406);
+  background-image: linear-gradient(top, #fbb450, #f89406);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89406', GradientType=0);
+  border: 1px solid #f89406;
   float: left;
   padding: 10px;
   position: relative;
   margin: 20px;
 }
+.chat-composite:after {
+  content: "";
+  position: absolute;
+  right: 17px;
+  bottom: -18px;
+  border-right: 17px solid #f89406;
+  border-bottom: 17px solid #fff;
+  /* ie fix */
+
+}
 .chat-composite:hover .admin-options {
   display: block;
+}
+.chat-composite a {
+  color: #fff;
 }
 .chat-composite .admin-options {
   position: absolute;
@@ -4850,45 +5052,18 @@ img {
   -moz-box-shadow: 0px 3px 6px #666666;
   box-shadow: 0px 3px 6px #666666;
 }
-.chat-composite .point {
-  width: 0;
-  height: 0;
-  position: absolute;
-  right: 17px;
-  bottom: -25px;
-  display: block;
-  border-right: 25px solid #f7f7f7;
-  border-bottom: 25px solid #FFF;
-  /* IE fix */
-
-  border-bottom: 25px solid rgba(0, 0, 0, 0);
-  overflow: hidden;
-  /* IE fix */
-
-  z-index: 2;
-}
-.chat-composite .point-under {
-  width: 0;
-  height: 0;
-  position: absolute;
-  right: 16px;
-  bottom: -27px;
-  display: block;
-  border-right: 27px solid #000;
-  border-bottom: 27px solid #FFF;
-  /* IE fix */
-
-  border-bottom: 27px solid rgba(0, 0, 0, 0);
-  overflow: hidden;
-  /* IE fix */
-
-  z-index: 1;
-}
 .chat-composite blockquote {
+  display: inline;
   margin: 0;
   padding: 0;
   border: none;
   margin-bottom: 7px;
+}
+.chat-composite blockquote a {
+  text-decoration: underline;
+}
+.chat-composite .colored blockquote a {
+  color: #08C;
 }
 .chat-composite .view-reply {
   text-align: right;
@@ -4984,7 +5159,6 @@ img {
   margin: 0;
 }
 .messages li {
-  text-shadow: 0 1px 0 white;
   padding: 5px;
 }
 .messages li.colored {
@@ -5084,6 +5258,8 @@ table.setup td.editing .edit {
   text-decoration: none;
   margin-right: -10px;
   margin-top: -5px;
+  opacity: 1;
+  filter: alpha(opacity=100);
 }
 #alert .letter p {
   font-size: 18px;
@@ -5091,6 +5267,19 @@ table.setup td.editing .edit {
 }
 #alert .error {
   background-color: #E73E36;
+}
+#alert.instructions {
+  position: static;
+  width: 100%;
+  margin-bottom: 25px;
+}
+#alert.instructions .wrapper {
+  position: static;
+  width: 600px;
+  margin: 0 auto;
+}
+#alert.instructions .wrapper p {
+  font-size: 16px;
 }
 .notice {
   left: 50%;

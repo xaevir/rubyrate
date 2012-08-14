@@ -1,20 +1,25 @@
 <div id="mock-homepage">
-  <div class="bubble header">
-    <blockquote>Hello. My name is Ruby. Welcome to Rubyrate, your online personal assistant.</blockquote>
-  </div>
-  <div id="how-works">
-    <h2>How this page works</h2>
-    <p>Shown below are answers to your request. You can respond to any company you are interested in by 
-      clicking on the reply.  Also please retweet us and tell your friends. 
-      We are 100% free. You are also welcome to start a new wish if you have a new request.  
-    </p>
-  </div>
-  <div id="you-said">
-    <div class="bubble second">
-      <blockquote style="font-size: 18px">{{wish}}</blockquote>
+  <div class="wrapper">
+    <div id="how-works">
+      <h2>How this page works</h2>
+      <p>Shown below are answers to your request. You can respond to any company you are interested in by 
+        clicking on the reply.  Also please retweet us and tell your friends. 
+        We are 100% free. You are also welcome to start a new wish if you have a new request.  
+      </p>
     </div>
-    <h2>You said...</h2>
-  </div> 
-  <h2 class="replies">And your replies are...</h2>
+    <div class="message-wrapper">
+      <div class="bubble header">
+        <blockquote>Hello. My name is Ruby. Welcome to Rubyrate, your online personal assistant.</blockquote>
+      </div>
+      <img src="/img/ruby-head.png" class="avatar"/>
+    </div>
+    <div id="blue-guy">
+      <div class="you"><span>You</span></div>
+      <div class="bubble second">
+        <blockquote>{{wish}}</blockquote>
+      </div>
+    </div> 
+  </div>
+  <h2 class="replies">Your replies</h2>
 </div>
 

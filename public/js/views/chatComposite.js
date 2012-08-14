@@ -24,13 +24,10 @@ return Backbone.View.extend({
     this.user = options.user
     if (options && options.noReply)
       this.noReply = options.noReply
-    if (options && options.bigTextarea)
-      this.bigTextarea = options.bigTextarea
   },
 
   render: function(){
     $(this.el).append(this.messagesView.render().el)
-    this.$el.append('<span class="point"></span><span class="point-under"></span>')
     if (this.noReply == undefined)
       this.$el.append('<a href="#" class="btn btn-warning reply">Reply</a>')
     return this

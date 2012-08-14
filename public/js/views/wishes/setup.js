@@ -5,11 +5,24 @@ var AlertView = require('views/site/alert')
   , tplHalfUser = require('text!templates/wishes/half-user.mustache')
 
 
+var Todo = Backbone.Model.extend({
+  // Remove this Todo from *localStorage* and delete its view.
+  clear: function() {
+    this.destroy();
+  }
+});
+
+var TodoList = Backbone.Collection.extend({
+  model: Todo,
+
+});
+
+
 var BusinessItem = Backbone.View.extend({
 
-  tagName:  "tr",
+  tagName:  "form",
 
-  template: Hogan.compile(tplHalfUser),
+  template: Hogan.compile(tpl),
 
   events: {
     "dblclick td"  : "edit",
@@ -17,9 +30,8 @@ var BusinessItem = Backbone.View.extend({
     "blur .edit"      : "close"
   },
 
-  initialize: function(halfUser, wish) {
-    _.bindAll(this, 'render');
-    this.halfUser = halfUser
+  initialize: function(wish) {
+    _.bindAll(this);
     this.wish = wish
   },
 
@@ -51,7 +63,7 @@ var BusinessItem = Backbone.View.extend({
 
 
   render: function() {
-    var template = this.template.render({user:this.halfUser})
+    var template = this.template.render()
     $(this.el).append(template)
     return this
   },
@@ -64,7 +76,7 @@ return Backbone.View.extend({
 
   tagName: 'table',
 
-  template: Hogan.compile(tplHalfUser),
+  template: Hogan.compile(tpl),
 
   events: {
     "click a.addBusiness": "addBusiness",
@@ -72,9 +84,6 @@ return Backbone.View.extend({
 
   initialize: function(options) {
     this.wish = options.wish
-    this.halfUsers = options.halfUsers
-    var template = this.template.render({head: true})
-    $(this.el).append(template)
     _.bindAll(this)
   },
 
@@ -84,13 +93,14 @@ return Backbone.View.extend({
   },
 
   addOne: function(halfUser, index) {
-    var view = new BusinessItem(halfUser, this.wish);
+    var view = new BusinessItem(this.wish);
     $(this.el).append(view.render().el)
   },
 
   render: function() {
-    _.each(this.halfUsers, this.addOne, this);
-
+    var template = this.template.render({header: true})
+    $(this.el).html(template)  
+    //_.each(this.halfUsers, this.addOne, this);
     $(this.el).append('<div><a href="#" class="btn addBusiness">Add Business</a></div>')
     return this
   },

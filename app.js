@@ -66,7 +66,9 @@ app.configure('production', function(){
   db = mongo.db('localhost/rubyrate?auto_reconnect');
 })
 
-app.settings.env = 'production'
+
+// debug
+//app.settings.env = 'production'
 
 db.bind('messages')
 db.bind('subjects')
@@ -357,6 +359,7 @@ app.get('/lead/:id/:slug', function(req, res) {
       db.messages.find({convo_id: userInArray.convo_id}).sort({_id:1}).toArray(function(err, messages) {
         messages.unshift(subject)
         res.send({messages: messages,
+                  wish: subject,
                   subject_id: req.params.id,   
                   convo_id: userInArray.convo_id})
       })

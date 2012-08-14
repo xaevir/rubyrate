@@ -5,6 +5,7 @@ var SignupView = require('views/users/signup')
   , LoginView = require('views/users/login')         
   , SubjectsNav = require('views/subjects_nav')
   , Wishes = require('collections/wishes')
+  , Messages = require('collections/messages')
   , Subjects = require('collections/subjects')
   , Subject = require('models/subject')
   , ChatColumns = require('views/chatColumns')
@@ -16,14 +17,16 @@ var SignupView = require('views/users/signup')
   , WishSetupView = require('views/wishes/setup')
   , ChatCompositeView = require('views/chatComposite')         
   , ReplyView = require('views/reply')
+  , ReplyLeadView = require('views/reply-lead')
   , instructionsTpl = require('text!templates/instructions.mustache')
-  , leadTpl = require('text!templates/lead.mustache')
   , sellerTpl = require('text!templates/seller.mustache')
   , UserMenu = require('views/user-menu')
   , User = require('models/user')
   , NewUser = require('models/newUser')
   , MainMenu = require('views/main-menu')         
   , Spider = require('views/spider')         
+  , BubblesView = require('views/bubbles')         
+  , AlertView = require('views/site/alert')
 
 function showStatic(path) {
   $.get(path, function(obj) {
@@ -245,19 +248,40 @@ AppRouter.prototype.reset_wish = function(){
 }
 
 AppRouter.prototype.lead = function(id, slug) {
-  var self = this
+  $('body').attr('id','lead')
 
-  $.get('/lead/'+id+'/'+slug, function(res) {
-    self.getUser()
+  $.get('/lead/'+id+'/'+slug, $.proxy(function(res){
+    this.getUser()
+    var instructions = '<h2>How this page works</h2>\
+      <p>You have a lead from a potential buyer. We started the convo for you and\
+        your lead has just replied. All you have to do is fill in the box at the bottom.\
+      </p>'
+
+    new AlertView({message: instructions, 
+                   doNotFadeOut: true,
+                   className: 'instructions',
+                   doNotStickAround: true}) 
+    var messages = new Messages(res.messages)
+    var bubblesView = new BubblesView({collection: messages,
+                                       user: this.user})
+    $('#app').append(bubblesView.render().el)
+    var opts = {convo_id: res.convo_id,
+                subject_id: res.subject_id,
+                collection: messages,
+                user: this.user}
+    var replyLeadView = new ReplyLeadView(opts)
+    $('#app').append(replyLeadView.render().el)
+    
+    /*
     var template = Hogan.compile(leadTpl)
-    $('#app').html(template.render());
+    $('#app').html(template.render({lead: res.wish, you: res.messages[1].body}));
 
-    var chatCompositeView = new ChatCompositeView({id:'lead-chat', user: self.user})
-    chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.messages, user: self.user})
+    var chatCompositeView = new ChatCompositeView({id:'lead-chat', user: this.user})
+    chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.messages, user: this.user})
     var opts = {convo_id: res.convo_id,
                 subject_id: res.subject_id,
                 parentView: chatCompositeView,
-                user: self.user}
+                user: this.user}
     chatCompositeView.replyView = new ReplyView(opts)
     var html = chatCompositeView.render().el
     $('#app').append(html);
@@ -268,8 +292,11 @@ AppRouter.prototype.lead = function(id, slug) {
     });
     _gaq.push(['_trackPageview', '/lead/'+ res.subject.body])
     document.title = 'Ruby Rate';
-
-  })
+   */
+  }, this));
+}
+AppRouter.prototype.reset_helper = function(){
+  $('body').removeAttr('id')
 }
 
 

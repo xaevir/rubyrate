@@ -4,7 +4,6 @@ var tpl = require('text!templates/messageBody.mustache')
 
 return Backbone.View.extend({
 
-  tagName:  "span",
   className: 'msg',
 
   template: Hogan.compile(tpl),

@@ -32,8 +32,8 @@ var MessageItem = Backbone.View.extend({
     if (this.message.author == 'Me')
       $(this.el).addClass('colored')
 
-    if (this.user.get('role') == 'admin')
-      $(this.el).prepend('<div class="admin-options"><a href="/messages/'+this.message._id+'/edit">edit</a></div>')
+//    if (this.user.get('role') == 'admin')
+//      $(this.el).prepend('<div class="admin-options"><a href="/messages/'+this.message._id+'/edit">edit</a></div>')
 
     return this;
   },

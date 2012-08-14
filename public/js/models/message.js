@@ -5,9 +5,7 @@ define(function(require) {
     idAttribute: "_id",
 
     validation: {
-      //username:    {required: true},
       body:      {required: true},
-      //kickoff:   {required: true}
     }
   })
 

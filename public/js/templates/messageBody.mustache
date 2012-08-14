@@ -1,9 +1,11 @@
 {{#makeProfileLink}}
-  <b><a href="/profile/{{authorSlug}}" class="profile-link">{{author}}</a>:</b>
+  <b class="author"><a href="/profile/{{authorSlug}}" class="profile-link">{{author}}</a>:</b>
 {{/makeProfileLink}}
 {{^makeProfileLink}}
-  <b>{{author}}:</b>
+  <b class="author">{{author}}:</b>
 {{/makeProfileLink}}
 
+<blockquote>
 {{{body}}} 
+</blockquote>
 <span class="sent">Sent: {{time}}</span>
