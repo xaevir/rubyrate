@@ -32,7 +32,6 @@ app.engine('mustache', cons.hogan);
 
 app.configure(function(){
   app.set("trust proxy", true)
-  app.set('port', process.env.PORT || 8010);
   app.set('views', __dirname + '/pages');
   app.set('view engine', 'mustache');
   app.set('view options', { layout: false });
@@ -59,10 +58,12 @@ app.use(function(err, req, res, next) {
 
 app.configure('development', function(){
   app.use(express.errorHandler());
+  app.set('port', process.env.PORT || 8011);
   db = mongo.db('localhost/dev_ruby?auto_reconnect');
 });
 
 app.configure('production', function(){
+  app.set('port', process.env.PORT || 8010);
   db = mongo.db('localhost/rubyrate?auto_reconnect');
 })
 
