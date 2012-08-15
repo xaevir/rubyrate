@@ -26,5 +26,7 @@
     , "sinon-chai": "*"
     , "sinon": "*"
     , "request": "*"
+    , "jsdom" : "*"
+    , "socket.io": "*"
   }
 }

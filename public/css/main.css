@@ -4270,6 +4270,9 @@ p {
 li {
   line-height: 1.3em;
 }
+body.home {
+  background: url(/img/orange-bokeh-bg.jpg) no-repeat top center;
+}
 #home {
   background: url(/img/ruby.png) no-repeat 13px 27px;
   min-height: 393px;

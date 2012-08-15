@@ -7,11 +7,16 @@ var homeTpl = require('text!templates/home.mustache'),
     AlertView = require('views/site/alert')
 
 Router.prototype.home = function(){
+  $('body').addClass('home')
   var wishView = new CreateWishHomepageView({user: this.user})
   $('#app').html(homeTpl)
   $('.home-form', '#app').html(wishView.render().el)
   document.title = 'Ruby Rate'
   _gaq.push(['_trackPageview', '/home'])
+}
+
+Router.prototype.reset_home = function(){
+  $('body').removeClass('home')
 }
 
 
