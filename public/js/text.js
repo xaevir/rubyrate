@@ -244,8 +244,8 @@ define(['module'], function (module) {
             }
 
             xhr.onreadystatechange = function (evt) {
-                console.log('xhr status: '+xhr.readyState)
-                console.log('xhr response: '+xhr.responseText)
+                //console.log('xhr status: '+xhr.readyState)
+                //console.log('xhr response: '+xhr.responseText)
                 var status, err;
                 //Do not explicitly handle errors, those should be
                 //visible via console output in the browser.

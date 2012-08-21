@@ -15,6 +15,7 @@ return Backbone.View.extend({
 
   initialize: function(options){
     this.user = options.user
+    this.isHome = options.isHome
     this.user.on('change', this.render, this)
     _.bindAll(this, 'render') 
   },
@@ -30,10 +31,9 @@ return Backbone.View.extend({
     router.navigate(href.substr(1), true)
   },
 
-
   render: function() {
     var loggedIn = this.user.isLoggedIn() 
-    var template = this.template.render({user: loggedIn})
+    var template = this.template.render({user: loggedIn, isHome: this.isHome})
     $(this.el).html(template)
     return this
   },

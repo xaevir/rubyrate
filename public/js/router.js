@@ -19,7 +19,7 @@ var SignupView = require('views/users/signup')
   , ReplyView = require('views/reply')
   , ReplyLeadView = require('views/reply-lead')
   , instructionsTpl = require('text!templates/instructions.mustache')
-  , sellerTpl = require('text!templates/seller.mustache')
+//  , sellerTpl = require('text!templates/seller.mustache')
   , UserMenu = require('views/user-menu')
   , User = require('models/user')
   , NewUser = require('models/newUser')
@@ -43,6 +43,7 @@ rp.route = function(route, name, callback) {
     //this.trigger.apply(this, ['beforeroute:' + name].concat(_.toArray(arguments)));
     this.reset(name)
     callback.apply(this, arguments);
+    this.modernizr()
   });
 };
 
@@ -63,7 +64,8 @@ var AppRouter = Backbone.Router.extend({
 
   initialize: function() {
     _.bindAll(this); 
-    this.setup()
+    this.user = new User(window.user) 
+    this.on('all', this.setupNav)
     this.on('all', this.highlight)
     window.events = _.clone(Backbone.Events)
     window.dispatcher.on('session:logout', this.logout, this)
@@ -105,11 +107,21 @@ AppRouter.prototype.notFound = function(){
   $('#app').html('<h1 style="text-align: center">404 Error: This page was not found</h1>')
 }
 
-AppRouter.prototype.setup = function(){
-  this.user = new User(window.user) 
-  new MainMenu({ el: $("#main-menu"), user: this.user}).render()
+AppRouter.prototype.setupNav = function(route, section){
+  var isHome = false
+  if (route === 'route:home')
+    isHome = true
+  new MainMenu({ el: $("#main-menu"), user: this.user, isHome: isHome}).render()
   new UserMenu({ el: $("#user-menu"), model: this.user}).render()
 }
+
+AppRouter.prototype.modernizr = function(){
+   Modernizr.load({
+     test: Modernizr.input.placeholder,
+     nope: ['/js/libs/HTML5-placeholder-polyfill/placeholder_polyfill.min.css',
+            '/js/libs/HTML5-placeholder-polyfill/placeholder_polyfill.jquery.min.combo.js']
+   });
+} 
 
 AppRouter.prototype.reset = function(route, section) {
   route = route.replace('route:', '');
