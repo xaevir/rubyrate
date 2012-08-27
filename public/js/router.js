@@ -133,6 +133,17 @@ AppRouter.prototype.reset = function(route, section) {
   this.prev_route = route
 }
 
+AppRouter.prototype.getUser = function() {
+  var self = this
+  $.ajax({ 
+    url: "/user", 
+    async: false, 
+    success: function(user) {   
+      if (user) self.user.set(user)
+    }
+  });
+}
+
 AppRouter.prototype.how_it_works = function() { 
   var template = Hogan.compile(homeTpl)
   $('#app').html(template.render())
@@ -264,6 +275,7 @@ AppRouter.prototype.lead = function(id, slug) {
 
   $.get('/lead/'+id+'/'+slug, $.proxy(function(res){
     this.getUser()
+    $('#app').html('')
     var instructions = '<h2>How this page works</h2>\
       <p>You have a lead from a potential buyer. We started the convo for you and\
         your lead has just replied. All you have to do is fill in the box at the bottom.\
@@ -283,60 +295,77 @@ AppRouter.prototype.lead = function(id, slug) {
                 user: this.user}
     var replyLeadView = new ReplyLeadView(opts)
     $('#app').append(replyLeadView.render().el)
-    
-    /*
-    var template = Hogan.compile(leadTpl)
-    $('#app').html(template.render({lead: res.wish, you: res.messages[1].body}));
 
-    var chatCompositeView = new ChatCompositeView({id:'lead-chat', user: this.user})
-    chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.messages, user: this.user})
-    var opts = {convo_id: res.convo_id,
-                subject_id: res.subject_id,
-                parentView: chatCompositeView,
-                user: this.user}
-    chatCompositeView.replyView = new ReplyView(opts)
-    var html = chatCompositeView.render().el
-    $('#app').append(html);
-
-    $.each($('.scrollable'), function(index, ul) { 
-      var height = ul.scrollHeight
-      ul.scrollTop = height
-    });
-    _gaq.push(['_trackPageview', '/lead/'+ res.subject.body])
+    var ul = $('.bubbles')[0];
+    var height = ul.scrollHeight
+    ul.scrollTop = height
+    _gaq.push(['_trackPageview', '/lead/'+ res.wish.body])
     document.title = 'Ruby Rate';
-   */
+   
   }, this));
 }
-AppRouter.prototype.reset_helper = function(){
+
+AppRouter.prototype.reset_lead = function(){
   $('body').removeAttr('id')
 }
-
-
-AppRouter.prototype.getUser = function() {
-  var self = this
-  $.ajax({ 
-    url: "/user", 
-    async: false, 
-    success: function(user) {   
-      if (user) self.user.set(user)
-    }
-  });
-}
-
 
 AppRouter.prototype.seller = function(id) {
   var template = Hogan.compile(sellerTpl)
   $('#app').html(template.render());
-
 }
+
 AppRouter.prototype.helper = function(id) {
-  var self = this
-  $('body').attr('id','wish')
-  $.get('/helper/'+id, function(res) {
+  $('body').attr('id','helper')
+
+  $.get('/helper/'+id, $.proxy(function(res){
     if (res.success === false)
-      return self.notFound()
-    self.getUser()
-    // Instructions
+      return this.notFound()
+    this.getUser()
+    $('#app').html('')
+    var instructions = '<h2>How this page works</h2>\
+      <p>Shown below are answers to your request. You can respond to any \
+         company you are interested in by clicking on the reply.\
+      </p>'
+
+    new AlertView({message: instructions, 
+                   doNotFadeOut: true,
+                   className: 'instructions',
+                   doNotStickAround: true}) 
+
+    var tpl = '<div class="bubble-orange">\
+                <blockquote>{{{body}}}</blockquote>\
+              </div>\
+              <div class="author">Me</div>'
+
+    tpl = Hogan.compile(tpl)
+    tpl = tpl.render(res.subject)
+    $('#app').append(tpl)
+    $('#app').append('<h2 class="replies">Your replies</h2>')
+    
+    _gaq.push(['_trackPageview', '/helper/'+ res.subject.body])
+    document.title = 'Ruby Rate - Helper';
+    var views = []
+    _.each(res.conversations, function(convo){
+      var chatCompositeView = new ChatCompositeView({user: this.user})
+      chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: this.user})
+      var opts = {
+        convo_id: convo._id,
+        subject_id: convo.value.comments[0].subject_id,
+        parentView: chatCompositeView,
+        user: self.user
+      }
+      chatCompositeView.replyView = new ReplyView(opts)
+      views.push(chatCompositeView);
+   }, this);
+    var view = new ChatColumns({views: views, columns: 2, span: 6})
+    var html =  view.render().el
+    $('#app').append(html);
+    $.each($('.scrollable'), function(index, ul) { 
+      var height = ul.scrollHeight
+      ul.scrollTop = height
+    });
+
+    /*
     var template = Hogan.compile(instructionsTpl)
     $('#app').html(template.render({wish: res.subject.body}));
 
@@ -361,9 +390,8 @@ AppRouter.prototype.helper = function(id) {
       var height = ul.scrollHeight
       ul.scrollTop = height
     });
-    _gaq.push(['_trackPageview', '/helper/'+ res.subject.body])
-    document.title = 'Ruby Rate - Helper';
-  });
+    */
+  }, this));
 }
 
 AppRouter.prototype.reset_helper = function(){

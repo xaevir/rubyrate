@@ -1,6 +1,6 @@
 define(function(require) {
 
-var tpl = '<div class="bubble">\
+var tpl = '<div class="{{bubbleClass}}">\
             <blockquote>{{{body}}}</blockquote>\
           </div>\
           <div class="author">{{author}}</div>'
@@ -22,9 +22,11 @@ var BubbleView = Backbone.View.extend({
 
     // add color if me 
     if (this.user.get('username') == this.model.get('author')) {
-      $(this.el).addClass('seller')
+      locals.bubbleClass = 'bubble-blue'
       locals.author = 'Me'
+      $(this.el).addClass('seller')
     } else {
+      locals.bubbleClass = 'bubble-orange'
       $(this.el).addClass('buyer')
     }
     var template = this.template.render(locals)
