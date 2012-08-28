@@ -36,24 +36,31 @@ li {
 
 @red: #e73e36;
 
-.pie-border-radius(@radius: 5px) {
+.border-radius-for-pie(@radius: 5px) {
   .border-radius(@radius);
   behavior: url(/js/libs/PIE.htc);
 }
 
+.gradient-for-pie(@startColor: #555, @endColor: #333) {
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor) to(@endColor)); /*old webkit*/
+    background: -webkit-linear-gradient(@startColor, @endColor); /*new webkit*/
+    background: -moz-linear-gradient(@startColor, @endColor); /*gecko*/
+    background: -ms-linear-gradient(@startColor, @endColor); /*IE10 preview*/
+    background: -o-linear-gradient(@startColor, @endColor); /*opera 11.10+*/
+    background: linear-gradient(@startColor, @endColor); /*future CSS3 browsers*/
+    -pie-background: linear-gradient(@startColor, @endColor); /*PIE*/
+}
+
 .bubble {
   margin-bottom: 15px;
-  .pie-border-radius(20px);
   padding: 10px; 
   position: relative;
-  color: #fff;
   width: 250px;
   margin: 20px;
   &:after {
     content:"";
     position: absolute;
     //border-bottom: 17px solid #fff; /* ie fix */
-    border-bottom: 17px solid rgba(0,0,0,0); 
   }
   blockquote {
     overflow: auto;
@@ -71,30 +78,59 @@ li {
   }
 }
 
-
 .bubble-orange {
   .bubble;
-  #gradient > .vertical( #ffa92f,#f89406 );
-  //-pie-background: linear-gradient(#FFD754,  #f4c00c);
+  .border-radius-for-pie(20px);
+  .gradient-for-pie(#ffa92f, #f89406);
   border: 1px solid #f89406;
   &:after {
     left: 17px;
     border-left: 17px solid #f89406; 
     bottom: -18px;
+    border-bottom: 17px solid rgba(0,0,0,0); 
   }
 }
 
 .bubble-blue {
   .bubble;
+  .border-radius-for-pie(20px);
   #gradient > .vertical(#31c9f7, #08ace2);
   -pie-background: linear-gradient(#31c9f7, #08ace2);
-  .pie-border-radius(20px);
+  .border-radius-for-pie(20px);
   border: 1px solid #08ace2;
   &:after {
     right: 17px;
     bottom: -18px;
     border-right: 17px solid #08ace2; 
+    border-bottom: 17px solid rgba(0,0,0,0); 
   }
+}
+
+.bubble-orange-border {
+  .bubble;
+  .border-radius-for-pie(5px);
+  background: #fff;
+  border: 1px solid #f89406;
+  .box-shadow(0 1px 2px #CCC);
+  &:after {
+    left: 17px;
+    bottom: -18px;
+    background: url(/img/tip-orange.png) no-repeat top center;
+    width: 18px;
+    height: 18px;
+  }
+
+  /*
+  &:before {
+    content:"";
+    position: absolute;
+    border-bottom: 17px solid rgba(0,0,0,0); 
+    left: 18px;
+    border-left: 17px solid #fff; 
+    bottom: -16px;
+    z-index: 1;
+  }
+  */
 }
 
 #home {
@@ -105,45 +141,30 @@ li {
     display: block;
     margin-top: 10px;
   }
-  .col1, .col2 {
-    .clearfix();
-    //#gradient > .vertical(#ffb54c, #ff7b33);
-    //background: #e73e36;
-    .pie-border-radius(20px);
-    padding: 10px;
-    float: left;
-  }
-  .col2 {
-    float: right; 
-  }
   h1 {
     margin: 15px 0 25px 0;
     padding: 0;
     font-size: 28px;
-    //font-family: DroidSans;
     padding: 0 15px;
     text-align: center;
-    //color: #e73e36;
   }
   h2 {
     border-bottom: 3px solid #e73e36;
     margin-bottom: 20px;
   }
   .how-it-works {
-    .pie-border-radius(10px);
     width: 365px;
     float: left;
     padding: 20px;
     padding-top: 0;
-    background: #fff;
-    #gradient > .vertical(#fff, #f7f7f7);
+    .gradient-for-pie(#fff, #f7f7f7);
+    .border-radius-for-pie(10px);
     border: 1px solid #ccc;
     margin: 0 auto;
     .clearfix();
     height: 400px;
     h2 {
       text-align: center; 
-      //color: #e73e36;
     }
     ul {
       list-style: none;
@@ -157,7 +178,6 @@ li {
       b {
         margin-right: 8px;
         position: relative;
-        //top: 10px;
         font-size: 22px;
         display: block;
         float: left;
@@ -168,24 +188,18 @@ li {
   .home-form {
     float: right;
     margin: 0 auto;
-    //margin-bottom: 20px;
-    //background: rgba(49,201,247, .5);
-    //-pie-background: rgba(49,201,247, .5);
-    //#gradient > .vertical(#e5f9ff, #d1f3fc);
-    #gradient > .vertical(#888, #666);
-    #gradient > .vertical(#555, #333);
-    border: 1px solid #666;
+    //.gradient-for-pie(#444, #111);
+    background: #222;
+    .border-radius-for-pie(10px);
+    border: 1px solid #000;
     padding: 40px;
     padding-top: 0;
-    .pie-border-radius(10px);
     width: 325px;
     height: 380px;
     h2 {
       text-align: center; 
       color: #fff;
       //text-shadow: 1px 1px 0 #666;
-      border-bottom: 3px solid #e73e36;
-      border-bottom: 3px solid #62C462;
     }
     label {
       font-weight: bold;
@@ -197,11 +211,10 @@ li {
       height: 95px; 
       .input-block-level();
     }
-    .btn {
-      //border: 1px solid #fff; 
-    }
   }
 }
+
+
 
 #lead {
   #app {
@@ -212,7 +225,7 @@ li {
     clear: both;
     background: #ccc;   
     //width: 350px;
-    .border-radius(0 0 20px 20px);
+    .border-radius-for-pie(0 0 20px 20px);
     padding: 0 20px;
     margin: 0 auto;
     width: 575px;
@@ -235,10 +248,10 @@ li {
     background: #CFF3FC;
     //border: 1px solid #95e1f6;
     padding: 0 20px 10px 20px;
-    .box-shadow(inset 0 0px 10px rgba(0, 0, 0, 0.5));
+    //.box-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
     max-height: 300px;
     overflow: auto;
-    .pie-border-radius(20px 20px 0 0);
+    .border-radius-for-pie(20px 20px 0 0);
     li {
       clear: both; 
     }
@@ -272,7 +285,7 @@ li {
   .bubble {
     margin-bottom: 13px;
     background-color: #000;
-    .border-radius(20px);
+    .border-radius-for-pie(20px);
     padding: 10px; 
     position: relative;
     //.box-shadow(0 1px 1px rgba(0, 0, 0, .3));
@@ -449,7 +462,7 @@ footer {
   margin-bottom: 20px;
   #gradient > .vertical( #f5f5f5,  #e5e5e5);
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 0 0 1px rgba(0, 0, 0, 0.2);
-  .border-radius(6px);
+  .border-radius-for-pie(6px);
   box-shadow: none;
   border: 1px solid #e1e1e1;
 }
@@ -457,7 +470,7 @@ footer {
 .small-content {
   padding: 50px;
   //.box-shadow(0 0px 1px rgba(0, 0, 0, 0.35));
-  .border-radius(5px);
+  .border-radius-for-pie(5px);
   margin: 0 auto;
   width: 230px;
   //background-color: #F9F9F9;
@@ -479,7 +492,7 @@ footer {
 .app #app {
   min-height: 400px;
   background-color: #fff;
-  .border-radius(4px);
+  .border-radius-for-pie(4px);
   //.box-shadow(0 0px 5px 1px #B8B8B8);
 }
 
@@ -734,6 +747,11 @@ img {
   width: 400px;
 }
 
+#wishes .chat-composite {
+  .bubble-orange-border;
+}
+
+
 #helper .chat-composite {
   .bubble-blue;
 }
@@ -745,8 +763,8 @@ img {
       display: block; 
     }
   }
-  a {
-    color: #fff; 
+  .author {
+    font-weight: normal;
   }
   .admin-options {
     position: absolute;  
@@ -943,11 +961,11 @@ table.setup {
     left: -150px;
   }
   .content {
-    .box-shadow(0 2px 10px rgba(0, 0, 0, 0.4));
+    .box-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
     border: 1px solid #fff;
     background: #333;
     color: #fff;
-    .border-radius(5px);
+    .border-radius-for-pie(5px);
     display: block;
     font-size: 18px;
     font-weight: bold;
@@ -975,13 +993,23 @@ table.setup {
   position: static;
   width: 100%;
   margin-bottom: 25px;
+  h2 {
+    color: #0e72a0;
+  }
   .wrapper {
     position: static; 
-    width: 600px;
+    width: 500px;
     margin: 0 auto;
     p {
       font-size: 16px; 
+      font-weight: normal;
     }
+  }
+  .content {
+    border: 1px solid #a2c9db;
+    background: #D9EDF7;
+    color: #333;
+    text-align: left;
   }
 }
 
@@ -997,7 +1025,7 @@ table.setup {
     border-width: 7px; 
     border-style: solid; 
     background-color: #ccc;
-    .border-radius(10px);
+    .border-radius-for-pie(10px);
     display: block;
     left: -150px;
     padding: 5px 14px;
@@ -1041,7 +1069,7 @@ table.setup {
           height: 20px;
           color: #fff;
           background: #333;
-          .border-radius(20px);
+          .border-radius-for-pie(20px);
         }
       }
     }

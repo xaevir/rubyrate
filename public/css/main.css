@@ -4274,20 +4274,14 @@ li {
 /*********** Mixins ***************/
 .bubble {
   margin-bottom: 15px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
   padding: 10px;
   position: relative;
-  color: #fff;
   width: 250px;
   margin: 20px;
 }
 .bubble:after {
   content: "";
   position: absolute;
-  border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
 .bubble blockquote {
   overflow: auto;
@@ -4305,30 +4299,40 @@ li {
 }
 .bubble-orange {
   margin-bottom: 15px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+  margin: 20px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
   behavior: url(/js/libs/PIE.htc);
-  padding: 10px;
-  position: relative;
-  color: #fff;
-  width: 250px;
-  margin: 20px;
-  background-color: #fca11f;
-  background-image: -moz-linear-gradient(top, #ffa92f, #f89406);
-  background-image: -ms-linear-gradient(top, #ffa92f, #f89406);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffa92f), to(#f89406));
-  background-image: -webkit-linear-gradient(top, #ffa92f, #f89406);
-  background-image: -o-linear-gradient(top, #ffa92f, #f89406);
-  background-image: linear-gradient(top, #ffa92f, #f89406);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa92f', endColorstr='#f89406', GradientType=0);
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffa92f) to(#f89406));
+  /*old webkit*/
+
+  background: -webkit-linear-gradient(#ffa92f, #f89406);
+  /*new webkit*/
+
+  background: -moz-linear-gradient(#ffa92f, #f89406);
+  /*gecko*/
+
+  background: -ms-linear-gradient(#ffa92f, #f89406);
+  /*IE10 preview*/
+
+  background: -o-linear-gradient(#ffa92f, #f89406);
+  /*opera 11.10+*/
+
+  background: linear-gradient(#ffa92f, #f89406);
+  /*future CSS3 browsers*/
+
+  -pie-background: linear-gradient(#ffa92f, #f89406);
+  /*PIE*/
+
   border: 1px solid #f89406;
 }
 .bubble-orange:after {
   content: "";
   position: absolute;
-  border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
 .bubble-orange blockquote {
   overflow: auto;
@@ -4348,18 +4352,18 @@ li {
   left: 17px;
   border-left: 17px solid #f89406;
   bottom: -18px;
+  border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
 .bubble-blue {
   margin-bottom: 15px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+  margin: 20px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
   behavior: url(/js/libs/PIE.htc);
-  padding: 10px;
-  position: relative;
-  color: #fff;
-  width: 250px;
-  margin: 20px;
   background-color: #21bdef;
   background-image: -moz-linear-gradient(top, #31c9f7, #08ace2);
   background-image: -ms-linear-gradient(top, #31c9f7, #08ace2);
@@ -4379,7 +4383,6 @@ li {
 .bubble-blue:after {
   content: "";
   position: absolute;
-  border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
 .bubble-blue blockquote {
   overflow: auto;
@@ -4399,6 +4402,60 @@ li {
   right: 17px;
   bottom: -18px;
   border-right: 17px solid #08ace2;
+  border-bottom: 17px solid rgba(0, 0, 0, 0);
+}
+.bubble-orange-border {
+  margin-bottom: 15px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+  margin: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  behavior: url(/js/libs/PIE.htc);
+  background: #fff;
+  border: 1px solid #f89406;
+  -webkit-box-shadow: 0 1px 2px #cccccc;
+  -moz-box-shadow: 0 1px 2px #cccccc;
+  box-shadow: 0 1px 2px #cccccc;
+  /*
+  &:before {
+    content:"";
+    position: absolute;
+    border-bottom: 17px solid rgba(0,0,0,0); 
+    left: 18px;
+    border-left: 17px solid #fff; 
+    bottom: -16px;
+    z-index: 1;
+  }
+  */
+
+}
+.bubble-orange-border:after {
+  content: "";
+  position: absolute;
+}
+.bubble-orange-border blockquote {
+  overflow: auto;
+  max-height: 165px;
+  display: inline;
+  color: #333;
+  padding: 0;
+  border-left: none;
+  margin: 0;
+  line-height: 1.3;
+  margin-bottom: 7px;
+}
+.bubble-orange-border blockquote a {
+  text-decoration: underline;
+}
+.bubble-orange-border:after {
+  left: 17px;
+  bottom: -18px;
+  background: url(/img/tip-orange.png) no-repeat top center;
+  width: 18px;
+  height: 18px;
 }
 #home {
   padding: 20px;
@@ -4408,30 +4465,6 @@ li {
   margin: 0 auto;
   display: block;
   margin-top: 10px;
-}
-#home .col1,
-#home .col2 {
-  *zoom: 1;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
-  padding: 10px;
-  float: left;
-}
-#home .col1:before,
-#home .col2:before,
-#home .col1:after,
-#home .col2:after {
-  display: table;
-  content: "";
-}
-#home .col1:after,
-#home .col2:after {
-  clear: both;
-}
-#home .col2 {
-  float: right;
 }
 #home h1 {
   margin: 15px 0 25px 0;
@@ -4445,24 +4478,35 @@ li {
   margin-bottom: 20px;
 }
 #home .how-it-works {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  behavior: url(/js/libs/PIE.htc);
   width: 365px;
   float: left;
   padding: 20px;
   padding-top: 0;
-  background: #fff;
-  background-color: #fcfcfc;
-  background-image: -moz-linear-gradient(top, #ffffff, #f7f7f7);
-  background-image: -ms-linear-gradient(top, #ffffff, #f7f7f7);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f7f7f7));
-  background-image: -webkit-linear-gradient(top, #ffffff, #f7f7f7);
-  background-image: -o-linear-gradient(top, #ffffff, #f7f7f7);
-  background-image: linear-gradient(top, #ffffff, #f7f7f7);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0);
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff) to(#f7f7f7));
+  /*old webkit*/
+
+  background: -webkit-linear-gradient(#ffffff, #f7f7f7);
+  /*new webkit*/
+
+  background: -moz-linear-gradient(#ffffff, #f7f7f7);
+  /*gecko*/
+
+  background: -ms-linear-gradient(#ffffff, #f7f7f7);
+  /*IE10 preview*/
+
+  background: -o-linear-gradient(#ffffff, #f7f7f7);
+  /*opera 11.10+*/
+
+  background: linear-gradient(#ffffff, #f7f7f7);
+  /*future CSS3 browsers*/
+
+  -pie-background: linear-gradient(#ffffff, #f7f7f7);
+  /*PIE*/
+
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  behavior: url(/js/libs/PIE.htc);
   border: 1px solid #ccc;
   margin: 0 auto;
   *zoom: 1;
@@ -4508,39 +4552,20 @@ li {
 #home .home-form {
   float: right;
   margin: 0 auto;
-  background-color: #7a7a7a;
-  background-image: -moz-linear-gradient(top, #888888, #666666);
-  background-image: -ms-linear-gradient(top, #888888, #666666);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#888888), to(#666666));
-  background-image: -webkit-linear-gradient(top, #888888, #666666);
-  background-image: -o-linear-gradient(top, #888888, #666666);
-  background-image: linear-gradient(top, #888888, #666666);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#888888', endColorstr='#666666', GradientType=0);
-  background-color: #474747;
-  background-image: -moz-linear-gradient(top, #555555, #333333);
-  background-image: -ms-linear-gradient(top, #555555, #333333);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#555555), to(#333333));
-  background-image: -webkit-linear-gradient(top, #555555, #333333);
-  background-image: -o-linear-gradient(top, #555555, #333333);
-  background-image: linear-gradient(top, #555555, #333333);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#555555', endColorstr='#333333', GradientType=0);
-  border: 1px solid #666;
-  padding: 40px;
-  padding-top: 0;
+  background: #222;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
   behavior: url(/js/libs/PIE.htc);
+  border: 1px solid #000;
+  padding: 40px;
+  padding-top: 0;
   width: 325px;
   height: 380px;
 }
 #home .home-form h2 {
   text-align: center;
   color: #fff;
-  border-bottom: 3px solid #e73e36;
-  border-bottom: 3px solid #62C462;
 }
 #home .home-form label {
   font-weight: bold;
@@ -4568,6 +4593,7 @@ li {
   -webkit-border-radius: 0 0 20px 20px;
   -moz-border-radius: 0 0 20px 20px;
   border-radius: 0 0 20px 20px;
+  behavior: url(/js/libs/PIE.htc);
   padding: 0 20px;
   margin: 0 auto;
   width: 575px;
@@ -4593,9 +4619,6 @@ li {
   list-style: none;
   background: #CFF3FC;
   padding: 0 20px 10px 20px;
-  -webkit-box-shadow: inset 0 0px 10px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: inset 0 0px 10px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0px 10px rgba(0, 0, 0, 0.5);
   max-height: 300px;
   overflow: auto;
   -webkit-border-radius: 20px 20px 0 0;
@@ -4636,6 +4659,7 @@ li {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+  behavior: url(/js/libs/PIE.htc);
   padding: 10px;
   position: relative;
 }
@@ -4852,6 +4876,7 @@ footer .details {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
+  behavior: url(/js/libs/PIE.htc);
   box-shadow: none;
   border: 1px solid #e1e1e1;
 }
@@ -4860,6 +4885,7 @@ footer .details {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  behavior: url(/js/libs/PIE.htc);
   margin: 0 auto;
   width: 230px;
   margin-top: 30px;
@@ -4892,6 +4918,7 @@ footer .details {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  behavior: url(/js/libs/PIE.htc);
 }
 #app {
   min-height: 400px;
@@ -5137,17 +5164,69 @@ img {
 #wish .chat-composite {
   width: 400px;
 }
+#wishes .chat-composite {
+  margin-bottom: 15px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+  margin: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  behavior: url(/js/libs/PIE.htc);
+  background: #fff;
+  border: 1px solid #f89406;
+  -webkit-box-shadow: 0 1px 2px #cccccc;
+  -moz-box-shadow: 0 1px 2px #cccccc;
+  box-shadow: 0 1px 2px #cccccc;
+  /*
+  &:before {
+    content:"";
+    position: absolute;
+    border-bottom: 17px solid rgba(0,0,0,0); 
+    left: 18px;
+    border-left: 17px solid #fff; 
+    bottom: -16px;
+    z-index: 1;
+  }
+  */
+
+}
+#wishes .chat-composite:after {
+  content: "";
+  position: absolute;
+}
+#wishes .chat-composite blockquote {
+  overflow: auto;
+  max-height: 165px;
+  display: inline;
+  color: #333;
+  padding: 0;
+  border-left: none;
+  margin: 0;
+  line-height: 1.3;
+  margin-bottom: 7px;
+}
+#wishes .chat-composite blockquote a {
+  text-decoration: underline;
+}
+#wishes .chat-composite:after {
+  left: 17px;
+  bottom: -18px;
+  background: url(/img/tip-orange.png) no-repeat top center;
+  width: 18px;
+  height: 18px;
+}
 #helper .chat-composite {
   margin-bottom: 15px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+  margin: 20px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
   behavior: url(/js/libs/PIE.htc);
-  padding: 10px;
-  position: relative;
-  color: #fff;
-  width: 250px;
-  margin: 20px;
   background-color: #21bdef;
   background-image: -moz-linear-gradient(top, #31c9f7, #08ace2);
   background-image: -ms-linear-gradient(top, #31c9f7, #08ace2);
@@ -5167,7 +5246,6 @@ img {
 #helper .chat-composite:after {
   content: "";
   position: absolute;
-  border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
 #helper .chat-composite blockquote {
   overflow: auto;
@@ -5187,6 +5265,7 @@ img {
   right: 17px;
   bottom: -18px;
   border-right: 17px solid #08ace2;
+  border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
 .chat-composite {
   float: left;
@@ -5194,8 +5273,8 @@ img {
 .chat-composite:hover .admin-options {
   display: block;
 }
-.chat-composite a {
-  color: #fff;
+.chat-composite .author {
+  font-weight: normal;
 }
 .chat-composite .admin-options {
   position: absolute;
@@ -5385,15 +5464,16 @@ table.setup td.editing .edit {
   left: -150px;
 }
 #alert .content {
-  -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   border: 1px solid #fff;
   background: #333;
   color: #fff;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  behavior: url(/js/libs/PIE.htc);
   display: block;
   font-size: 18px;
   font-weight: bold;
@@ -5420,13 +5500,23 @@ table.setup td.editing .edit {
   width: 100%;
   margin-bottom: 25px;
 }
+#alert.instructions h2 {
+  color: #0e72a0;
+}
 #alert.instructions .wrapper {
   position: static;
-  width: 600px;
+  width: 500px;
   margin: 0 auto;
 }
 #alert.instructions .wrapper p {
   font-size: 16px;
+  font-weight: normal;
+}
+#alert.instructions .content {
+  border: 1px solid #a2c9db;
+  background: #D9EDF7;
+  color: #333;
+  text-align: left;
 }
 .notice {
   left: 50%;
@@ -5446,6 +5536,7 @@ table.setup td.editing .edit {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
+  behavior: url(/js/libs/PIE.htc);
   display: block;
   left: -150px;
   padding: 5px 14px;
@@ -5507,6 +5598,7 @@ table.setup td.editing .edit {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+  behavior: url(/js/libs/PIE.htc);
 }
 #progress-bar #steps li.active {
   background-color: yellow;

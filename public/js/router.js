@@ -209,6 +209,7 @@ AppRouter.prototype.reset_subject = function(){
 }
 
 AppRouter.prototype.wishes = function(e) {
+  $('body').attr('id','wishes')
   var self = this
   $.get('/wishes', function(wishes) {
     var views = []
@@ -233,6 +234,10 @@ AppRouter.prototype.wishes = function(e) {
     _gaq.push(['_trackPageview', '/wishes'])
     document.title = 'Wishes';
   });
+}
+
+AppRouter.prototype.reset_wishes = function(){
+  $('body').removeAttr('id')
 }
 
 AppRouter.prototype.wish = function(id) {
