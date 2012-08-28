@@ -1,7 +1,6 @@
 define(function(require) {
 
 var CreateWishHomepageView = require('views/wishes/create_wish_homepage'),
-    HomeView = require('views/home'),
     Router = require('router'),
     AlertView = require('views/site/alert')
 

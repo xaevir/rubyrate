@@ -1,7 +1,6 @@
 define(function(require) {
 
 var SignupView = require('views/users/signup')
-  , homeTpl = require('text!templates/home.mustache')
   , LoginView = require('views/users/login')         
   , SubjectsNav = require('views/subjects_nav')
   , Wishes = require('collections/wishes')
@@ -337,10 +336,10 @@ AppRouter.prototype.helper = function(id) {
                    className: 'instructions',
                    doNotStickAround: true}) 
 
-    var tpl = '<div class="bubble-orange">\
+    var tpl = '<div class="you"><div class="bubble-orange-border">\
                 <blockquote>{{{body}}}</blockquote>\
               </div>\
-              <div class="author">Me</div>'
+              <div class="author">You</div></div>'
 
     tpl = Hogan.compile(tpl)
     tpl = tpl.render(res.subject)

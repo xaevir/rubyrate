@@ -119,19 +119,47 @@ li {
     width: 18px;
     height: 18px;
   }
+}
 
-  /*
+.bubble-blue-border {
+  .bubble;
+  .border-radius-for-pie(5px);
+  background: #fff;
+  border: 1px solid #08ace2;
+  .box-shadow(0 1px 2px #CCC);
+  &:after {
+    right: 17px;
+    bottom: -18px;
+    background: url(/img/tip-blue.png) no-repeat top center;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.bubble-template-border {
+  .bubble;
+  .border-radius-for-pie(5px);
+  background: #fff;
+  border: 1px solid #08ace2;
+  .box-shadow(0 1px 2px #CCC);
+  &:after {
+    right: 17px;
+    bottom: -18px;
+    border-right: 17px solid #08ace2; 
+    border-bottom: 17px solid rgba(0,0,0,0); 
+  }
   &:before {
     content:"";
     position: absolute;
+    right: 17px;
+    bottom: -18px;
+    border-right: 17px solid white; 
+    z-index: 2;
     border-bottom: 17px solid rgba(0,0,0,0); 
-    left: 18px;
-    border-left: 17px solid #fff; 
-    bottom: -16px;
-    z-index: 1;
   }
-  */
+
 }
+
 
 #home {
   padding: 20px;
@@ -523,9 +551,6 @@ footer {
 }
 */
 
-
-
-
 form {
   .btn {
     display: block;   
@@ -718,9 +743,6 @@ img {
   width: 400px;
 }
 
-
-
-
 #conversations #header {
   position: relative;
   h1 { 
@@ -747,13 +769,35 @@ img {
   width: 400px;
 }
 
-#wishes .chat-composite {
-  .bubble-orange-border;
+#wishes {
+  .chat-composite {
+    .bubble-orange-border;
+  }
+  .reply {
+    .btn-warning; 
+  }
 }
 
 
-#helper .chat-composite {
-  .bubble-blue;
+#helper {
+  .you {
+    margin: 0 auto; 
+    width: 275px;
+  }
+  .bubble-orange-border {
+    font-size: 16px; 
+  }
+  .author {
+    font-size: 16px; 
+    margin-left: 19px;
+  }
+  .chat-composite {
+    .bubble-blue-border;
+    width: 400px;
+  }
+  .reply {
+    .btn-info; 
+  }
 }
 
 .chat-composite {
@@ -995,6 +1039,7 @@ table.setup {
   margin-bottom: 25px;
   h2 {
     color: #0e72a0;
+    text-align: center;
   }
   .wrapper {
     position: static; 
