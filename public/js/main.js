@@ -1,6 +1,6 @@
 define(function(require) {
   require('order!libs/jquery/jquery-min')  
-  require('order!libs/socket.io/socket.io')  
+//  require('order!libs/socket.io/socket.io')  
   require('order!libs/underscore/underscore')
   require('order!libs/backbone/backbone')
   require('order!libs/backbone.validation/backbone.validation')

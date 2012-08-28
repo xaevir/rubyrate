@@ -56,6 +56,9 @@ app.use(function(err, req, res, next) {
   })
 });
 
+// debug
+//app.settings.env = 'production'
+
 app.configure('production', function(){
   app.set('port', process.env.PORT || 8010);
   db = mongo.db('localhost/rubyrate?auto_reconnect');
@@ -72,12 +75,6 @@ app.configure('development', function(){
   db = mongo.db('localhost/dev_ruby?auto_reconnect');
 });
 
-
-
-
-
-// debug
-//app.settings.env = 'production'
 
 db.bind('messages')
 db.bind('subjects')
