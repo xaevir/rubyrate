@@ -356,7 +356,7 @@ AppRouter.prototype.helper = function(id) {
         convo_id: convo._id,
         subject_id: convo.value.comments[0].subject_id,
         parentView: chatCompositeView,
-        user: self.user
+        user: this.user
       }
       chatCompositeView.replyView = new ReplyView(opts)
       views.push(chatCompositeView);
