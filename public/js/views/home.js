@@ -1,55 +1,51 @@
 define(function(require) {
 
-var tpl = require('text!templates/home.mustache')
+var tpl = require('text!templates/home.html')
+  , thankyouTpl = require('text!templates/wish_thankyou.html')
+  , Wish = require('models/homepage_wish') 
+  , AlertView = require('views/site/alert')       
+  , NewUser = require('models/newUser')
 
 return Backbone.View.extend({
 
-//  tagName:  "li",
-
-  template: Hogan.compile(tpl),
-
-  initialize: function(wish){
-    _.bindAll(this, 'render') 
+  initialize: function(options){
+    _.bindAll(this); 
+    this.model = new Wish();
+    Backbone.Validation.bind(this);
+    this.model.on('sync', this.onSync, this)
   },
 
   events: {
-    "click #steps li": function(e){
-      var el = $(e.currentTarget)
-      this.setupChange(el)
-    }
+    'submit form' : 'submit'
   },
 
-  startingStep: function(){
-    var startingEl = $("#steps li:first-child", this.el)
-    this.setupChange(startingEl)
+  template: tpl,
+
+  render: function(){
+    $(this.el).html(this.template);
+    return this; 
   },
 
-
-  setupChange: function(el) {
-    this.highlight(el)
-    this.changePaneContent(el)
+  submit: function(e) {
+    e.preventDefault()
+    var self = this
+    var params = this.$('form').serializeObject();
+    this.model.save(params)
   },
 
-  highlight: function(el){
-    if (el.hasClass('active')) return
-    $('#steps li').removeClass('active');
-    el.addClass('active');
-  },
+  onSync: function(){
+    new AlertView({message: thankyouTpl, 
+                   duration: 5000, 
+                   type:"letter", 
+                   wrapperClass: 'letterWrapper',
+                   bgOpacity: true,
+                   doNotFadeOut: true}) 
 
-  changePaneContent: function(el) {
-    var target = el.data('target');
-    var content = $('#'+target, this.el)
-    if (content.hasClass('active')) return
-    $('.stepsContent div').removeClass('active');
-    content.addClass('active');
-  },
+    var router = new Backbone.Router();
+    //router.navigate('wishes', {trigger: true}) 
+    this.render()
+  }
 
-  render: function() {
-    var template = this.template.render()
-    $(this.el).html(template);
-    this.startingStep()
-    return this;
-  },
-})
+});
 
-})
+});

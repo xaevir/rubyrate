@@ -22,11 +22,11 @@ var BubbleView = Backbone.View.extend({
 
     // add color if me 
     if (this.user.get('username') == this.model.get('author')) {
-      locals.bubbleClass = 'bubble-blue'
+      locals.bubbleClass = 'bubble-blue-border'
       locals.author = 'Me'
       $(this.el).addClass('seller')
     } else {
-      locals.bubbleClass = 'bubble-orange'
+      locals.bubbleClass = 'bubble-orange-border'
       $(this.el).addClass('buyer')
     }
     var template = this.template.render(locals)

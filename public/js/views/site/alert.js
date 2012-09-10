@@ -25,6 +25,7 @@ return Backbone.View.extend({
       this.duration = options.duration
       this.wrapperClass = options.wrapperClass
       this.doNotStickAround = options.doNotStickAround
+      this.bgOpacity = options.bgOpacity
     } else {
       this.message = options 
     }
@@ -38,6 +39,8 @@ return Backbone.View.extend({
       wrapperClass: this.wrapperClass
     })
     $(this.el).html(template)
+    if (this.bgOpacity)
+      $('body').append('<div class="modal-backdrop" />')
     if (this.doNotStickAround)
       $('#app').prepend(this.el)
     else 
@@ -59,6 +62,10 @@ return Backbone.View.extend({
   },
   
   close: function(){
+    $('.modal-backdrop').fadeOut('slow', function() {
+      $(this.el).remove();
+     });
+
     $(this.el).fadeOut('slow', function() {
       $(this.el).remove();
      });

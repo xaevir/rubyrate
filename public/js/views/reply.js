@@ -84,7 +84,7 @@ var ReplyView = Backbone.View.extend({
   xhr_callback: function(res) {
     this.showMessage()
     this.parentView.closeReplyForm()
-    window.events.trigger("messageAdded-Reply.js", self.parentView, res.data);
+    window.events.trigger("messageAdded-Reply.js", this.parentView, res.data);
   }
 })
 

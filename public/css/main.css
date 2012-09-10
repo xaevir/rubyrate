@@ -4481,9 +4481,9 @@ li {
   -pie-background: linear-gradient(#ffffff, #f7f7f7);
   /*PIE*/
 
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
   behavior: url(/js/libs/PIE.htc);
   border: 1px solid #ccc;
   margin: 0 auto;
@@ -4518,22 +4518,53 @@ li {
   font-size: 22px;
   margin-bottom: 20px;
   clear: both;
+  *zoom: 1;
+}
+#home .how-it-works li:before,
+#home .how-it-works li:after {
+  display: table;
+  content: "";
+}
+#home .how-it-works li:after {
+  clear: both;
 }
 #home .how-it-works li b {
   margin-right: 8px;
   position: relative;
-  font-size: 22px;
   display: block;
   float: left;
-  margin-bottom: 15px;
+}
+#home .how-it-works li span {
+  width: 338px;
+  float: left;
 }
 #home .home-form {
   float: right;
   margin: 0 auto;
-  background: #222;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#ff7113) to(#ffdd5b));
+  /*old webkit*/
+
+  background: -webkit-linear-gradient(#ff7113, #ffdd5b);
+  /*new webkit*/
+
+  background: -moz-linear-gradient(#ff7113, #ffdd5b);
+  /*gecko*/
+
+  background: -ms-linear-gradient(#ff7113, #ffdd5b);
+  /*IE10 preview*/
+
+  background: -o-linear-gradient(#ff7113, #ffdd5b);
+  /*opera 11.10+*/
+
+  background: linear-gradient(#ff7113, #ffdd5b);
+  /*future CSS3 browsers*/
+
+  -pie-background: linear-gradient(#ff7113, #ffdd5b);
+  /*PIE*/
+
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
   behavior: url(/js/libs/PIE.htc);
   border: 1px solid #000;
   padding: 40px;
@@ -4561,17 +4592,24 @@ li {
   -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
+#home.electronic-repair .how-it-works li {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
 #lead #app {
   padding: 20px;
   width: 650px;
 }
 #lead .reply-form {
   clear: both;
-  background: #ccc;
+  background: #CFF3FC;
+  background: rgba(49, 201, 247, 0.1);
   -webkit-border-radius: 0 0 20px 20px;
   -moz-border-radius: 0 0 20px 20px;
   border-radius: 0 0 20px 20px;
   behavior: url(/js/libs/PIE.htc);
+  border: 1px solid #333;
+  border-top: 1px solid #333;
   padding: 0 20px;
   margin: 0 auto;
   width: 575px;
@@ -4595,7 +4633,9 @@ li {
   width: 575px;
   margin: 0 auto;
   list-style: none;
-  background: #CFF3FC;
+  background: rgba(49, 201, 247, 0.1);
+  border: 1px solid #333;
+  border-bottom: none;
   padding: 0 20px 10px 20px;
   max-height: 300px;
   overflow: auto;
@@ -4612,7 +4652,6 @@ li {
 }
 #lead .bubbles blockquote {
   font-size: 18px;
-  color: #fff;
 }
 #lead .bubbles .seller {
   float: right;
@@ -5218,8 +5257,18 @@ img {
   opacity: 0.75;
   filter: alpha(opacity=75);
 }
-#wish .header.chat-composite {
-  float: none;
+#wish #header {
+  *zoom: 1;
+}
+#wish #header:before,
+#wish #header:after {
+  display: table;
+  content: "";
+}
+#wish #header:after {
+  clear: both;
+}
+#wish #header .chat-composite {
   margin-bottom: 15px;
   padding: 10px;
   position: relative;
@@ -5235,11 +5284,11 @@ img {
   -moz-box-shadow: 0 1px 2px #cccccc;
   box-shadow: 0 1px 2px #cccccc;
 }
-#wish .header.chat-composite:after {
+#wish #header .chat-composite:after {
   content: "";
   position: absolute;
 }
-#wish .header.chat-composite blockquote {
+#wish #header .chat-composite blockquote {
   overflow: auto;
   max-height: 165px;
   display: inline;
@@ -5250,10 +5299,10 @@ img {
   line-height: 1.3;
   margin-bottom: 7px;
 }
-#wish .header.chat-composite blockquote a {
+#wish #header .chat-composite blockquote a {
   text-decoration: underline;
 }
-#wish .header.chat-composite:after {
+#wish #header .chat-composite:after {
   left: 17px;
   bottom: -18px;
   background: url(/img/tips.png) no-repeat top left;
@@ -5304,15 +5353,14 @@ img {
   height: 18px;
 }
 #helper .you {
-  margin: 0 auto;
   width: 275px;
+}
+#helper .you .author {
+  font-size: 16px;
+  margin-left: 19px;
 }
 #helper .bubble-orange-border {
   font-size: 16px;
-}
-#helper .author {
-  font-size: 16px;
-  margin-left: 19px;
 }
 #helper .chat-composite {
   margin-bottom: 15px;
@@ -5514,7 +5562,7 @@ img {
   padding: 5px;
 }
 .messages li.colored {
-  background-color: #fff;
+  background-color: #e5f9ff;
 }
 #wish #subject h1 {
   font-weight: normal;
@@ -5578,7 +5626,7 @@ table.setup td.editing .edit {
   text-align: center;
   top: 0px;
   width: 200px;
-  z-index: 100;
+  z-index: 1050;
 }
 #alert .wrapper {
   width: 200px;
@@ -5593,9 +5641,9 @@ table.setup td.editing .edit {
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  border: 1px solid #fff;
-  background: #333;
-  color: #fff;
+  border: 1px solid #a2c9db;
+  background: #D9EDF7;
+  color: #0E72A0;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -5617,9 +5665,12 @@ table.setup td.editing .edit {
 #alert .letter p {
   font-size: 18px;
   text-align: left;
+  font-weight: normal;
 }
 #alert .error {
-  background-color: #E73E36;
+  border: 1px solid #E73E36;
+  background: #fff;
+  color: #E73E36;
 }
 #alert.instructions {
   position: static;
@@ -5673,71 +5724,4 @@ table.setup td.editing .edit {
 }
 .notice .container .msg {
   font-size: 16px;
-}
-#progress-bar {
-  text-align: center;
-}
-#progress-bar #steps {
-  float: left;
-  list-style-type: none;
-  *zoom: 1;
-  margin: 0px;
-}
-#progress-bar #steps:before,
-#progress-bar #steps:after {
-  display: table;
-  content: "";
-}
-#progress-bar #steps:after {
-  clear: both;
-}
-#progress-bar #steps li {
-  background-color: #21bdef;
-  background-image: -moz-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: -ms-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#31c9f7), to(#08ace2));
-  background-image: -webkit-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: -o-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: linear-gradient(top, #31c9f7, #08ace2);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#31c9f7', endColorstr='#08ace2', GradientType=0);
-  border: 1px solid #08ace2;
-  cursor: pointer;
-  width: 228px;
-  background-color: #ccc;
-  padding: 15px 0;
-  position: relative;
-}
-#progress-bar #steps li b {
-  position: absolute;
-  left: 50%;
-  display: block;
-  z-index: 1;
-}
-#progress-bar #steps li b i {
-  display: block;
-  width: 20px;
-  left: -10px;
-  position: relative;
-  height: 20px;
-  color: #fff;
-  background: #333;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
-}
-#progress-bar #steps li.active {
-  background-color: yellow;
-}
-.stepsContent {
-  background: #fff;
-  width: 300px;
-  float: left;
-}
-.stepsContent .stepContent {
-  display: none;
-}
-.stepsContent .active {
-  display: block;
 }

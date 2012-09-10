@@ -11,10 +11,11 @@ var SignupView = require('views/users/signup')
 
     template: Hogan.compile(tpl),
 
-    initialize: function(){
+    initialize: function(user){
+      this.user = user
       _.bindAll(this, 'render')
-      this.signupView = new SignupView({context: 'tabbed', passThru: true})
-      this.loginView = new LoginView({context: 'tabbed', passThru: true})
+      this.signupView = new SignupView({context: 'tabbed', passThru: true, user: this.user})
+      this.loginView = new LoginView({context: 'tabbed', passThru: true, user: this.user})
     },
 
     render: function(){

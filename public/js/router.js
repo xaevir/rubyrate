@@ -18,7 +18,6 @@ var SignupView = require('views/users/signup')
   , ReplyView = require('views/reply')
   , ReplyLeadView = require('views/reply-lead')
   , instructionsTpl = require('text!templates/instructions.mustache')
-//  , sellerTpl = require('text!templates/seller.mustache')
   , UserMenu = require('views/user-menu')
   , User = require('models/user')
   , NewUser = require('models/newUser')
@@ -91,13 +90,13 @@ var AppRouter = Backbone.Router.extend({
     , 'wishes/:id':                 'wish' 
     , 'helper/:id':                 'helper' 
     , 'wishes/:id/setup':           'wish_setup' 
-    , 'wishes/:id/seller':             'seller' 
     , 'subjects':                   'subjects'
     , 'subjects/:id':               'subject'
     , 'lead/:id/:slug':             'lead'
     , 'spider':                     'spider'
     , '':                           'home'
     , 'admin':                      'admin'
+    , 'electronic-repair':          'electronic_repair'
     , '*actions':                   'notFound'
   },
 }) 
@@ -108,7 +107,7 @@ AppRouter.prototype.notFound = function(){
 
 AppRouter.prototype.setupNav = function(route, section){
   var isHome = false
-  if (route === 'route:home')
+  if (route === 'route:home' || 'route:electronic-repair')
     isHome = true
   new MainMenu({ el: $("#main-menu"), user: this.user, isHome: isHome}).render()
   new UserMenu({ el: $("#user-menu"), model: this.user}).render()
@@ -158,55 +157,6 @@ AppRouter.prototype.spider = function(){
   _gaq.push(['_trackPageview', '/spider'])
 }
 
-AppRouter.prototype.subjects = function(){
-  $('body').addClass('app')
-  this.wishNavIsSet = true
-  $.get('/subjects', function(res) {
-    var view = new SubjectsNav()
-    $('#app').html(view.render(res));
-    document.title = 'Topics';
-  });
-}
-
-AppRouter.prototype.reset_subjects = function(){
-  $('body').removeClass('app')
-}
-
-AppRouter.prototype.subject = function(id) {
-  $('body').addClass('app')
-  if (!this.wishNavIsSet)
-    return this.router.navigate('subjects', {trigger: true})
-  var self = this
-  $.get('/subjects/'+id, function(res) {
-    // header
-    var header = new MessageBodyView({message: res.subject, tagName: 'h1', user: this.user})
-    var header_html = header.render().el
-    $('#conversations #header').html(header_html)
-
-    // body
-    var views = []
-    _.each(res.conversations, function(convo){
-      var chatCompositeView = new ChatCompositeView({user: self.user})
-      chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: self.user})
-      var opts = {
-        convo_id: convo._id,
-        subject_id: convo.value.comments[0].subject_id,
-        parentView: chatCompositeView,
-        user: self.user
-      }
-      chatCompositeView.replyView = new ReplyView(opts)
-      views.push(chatCompositeView);
-   }, this);
-    var view = new ChatColumns({views: views, columns: 2})
-    $('#conversations #body').html(view.render().el);
-    document.title = 'Ruby Rate';
-  });
-}
-
-AppRouter.prototype.reset_subject = function(){
-  $('body').removeClass('app')
-}
-
 AppRouter.prototype.wishes = function(e) {
   $('body').attr('id','wishes')
   var self = this
@@ -246,11 +196,15 @@ AppRouter.prototype.wish = function(id) {
     if (res.success === false)
       return self.notFound()
     // header
-    var chatCompositeView = new ChatCompositeView({noReply: true, user: self.user})
+    var chatCompositeView = new ChatCompositeView({user: self.user})
     chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.subject, user: self.user})
-    $(chatCompositeView.el).addClass('header')
-
-    $('#app').html(chatCompositeView.render().el);
+    chatCompositeView.replyView = new ReplyView({subject_id: id, 
+                                                 parentView: chatCompositeView, 
+                                                 context: 'wish',
+                                                 bigTextarea: true,
+                                                 user: self.user})
+    $('#app').html('<div id="header" />')
+    $('#header', '#app').html(chatCompositeView.render().el);
     // body
     var views = []
     _.each(res.conversations, function(convo){
@@ -301,7 +255,8 @@ AppRouter.prototype.lead = function(id, slug) {
                 collection: messages,
                 user: this.user}
     var replyLeadView = new ReplyLeadView(opts)
-    $('#app').append(replyLeadView.render().el)
+    $('button', replyLeadView.render().el).addClass('btn-large btn-success')
+    $('#app').append(replyLeadView.el)
 
     var ul = $('.bubbles')[0];
     var height = ul.scrollHeight
@@ -314,11 +269,6 @@ AppRouter.prototype.lead = function(id, slug) {
 
 AppRouter.prototype.reset_lead = function(){
   $('body').removeAttr('id')
-}
-
-AppRouter.prototype.seller = function(id) {
-  var template = Hogan.compile(sellerTpl)
-  $('#app').html(template.render());
 }
 
 AppRouter.prototype.helper = function(id) {
@@ -347,7 +297,6 @@ AppRouter.prototype.helper = function(id) {
     tpl = Hogan.compile(tpl)
     tpl = tpl.render(res.subject)
     $('#app').append(tpl)
-    $('#app').append('<h2 class="replies">Your replies</h2>')
     
     _gaq.push(['_trackPageview', '/helper/'+ res.subject.body])
     document.title = 'Ruby Rate - Helper';
@@ -371,40 +320,12 @@ AppRouter.prototype.helper = function(id) {
       var height = ul.scrollHeight
       ul.scrollTop = height
     });
-
-    /*
-    var template = Hogan.compile(instructionsTpl)
-    $('#app').html(template.render({wish: res.subject.body}));
-
-    // body
-    var views = []
-    _.each(res.conversations, function(convo){
-      var chatCompositeView = new ChatCompositeView({user: self.user})
-      chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: self.user})
-      var opts = {
-        convo_id: convo._id,
-        subject_id: convo.value.comments[0].subject_id,
-        parentView: chatCompositeView,
-        user: self.user
-      }
-      chatCompositeView.replyView = new ReplyView(opts)
-      views.push(chatCompositeView);
-   }, this);
-    var view = new ChatColumns({views: views, columns: 2, span: 6})
-    var html =  view.render().el
-    $('#app').append(html);
-    $.each($('.scrollable'), function(index, ul) { 
-      var height = ul.scrollHeight
-      ul.scrollTop = height
-    });
-    */
   }, this));
 }
 
 AppRouter.prototype.reset_helper = function(){
   $('body').removeAttr('id')
 }
-
 
 AppRouter.prototype.wish_setup = function(id) {
   var self = this
@@ -460,7 +381,6 @@ AppRouter.prototype.alreadyLoggedIn = function(callback) {
     return this.navigate('/', true) 
   callback.apply(this, Array.prototype.slice.call(arguments,1)); 
 }
-
 
 AppRouter.prototype.restrict = function(callback) { 
   if (!this.user.isLoggedIn()) 

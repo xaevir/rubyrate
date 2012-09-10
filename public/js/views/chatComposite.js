@@ -35,7 +35,7 @@ return Backbone.View.extend({
 
   renderReplyForm: function(e){
     e.preventDefault()
-    if (!this.user.isLoggedIn()) return new RestrictedView().render()  
+    if (!this.user.isLoggedIn()) return new RestrictedView(this.user).render()  
     //this.replyView = new ReplyView({subject_id: this.subject_id, context: this.context, parentView: this})
     this.replyView.render()
     $(this.el).append(this.replyView.el)
