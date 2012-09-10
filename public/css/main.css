@@ -4264,6 +4264,7 @@ h3 {
 body {
   line-height: 1.3;
   background: #fafbf6;
+  background: url(/img/orange-bokeh-bg.jpg) no-repeat top center;
 }
 p {
   line-height: 1.3em;
@@ -4297,112 +4298,10 @@ li {
 .bubble blockquote a {
   text-decoration: underline;
 }
-.bubble-orange {
-  margin-bottom: 15px;
-  padding: 10px;
-  position: relative;
-  width: 250px;
-  margin: 20px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
-  background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffa92f) to(#f89406));
-  /*old webkit*/
-
-  background: -webkit-linear-gradient(#ffa92f, #f89406);
-  /*new webkit*/
-
-  background: -moz-linear-gradient(#ffa92f, #f89406);
-  /*gecko*/
-
-  background: -ms-linear-gradient(#ffa92f, #f89406);
-  /*IE10 preview*/
-
-  background: -o-linear-gradient(#ffa92f, #f89406);
-  /*opera 11.10+*/
-
-  background: linear-gradient(#ffa92f, #f89406);
-  /*future CSS3 browsers*/
-
-  -pie-background: linear-gradient(#ffa92f, #f89406);
-  /*PIE*/
-
-  border: 1px solid #f89406;
-}
-.bubble-orange:after {
-  content: "";
-  position: absolute;
-}
-.bubble-orange blockquote {
-  overflow: auto;
-  max-height: 165px;
-  display: inline;
-  color: #333;
-  padding: 0;
-  border-left: none;
-  margin: 0;
-  line-height: 1.3;
-  margin-bottom: 7px;
-}
-.bubble-orange blockquote a {
-  text-decoration: underline;
-}
-.bubble-orange:after {
-  left: 17px;
-  border-left: 17px solid #f89406;
-  bottom: -18px;
-  border-bottom: 17px solid rgba(0, 0, 0, 0);
-}
-.bubble-blue {
-  margin-bottom: 15px;
-  padding: 10px;
-  position: relative;
-  width: 250px;
-  margin: 20px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
-  background-color: #21bdef;
-  background-image: -moz-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: -ms-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#31c9f7), to(#08ace2));
-  background-image: -webkit-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: -o-linear-gradient(top, #31c9f7, #08ace2);
-  background-image: linear-gradient(top, #31c9f7, #08ace2);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#31c9f7', endColorstr='#08ace2', GradientType=0);
-  -pie-background: linear-gradient(#31c9f7, #08ace2);
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
-  border: 1px solid #08ace2;
-}
-.bubble-blue:after {
-  content: "";
-  position: absolute;
-}
-.bubble-blue blockquote {
-  overflow: auto;
-  max-height: 165px;
-  display: inline;
-  color: #333;
-  padding: 0;
-  border-left: none;
-  margin: 0;
-  line-height: 1.3;
-  margin-bottom: 7px;
-}
-.bubble-blue blockquote a {
-  text-decoration: underline;
-}
-.bubble-blue:after {
-  right: 17px;
-  bottom: -18px;
-  border-right: 17px solid #08ace2;
-  border-bottom: 17px solid rgba(0, 0, 0, 0);
+.tip {
+  background: url(/img/tips.png) no-repeat top left;
+  width: 18px;
+  height: 18px;
 }
 .bubble-orange-border {
   margin-bottom: 15px;
@@ -4441,9 +4340,10 @@ li {
 .bubble-orange-border:after {
   left: 17px;
   bottom: -18px;
-  background: url(/img/tip-orange.png) no-repeat top center;
+  background: url(/img/tips.png) no-repeat top left;
   width: 18px;
   height: 18px;
+  background-position: 0 0;
 }
 .bubble-blue-border {
   margin-bottom: 15px;
@@ -5239,9 +5139,6 @@ img {
 #bigTextarea textarea {
   height: 300px;
 }
-#wish .chat-composite {
-  width: 400px;
-}
 #wishes .chat-composite {
   margin-bottom: 15px;
   padding: 10px;
@@ -5279,9 +5176,10 @@ img {
 #wishes .chat-composite:after {
   left: 17px;
   bottom: -18px;
-  background: url(/img/tip-orange.png) no-repeat top center;
+  background: url(/img/tips.png) no-repeat top left;
   width: 18px;
   height: 18px;
+  background-position: 0 0;
 }
 #wishes .reply {
   color: #ffffff;
@@ -5319,6 +5217,91 @@ img {
   border-bottom-color: #ffffff;
   opacity: 0.75;
   filter: alpha(opacity=75);
+}
+#wish .header.chat-composite {
+  float: none;
+  margin-bottom: 15px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+  margin: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  behavior: url(/js/libs/PIE.htc);
+  background: #fff;
+  border: 1px solid #f89406;
+  -webkit-box-shadow: 0 1px 2px #cccccc;
+  -moz-box-shadow: 0 1px 2px #cccccc;
+  box-shadow: 0 1px 2px #cccccc;
+}
+#wish .header.chat-composite:after {
+  content: "";
+  position: absolute;
+}
+#wish .header.chat-composite blockquote {
+  overflow: auto;
+  max-height: 165px;
+  display: inline;
+  color: #333;
+  padding: 0;
+  border-left: none;
+  margin: 0;
+  line-height: 1.3;
+  margin-bottom: 7px;
+}
+#wish .header.chat-composite blockquote a {
+  text-decoration: underline;
+}
+#wish .header.chat-composite:after {
+  left: 17px;
+  bottom: -18px;
+  background: url(/img/tips.png) no-repeat top left;
+  width: 18px;
+  height: 18px;
+  background-position: 0 0;
+}
+#wish .chat-composite {
+  margin-bottom: 15px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+  margin: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  behavior: url(/js/libs/PIE.htc);
+  background: #fff;
+  border: 1px solid #08ace2;
+  -webkit-box-shadow: 0 1px 2px #cccccc;
+  -moz-box-shadow: 0 1px 2px #cccccc;
+  box-shadow: 0 1px 2px #cccccc;
+  width: 400px;
+}
+#wish .chat-composite:after {
+  content: "";
+  position: absolute;
+}
+#wish .chat-composite blockquote {
+  overflow: auto;
+  max-height: 165px;
+  display: inline;
+  color: #333;
+  padding: 0;
+  border-left: none;
+  margin: 0;
+  line-height: 1.3;
+  margin-bottom: 7px;
+}
+#wish .chat-composite blockquote a {
+  text-decoration: underline;
+}
+#wish .chat-composite:after {
+  right: 17px;
+  bottom: -18px;
+  background: url(/img/tip-blue.png) no-repeat top center;
+  width: 18px;
+  height: 18px;
 }
 #helper .you {
   margin: 0 auto;

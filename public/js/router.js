@@ -246,8 +246,11 @@ AppRouter.prototype.wish = function(id) {
     if (res.success === false)
       return self.notFound()
     // header
-    var header = new MessageBodyView({message: res.subject, tagName: 'h1', user: self.user})
-    $('#app').html(header.render().el);
+    var chatCompositeView = new ChatCompositeView({noReply: true, user: self.user})
+    chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.subject, user: self.user})
+    $(chatCompositeView.el).addClass('header')
+
+    $('#app').html(chatCompositeView.render().el);
     // body
     var views = []
     _.each(res.conversations, function(convo){
