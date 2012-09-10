@@ -276,14 +276,11 @@ app.get("/check-email", function(req, res){
   })
 })
 
-
-
 app.get('/profile/:slug', function(req, res) {
   db.users.findOne({slug: req.params.slug}, {password: 0, email: 0}, function(err, user) {
     res.send(user)
   })
 })
-
 
 app.get('/profile/:slug/edit', loadUser, function(req, res) {
   db.users.findOne({slug: req.user.slug}, {password: 0}, function(err, user) {
