@@ -107,7 +107,7 @@ AppRouter.prototype.notFound = function(){
 
 AppRouter.prototype.setupNav = function(route, section){
   var isHome = false
-  if (route === 'route:home' || 'route:electronic-repair')
+  if (route === 'route:home' || route === 'route:electronic-repair')
     isHome = true
   new MainMenu({ el: $("#main-menu"), user: this.user, isHome: isHome}).render()
   new UserMenu({ el: $("#user-menu"), model: this.user}).render()
@@ -389,18 +389,16 @@ AppRouter.prototype.restrict = function(callback) {
 }
 
 AppRouter.prototype.login = _.wrap(function(){
-    var view = new LoginView({context: 'main', user: this.user}).render()
+    var view = new LoginView({className: 'small-content', user: this.user}).render()
     $('#app').html(view.el)
     document.title = 'Login'
     _gaq.push(['_trackPageview', '/login'])
   }, AppRouter.prototype.alreadyLoggedIn)
 
 AppRouter.prototype.signup = _.wrap(function(){ 
-    this.signupView = new SignupView({
-      model: new NewUser(), 
-      context: 'main',
-      user: this.user
-    })
+    this.signupView = new SignupView({model: new NewUser(), 
+                                      className: 'small-content',
+                                      user: this.user})
     this.signupView.render();
     $('#app').html(this.signupView.el)
     document.title = 'Sign Up'

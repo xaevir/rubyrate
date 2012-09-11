@@ -330,6 +330,7 @@ app.post('/wishes-home', function(req, res) {
   var user = new NewUser({
     username: req.body.username,
     password: 'animeeverything',
+    contact: req.body.contact,
     slug: req.body.slug
   })
   user.setPassword(function(){

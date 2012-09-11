@@ -16,6 +16,7 @@ var Wish = NewUser.extend({
     username:    NewUser.prototype.validation.username,
     body:        {required: true},
     location:    {required: true},
+    contact:     {required: true}
   },
 
   parse: function(res){

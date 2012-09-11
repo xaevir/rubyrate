@@ -4488,7 +4488,7 @@ li {
   border: 1px solid #ccc;
   margin: 0 auto;
   *zoom: 1;
-  height: 400px;
+  padding-bottom: 50px;
 }
 #home .how-it-works:before,
 #home .how-it-works:after {
@@ -4570,7 +4570,6 @@ li {
   padding: 40px;
   padding-top: 0;
   width: 325px;
-  height: 380px;
 }
 #home .home-form h2 {
   text-align: center;
@@ -4905,6 +4904,7 @@ footer .details {
   behavior: url(/js/libs/PIE.htc);
   margin: 0 auto;
   width: 230px;
+  background: rgba(49, 201, 247, 0.1);
   margin-top: 30px;
   border: 10px solid #000;
 }
@@ -5626,7 +5626,7 @@ table.setup td.editing .edit {
   text-align: center;
   top: 0px;
   width: 200px;
-  z-index: 1050;
+  z-index: 1060;
 }
 #alert .wrapper {
   width: 200px;

@@ -2,7 +2,7 @@ define(function(require) {
 
 var tpl = require('text!templates/home.html')
   , thankyouTpl = require('text!templates/wish_thankyou.html')
-  , Wish = require('models/homepage_wish') 
+  , HomepageWish = require('models/homepage_wish') 
   , AlertView = require('views/site/alert')       
   , NewUser = require('models/newUser')
 
@@ -10,7 +10,7 @@ return Backbone.View.extend({
 
   initialize: function(options){
     _.bindAll(this); 
-    this.model = new Wish();
+    this.model = new HomepageWish();
     Backbone.Validation.bind(this);
     this.model.on('sync', this.onSync, this)
   },
