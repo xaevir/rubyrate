@@ -10,7 +10,7 @@ return Backbone.View.extend({
   template: Hogan.compile(tpl),
 
   id: 'alert',
-
+  
   events: { 
     'click .close' : 'close'
   },
@@ -24,12 +24,12 @@ return Backbone.View.extend({
       this.type = options.type
       this.duration = options.duration
       this.wrapperClass = options.wrapperClass
-      this.doNotStickAround = options.doNotStickAround
+      this.element = options.element
       this.bgOpacity = options.bgOpacity
     } else {
       this.message = options 
     }
-    this.render() 
+    this.render()
   },
 
   render: function(){
@@ -41,14 +41,17 @@ return Backbone.View.extend({
     $(this.el).html(template)
     if (this.bgOpacity)
       $('body').append('<div class="modal-backdrop" />')
-    if (this.doNotStickAround)
-      $('#app').prepend(this.el)
-    else 
+    if(this.element)
+      $(this.element).prepend(this.el)
+    else
       $('body').prepend(this.el)
     $(this.el).animate({ top: '50'})
     if (!this.doNotFadeOut)
       this.fadeOut() 
     return this
+  },
+
+  addToDom: function(){
   },
 
   fadeOut: function(){

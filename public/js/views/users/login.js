@@ -15,10 +15,6 @@ return Backbone.View.extend({
     this.model = new Session();
     this.user = options.user
     Backbone.Validation.bind(this);
-    if (options.context == 'main')
-      $(this.el).addClass('small-content')
-    if (options.passThru)          
-      this.passThru = options.passThru
   },
 
   render: function(){
@@ -36,24 +32,24 @@ return Backbone.View.extend({
     if (res.success === false)
       return this.renderError()
     this.user.set(res)
-    // display hello and remove error
     this.remove() 
     new AlertView('Hello')
-    if (!this.passThru) {
-      var router = new Backbone.Router()
-      router.navigate('', true);
-    }
+    this.afterSuccess()
+  },
+
+  afterSuccess: function(){
+    var router = new Backbone.Router()
+    router.navigate('', true);
   },
 
   renderError: function(){
     if (this.happened) return  
     this.happened = true 
-    new AlertView({
-      message: 'Heads Up! Please check your email or password', 
-      type: 'error', 
-      doNotFadeOut: true,
-      doNotStickAround: true
-    })
+
+    var alertView = new AlertView({message: 'Heads Up! Please check your email or password', 
+                               type: 'error', 
+                               element: this.el,
+                               doNotFadeOut: true})
   },
 });
 

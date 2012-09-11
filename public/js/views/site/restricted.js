@@ -3,6 +3,9 @@ define(function(require) {
 var SignupView = require('views/users/signup')
   , LoginView = require('views/users/login')         
   , tpl = require('text!templates/tabs.mustache')
+  , NewUser = require('models/newUser')
+
+
 
 
   return Backbone.View.extend({
@@ -14,8 +17,12 @@ var SignupView = require('views/users/signup')
     initialize: function(user){
       this.user = user
       _.bindAll(this, 'render')
-      this.signupView = new SignupView({context: 'tabbed', passThru: true, user: this.user})
-      this.loginView = new LoginView({context: 'tabbed', passThru: true, user: this.user})
+
+      SignupView.prototype.afterSuccess = this.bind(this.close, this) 
+      this.signupView = new SignupView({model: new NewUser(), user: this.user})
+     
+      LoginView.prototype.afterSuccess = this.bind(this.close, this)
+      this.loginView = new LoginView({user: this.user})
     },
 
     render: function(){
@@ -26,7 +33,19 @@ var SignupView = require('views/users/signup')
       $('#login', this.el).html(this.loginView.render().el)
       $(this.el).modal('show');
       $(this.el).center();
-    }
+    },
+
+    close: function(){
+      this.remove() 
+    }, 
+
+    bind: function(func, obj) { 
+      temp = function() { 
+        return func.apply(obj, arguments); 
+      }; 
+      return temp; 
+    },
+
 })
 
 
