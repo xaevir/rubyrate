@@ -24,7 +24,8 @@ var SignupView = require('views/users/signup')
   , MainMenu = require('views/main-menu')         
   , Spider = require('views/spider')         
   , BubblesView = require('views/bubbles')         
-  , AlertView = require('views/site/alert')
+  , AlertView = require('views/site/alert').main
+  , InstructionsView = require('views/site/alert').instructions
 
 function showStatic(path) {
   $.get(path, function(obj) {
@@ -107,7 +108,7 @@ AppRouter.prototype.notFound = function(){
 
 AppRouter.prototype.setupNav = function(route, section){
   var isHome = false
-  if (route === 'route:home' || route === 'route:electronic-repair')
+  if (route === 'route:home' || route === 'route:electronic_repair')
     isHome = true
   new MainMenu({ el: $("#main-menu"), user: this.user, isHome: isHome}).render()
   new UserMenu({ el: $("#user-menu"), model: this.user}).render()
@@ -237,15 +238,12 @@ AppRouter.prototype.lead = function(id, slug) {
   $.get('/lead/'+id+'/'+slug, $.proxy(function(res){
     this.getUser()
     $('#app').html('')
-    var instructions = '<h2>How this page works</h2>\
+    var message = '<h2>How this page works</h2>\
       <p>You have a lead from a potential buyer. We started the convo for you and\
         your lead has just replied. All you have to do is fill in the box at the bottom.\
       </p>'
+    new InstructionsView(message) 
 
-    new AlertView({message: instructions, 
-                   doNotFadeOut: true,
-                   className: 'instructions',
-                   doNotStickAround: true}) 
     var messages = new Messages(res.messages)
     var bubblesView = new BubblesView({collection: messages,
                                        user: this.user})
@@ -279,15 +277,11 @@ AppRouter.prototype.helper = function(id) {
       return this.notFound()
     this.getUser()
     $('#app').html('')
-    var instructions = '<h2>How this page works</h2>\
+    var message = '<h2>How this page works</h2>\
       <p>Shown below are answers to your request. You can respond to any \
          company you are interested in by clicking on the reply.\
       </p>'
-
-    new AlertView({message: instructions, 
-                   doNotFadeOut: true,
-                   className: 'instructions',
-                   doNotStickAround: true}) 
+    new InstructionsView(message) 
 
     var tpl = '<div class="you"><div class="bubble-orange-border">\
                 <blockquote>{{{body}}}</blockquote>\

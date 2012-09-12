@@ -5,9 +5,6 @@ var SignupView = require('views/users/signup')
   , tpl = require('text!templates/tabs.mustache')
   , NewUser = require('models/newUser')
 
-
-
-
   return Backbone.View.extend({
 
     className: 'modal fade restricted-modal',
@@ -18,10 +15,10 @@ var SignupView = require('views/users/signup')
       this.user = user
       _.bindAll(this, 'render')
 
-      SignupView.prototype.afterSuccess = this.bind(this.close, this) 
+      SignupView.prototype.afterSuccess = _.bind(this.close, this) 
       this.signupView = new SignupView({model: new NewUser(), user: this.user})
      
-      LoginView.prototype.afterSuccess = this.bind(this.close, this)
+      LoginView.prototype.afterSuccess = _.bind(this.close, this)
       this.loginView = new LoginView({user: this.user})
     },
 
@@ -38,13 +35,6 @@ var SignupView = require('views/users/signup')
     close: function(){
       this.remove() 
     }, 
-
-    bind: function(func, obj) { 
-      temp = function() { 
-        return func.apply(obj, arguments); 
-      }; 
-      return temp; 
-    },
 
 })
 

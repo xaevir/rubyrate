@@ -5,7 +5,9 @@ var tpl  = '<div class="wrapper {{wrapperClass}}">'
     tpl += '<a class="close" href="#">×</a>'
     tpl += '{{{message}}}</div></div>'
 
-return Backbone.View.extend({
+var alerts = {} 
+
+alerts.main = Backbone.View.extend({
 
   template: Hogan.compile(tpl),
 
@@ -20,7 +22,6 @@ return Backbone.View.extend({
     if (_.isObject(options)) {
       this.message = options.message
       this.container = options.container
-      this.doNotFadeOut = options.doNotFadeOut
       this.type = options.type
       this.duration = options.duration
       this.wrapperClass = options.wrapperClass
@@ -39,15 +40,12 @@ return Backbone.View.extend({
       wrapperClass: this.wrapperClass
     })
     $(this.el).html(template)
-    if (this.bgOpacity)
-      $('body').append('<div class="modal-backdrop" />')
     if(this.element)
       $(this.element).prepend(this.el)
     else
       $('body').prepend(this.el)
     $(this.el).animate({ top: '50'})
-    if (!this.doNotFadeOut)
-      this.fadeOut() 
+    this.fadeOut() 
     return this
   },
 
@@ -64,16 +62,51 @@ return Backbone.View.extend({
     }, duration);
   },
   
+
+});
+
+alerts.instructions = alerts.main.extend({
+
+  className: 'instructions',
+
+  initialize: function(message){
+    _.bindAll(this) 
+    this.message = message
+    this.globalEvent()
+    this.render()
+  },
+
+  globalEvent: function(){
+    var func = _.bind(this.close, this)
+    $('body').click(function(){
+      func() 
+    });
+  },
+
+  render: function() {
+    var template = this.template.render({
+      message: this.message, 
+    })
+    $(this.el).html(template)
+    $('body').prepend(this.el)
+    $(this.el).animate({ top: '50'})
+    $('body').append('<div class="modal-backdrop" />')
+    return this
+  },
+
   close: function(){
     $('.modal-backdrop').fadeOut('slow', function() {
       $(this.el).remove();
      });
 
     $(this.el).fadeOut('slow', function() {
-      $(this.el).remove();
+      $(this).remove();
      });
   }
 
-});
+
+})
+
+return alerts
 
 });
