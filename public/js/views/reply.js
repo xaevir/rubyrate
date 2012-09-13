@@ -2,7 +2,7 @@ define(function(require) {
 
 var tpl = require('text!templates/reply-form.mustache')
   , Message = require('models/message') 
-  , AlertView = require('views/site/alert')
+  , AlertView = require('views/site/alert').alert
 
 var longMessage = '<p>Hello,</p> \
                    <p>Thank you for your message. \

@@ -1,7 +1,7 @@
 define(function(require) {
 
-var SignupView = require('views/users/signup')
-  , LoginView = require('views/users/login')         
+var SignupView = require('views/users/signup').signup
+  , LoginView = require('views/users/login').login
   , SubjectsNav = require('views/subjects_nav')
   , Wishes = require('collections/wishes')
   , Messages = require('collections/messages')
@@ -24,7 +24,6 @@ var SignupView = require('views/users/signup')
   , MainMenu = require('views/main-menu')         
   , Spider = require('views/spider')         
   , BubblesView = require('views/bubbles')         
-  , AlertView = require('views/site/alert').main
   , InstructionsView = require('views/site/alert').instructions
 
 function showStatic(path) {

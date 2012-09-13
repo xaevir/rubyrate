@@ -1,5 +1,13 @@
 define(function(require) {
 
+var tplAlert = '<div class="content">\
+                  {{{message}}}\
+                </div>'
+
+var tplError = '<div class="content error">\
+                  {{{message}}}\
+                </div>'
+
 var tpl  = '<div class="wrapper {{wrapperClass}}">'
     tpl += '<div class="content {{type}}">'
     tpl += '<a class="close" href="#">×</a>'
@@ -7,49 +15,30 @@ var tpl  = '<div class="wrapper {{wrapperClass}}">'
 
 var alerts = {} 
 
-alerts.main = Backbone.View.extend({
-
-  template: Hogan.compile(tpl),
-
-  id: 'alert',
+alerts.alert = Backbone.View.extend({
   
-  events: { 
-    'click .close' : 'close'
-  },
+  id: 'alert',
 
-  initialize: function(options){
+  template: Hogan.compile(tplAlert),
+
+  shouldFadeOut: true,
+
+  initialize: function(message){
     _.bindAll(this) 
-    if (_.isObject(options)) {
-      this.message = options.message
-      this.container = options.container
-      this.type = options.type
-      this.duration = options.duration
-      this.wrapperClass = options.wrapperClass
-      this.element = options.element
-      this.bgOpacity = options.bgOpacity
-    } else {
-      this.message = options 
-    }
+    this.message = message
     this.render()
   },
 
   render: function(){
     var template = this.template.render({
       message: this.message, 
-      type: this.type,
-      wrapperClass: this.wrapperClass
     })
     $(this.el).html(template)
-    if(this.element)
-      $(this.element).prepend(this.el)
-    else
-      $('body').prepend(this.el)
+    $('#notification').html(this.el)
     $(this.el).animate({ top: '50'})
-    this.fadeOut() 
+    if(this.shouldFadeOut)
+      this.fadeOut() 
     return this
-  },
-
-  addToDom: function(){
   },
 
   fadeOut: function(){
@@ -61,11 +50,41 @@ alerts.main = Backbone.View.extend({
      });
     }, duration);
   },
-  
 
 });
 
-alerts.instructions = alerts.main.extend({
+
+alerts.error = alerts.alert.extend({
+  template: Hogan.compile(tplError),
+  shouldFadeOut: false,
+})
+
+
+alerts.contained = Backbone.View.extend({
+
+  id: 'alert',
+
+  template: Hogan.compile(tplError),
+
+  initialize: function(message){
+    _.bindAll(this) 
+    this.message = message
+  },
+
+  render: function(){
+    var template = this.template.render({
+      message: this.message, 
+    })
+    $(this.el).html(template)
+    return this
+  },
+})
+
+alerts.instructions = alerts.alert.extend({
+
+  events: { 
+    'click .close' : 'close'
+  },
 
   className: 'instructions',
 
@@ -73,7 +92,6 @@ alerts.instructions = alerts.main.extend({
     _.bindAll(this) 
     this.message = message
     this.globalEvent()
-    this.render()
   },
 
   globalEvent: function(){
@@ -88,13 +106,13 @@ alerts.instructions = alerts.main.extend({
       message: this.message, 
     })
     $(this.el).html(template)
-    $('body').prepend(this.el)
+    $('#notification').html(this.el)
     $(this.el).animate({ top: '50'})
     $('body').append('<div class="modal-backdrop" />')
     return this
   },
 
-  close: function(){
+  close: function() {
     $('.modal-backdrop').fadeOut('slow', function() {
       $(this.el).remove();
      });
@@ -102,7 +120,7 @@ alerts.instructions = alerts.main.extend({
     $(this.el).fadeOut('slow', function() {
       $(this).remove();
      });
-  }
+   }
 
 
 })

@@ -3,7 +3,9 @@ define(function(require) {
 var tpl = require('text!templates/users/signup.html')
   , AlertView = require('views/site/alert')
 
-return Backbone.View.extend({
+var signup = {}
+
+signup.signup = Backbone.View.extend({
 
   initialize: function(options){
     _.bindAll(this); 
@@ -32,16 +34,36 @@ return Backbone.View.extend({
     if (res._id) {
       this.user.set(res)
       new AlertView('Thank you for signing up!')
-      this.afterSuccess()
+      this.close()
     } 
   },
 
-  afterSuccess: function(){
+  close: function(){
     var router = new Backbone.Router()
     router.navigate('', true);
   },
 
 });
 
+signup.modal = signup.signup.extend({
+
+  initialize: function(options){
+    signup.signup.prototype.initialize(options)
+    this.parent = options.parent
+    this.errorEl = options.errorEl
+  },
+
+  close: function(){
+    this.parent.remove()
+  },
+
+  renderError: function(){
+    var alert = new AlertContainedView(this.errorMsg)
+    $(this.errorEl).prepend(alert.render().el)
+  },
+
+})
+
+return signup
 
 });

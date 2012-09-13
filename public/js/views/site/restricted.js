@@ -1,7 +1,7 @@
 define(function(require) {
 
-var SignupView = require('views/users/signup')
-  , LoginView = require('views/users/login')         
+var SignupModalView = require('views/users/signup').modal
+  , LoginModalView = require('views/users/login').modal         
   , tpl = require('text!templates/tabs.mustache')
   , NewUser = require('models/newUser')
 
@@ -13,28 +13,26 @@ var SignupView = require('views/users/signup')
 
     initialize: function(user){
       this.user = user
-      _.bindAll(this, 'render')
+      _.bindAll(this)
 
-      SignupView.prototype.afterSuccess = _.bind(this.close, this) 
-      this.signupView = new SignupView({model: new NewUser(), user: this.user})
-     
-      LoginView.prototype.afterSuccess = _.bind(this.close, this)
-      this.loginView = new LoginView({user: this.user})
+      this.signupModalView = new SignupModalView({model: new NewUser(), 
+                                                  user: this.user,
+                                                  parent: this,
+                                                  errorEl: $('.modal-body', this.el)})
+      this.loginModalView = new LoginModalView({user: this.user, 
+                                                parent: this,
+                                                errorEl: $('.modal-body', this.el)})
     },
 
     render: function(){
       var template = this.template.render();
       $(this.el).html(template);
-      var signupEl = this.signupView.render().el
+      var signupEl = this.signupModalView.render().el
       $('#new', this.el).html(signupEl)
-      $('#login', this.el).html(this.loginView.render().el)
+      $('#login', this.el).html(this.loginModalView.render().el)
       $(this.el).modal('show');
       $(this.el).center();
     },
-
-    close: function(){
-      this.remove() 
-    }, 
 
 })
 

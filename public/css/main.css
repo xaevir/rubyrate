@@ -5622,41 +5622,36 @@ table.setup td.editing .edit {
   width: 200px;
 }
 #alert {
-  left: 50%;
-  position: fixed;
-  text-align: center;
-  top: 0px;
-  z-index: 1060;
-}
-#alert .wrapper {
-  width: 200px;
-  left: -100px;
   position: absolute;
+  left: 50%;
+  z-index: 1060;
 }
 #alert .letterWrapper {
   width: 300px;
   left: -150px;
 }
 #alert .content {
+  position: relative;
+  left: -50%;
+  background: #F9EDBE;
+  border: 1px solid #F0C36D;
+  color: #222;
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  border: 1px solid #000;
-  background: #666;
-  color: #fff;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
   behavior: url(/js/libs/PIE.htc);
-  display: block;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 0 7px;
+  font-size: 16px;
+  padding: 10px;
   text-align: center;
 }
 #alert .content .close {
   color: #fff;
   text-decoration: none;
+  margin-top: -9px;
+  margin-right: -6px;
   opacity: 1;
   filter: alpha(opacity=100);
 }
@@ -5668,6 +5663,9 @@ table.setup td.editing .edit {
 #alert .error {
   border: 1px solid #E73E36;
   background: #fff;
+  color: #E73E36;
+}
+#alert .error .close {
   color: #E73E36;
 }
 #alert.instructions {
