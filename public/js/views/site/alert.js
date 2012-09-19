@@ -1,6 +1,6 @@
 define(function(require) {
 
-var tplAlert = '<div class="content">\
+var tpl = '<div class="content {{type}}">\
                   {{{message}}}\
                 </div>'
 
@@ -8,10 +8,6 @@ var tplError = '<div class="content error">\
                   {{{message}}}\
                 </div>'
 
-var tpl  = '<div class="wrapper {{wrapperClass}}">'
-    tpl += '<div class="content {{type}}">'
-    tpl += '<a class="close" href="#">×</a>'
-    tpl += '{{{message}}}</div></div>'
 
 var alerts = {} 
 
@@ -19,13 +15,19 @@ alerts.alert = Backbone.View.extend({
   
   id: 'alert',
 
-  template: Hogan.compile(tplAlert),
+  template: Hogan.compile(tpl),
 
   shouldFadeOut: true,
 
   initialize: function(message){
     _.bindAll(this) 
-    this.message = message
+    if (_.isObject(message)) {
+      this.message = options.message
+      this.type = options.type
+      this.duration = options.duration
+    } else {
+      this.message = message
+    }
     this.render()
   },
 
@@ -53,16 +55,14 @@ alerts.alert = Backbone.View.extend({
 
 });
 
-
 alerts.error = alerts.alert.extend({
   template: Hogan.compile(tplError),
   shouldFadeOut: false,
 })
 
-
 alerts.contained = Backbone.View.extend({
 
-  id: 'alert',
+  id: 'containedAlert',
 
   template: Hogan.compile(tplError),
 
@@ -80,50 +80,6 @@ alerts.contained = Backbone.View.extend({
   },
 })
 
-alerts.instructions = alerts.alert.extend({
-
-  events: { 
-    'click .close' : 'close'
-  },
-
-  className: 'instructions',
-
-  initialize: function(message){
-    _.bindAll(this) 
-    this.message = message
-    this.globalEvent()
-  },
-
-  globalEvent: function(){
-    var func = _.bind(this.close, this)
-    $('body').click(function(){
-      func() 
-    });
-  },
-
-  render: function() {
-    var template = this.template.render({
-      message: this.message, 
-    })
-    $(this.el).html(template)
-    $('#notification').html(this.el)
-    $(this.el).animate({ top: '50'})
-    $('body').append('<div class="modal-backdrop" />')
-    return this
-  },
-
-  close: function() {
-    $('.modal-backdrop').fadeOut('slow', function() {
-      $(this.el).remove();
-     });
-
-    $(this.el).fadeOut('slow', function() {
-      $(this).remove();
-     });
-   }
-
-
-})
 
 return alerts
 

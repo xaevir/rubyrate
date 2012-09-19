@@ -58,6 +58,4 @@ return Backbone.View.extend({
       $(this.el).removeAttr('id')
   },
 })
- 
-
 })

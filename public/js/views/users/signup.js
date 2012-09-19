@@ -1,7 +1,8 @@
 define(function(require) {
 
 var tpl = require('text!templates/users/signup.html')
-  , AlertView = require('views/site/alert')
+  , AlertView = require('views/site/alert').alert         
+  , AlertContainedView = require('views/site/alert').contained         
 
 var signup = {}
 
@@ -33,8 +34,8 @@ signup.signup = Backbone.View.extend({
   xhr_callback: function(res){
     if (res._id) {
       this.user.set(res)
-      new AlertView('Thank you for signing up!')
       this.close()
+      new AlertView('Thank you for signing up!')
     } 
   },
 
@@ -48,13 +49,13 @@ signup.signup = Backbone.View.extend({
 signup.modal = signup.signup.extend({
 
   initialize: function(options){
-    signup.signup.prototype.initialize(options)
+    signup.signup.prototype.initialize.call(this,options)
     this.parent = options.parent
     this.errorEl = options.errorEl
   },
 
   close: function(){
-    this.parent.remove()
+    this.parent.close()
   },
 
   renderError: function(){

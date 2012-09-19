@@ -1,15 +1,15 @@
 define(function(require) {
 
 var HomeView = require('views/home'),
-    Router = require('router'),
-    AlertView = require('views/site/alert')
+    Router = require('router')
 
-Router.prototype.home = function(){
-  var homeView = new HomeView({user: this.user})
+Router.prototype.home = function(state) {
+  var homeView = new HomeView({state: state})
   $('#app').html(homeView.render().el)
   document.title = 'Ruby Rate'
   _gaq.push(['_trackPageview', '/home'])
 }
+
 
 Router.prototype.electronic_repair = function(){
   var view = new HomeView({user: this.user})

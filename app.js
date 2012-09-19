@@ -9,7 +9,6 @@ var express = require('express')
   , check = require('validator').check
   , sanitize = require('validator').sanitize
   , nodemailer = require("nodemailer")
-  , Spider = require('./routes/spider')
  
 
 // setup Backbone models    
@@ -25,8 +24,7 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
     host: "localhost",
 })
 
-var app = express();
-
+var app = exports.app = express();
 
 app.engine('mustache', cons.hogan);
 
@@ -75,6 +73,7 @@ app.configure('development', function(){
   db = mongo.db('localhost/dev_ruby?auto_reconnect');
 });
 
+require ('./routes');
 
 db.bind('messages')
 db.bind('subjects')
@@ -164,7 +163,6 @@ app.get('/*', function(req, res, next) {
 //app.post('/scraper', spider.scraper)  
 
 //app.get('/crawl', spider.crawl)
-
 
 
 
@@ -352,6 +350,14 @@ app.post('/wishes', loadUser, function(req, res) {
     res.send({success: true, message: 'wish inserted'})
   })
 });
+
+app.get('/wishes/:id/seller', function(req, res) {
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
+    res.send({wish: subject,
+              subject_id: req.params.id})
+  })
+})
+
 
 app.get('/lead/:id/:slug', function(req, res) {
   db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {

@@ -19,7 +19,6 @@ h1, h2, h3 {
 
 body {
   line-height: 1.3;
-  //background: url(/img/orange-bokeh-bg.jpg) no-repeat top center;
   background: #fafbf6;
   background: url(/img/orange-bokeh-bg.jpg) no-repeat top center;
 }
@@ -56,7 +55,7 @@ li {
   padding: 10px; 
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   &:after {
     content:"";
     position: absolute;
@@ -241,17 +240,14 @@ li {
   }  
 }
 
-
-
-#lead {
+._lead {
   #app {
-    padding: 20px;
+    //padding: 20px;
     width: 650px;
   }
   .reply-form {
     clear: both;
     background: #CFF3FC;   
-
     background: rgba(49,201,247, .1);
     //width: 350px;
     .border-radius-for-pie(0 0 20px 20px);
@@ -279,7 +275,7 @@ li {
     //background: #CFF3FC;
     border: 1px solid #333;
     border-bottom: none;
-    padding: 0 20px 10px 20px;
+    padding: 20px 20px 10px 20px;
     //.box-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
     max-height: 300px;
     overflow: auto;
@@ -426,11 +422,17 @@ li {
 #main-nav {
   .clearfix();
   //margin-bottom: 20px;
-  margin-top: 10px;
+  //margin-top: 10px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  background: rgba(49, 201, 247, 0.1);
+  border: 1px solid #31C9F7;
+  border-top: none;
+  padding: 0 10px 5px 10px;
+  .border-radius(0  0 10px 10px);
+  //font-weight: bold;
   //#gradient > .vertical(#fff, #eee);
   //box-shadow: 0 1px 1px rgba(0, 0, 0, .3);
-  //.border-radius(0  0 6px 6px);
-  padding: 0 10px;
   #main-menu, #user-menu {
     list-style: none; 
     margin: 0;
@@ -439,7 +441,7 @@ li {
     >li {
       float: left;
       a {
-        //color: #333;
+        //color: #6293FC;
         padding: 10px;
         display: block;
         text-shadow: 1px 1px 0 #fff;
@@ -466,9 +468,10 @@ li {
   width: 182px;
   height: 43px;
   margin: 0 auto;
-  margin-top: -5px;
+  margin-top: -6px;
   //margin-top: 5px;
-  padding: 0 20px 0 0;
+  margin-right: 20px;
+  padding: 0 !important;
   display: block;
   float: left;
   background: url(/img/ruby-logo.png) no-repeat top left;
@@ -710,7 +713,7 @@ img {
 
 .restricted-modal {
   margin: -100px 0 0 0 !important;
-  width: inherit;
+  width: 300px;
 }
 
 .sidebar-nav {
@@ -795,14 +798,16 @@ img {
 #helper {
   .you {
     width: 275px;
+    margin-bottom: 20px;
     .author {
       font-size: 24px; 
       font-weight: bold;
-      margin-left: 19px;
+      //margin-left: 19px;
     }
   }
   .bubble-orange-border {
     font-size: 16px; 
+    margin-bottom: 15px; 
   }
   .chat-composite {
     .bubble-blue-border;
@@ -1000,10 +1005,6 @@ table.setup {
   position: absolute;
   left: 50%;
   z-index: 1060;
-  .letterWrapper {
-    width: 300px;
-    left: -150px;
-  }
   .content {
     position: relative;
     left: -50%;
@@ -1013,7 +1014,7 @@ table.setup {
     .box-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
     .border-radius-for-pie(5px);
     font-size: 16px;
-    //font-weight: bold;
+    //e chefont-weight: bold;
     padding: 10px;
     text-align: center;
     .close {
@@ -1022,13 +1023,6 @@ table.setup {
       margin-top: -9px;
       margin-right: -6px;
       .opacity(100);
-    }
-  }
-  .letter {
-    p {
-      font-size: 18px;
-      text-align: left;
-      font-weight: normal;
     }
   }
  .error {
@@ -1040,32 +1034,36 @@ table.setup {
     }
   }
 }
-#alert.instructions {
-  //position: static;
-  //width: 500px;
 
-  margin-bottom: 25px;
-  h2 {
-    color: #fff;
-    text-align: center;
-    margin: 0;
-  }
-  .wrapper {
+#containedAlert {
+  #alert.error;
+  padding: 5px;
+}
+
+.instructions {
+  background: #F9EDBE;
+  border: 1px solid #F0C36D;
+  color: #222;
+  text-align: center;
+  margin-bottom: 20px;
+  p {
     width: 500px;
-    left: -250px;
-    //position: static; 
-    //margin: 0 auto;
-    p {
-      font-size: 16px; 
-      font-weight: normal;
-    }
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: auto;
   }
+  h2 {
+    margin-bottom: 0; 
+  }
+}
+
+#letter {
+  #alert;
   .content {
-    //border: 1px solid #a2c9db;
-    //background: #D9EDF7;
-    //background: rgba(49,201,247, .1);
-    //color: #333;
-    text-align: left;
+    width: 300px; 
+  }
+  p {
+    font-size: 16px;
   }
 }
 

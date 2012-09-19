@@ -3,16 +3,19 @@ define(function(require) {
 var tpl = require('text!templates/home.html')
   , thankyouTpl = require('text!templates/wish_thankyou.html')
   , HomepageWish = require('models/homepage_wish') 
-  , AlertView = require('views/site/alert')       
+  , LetterView = require('views/letter')      
   , NewUser = require('models/newUser')
 
 return Backbone.View.extend({
 
   initialize: function(options){
     _.bindAll(this); 
+    this.state = options.state
     this.model = new HomepageWish();
     Backbone.Validation.bind(this);
     this.model.on('sync', this.onSync, this)
+    if (options.state)
+      this.onSync()
   },
 
   events: {
@@ -34,14 +37,8 @@ return Backbone.View.extend({
   },
 
   onSync: function(){
-    new AlertView({message: thankyouTpl, 
-                   duration: 5000, 
-                   type:"letter", 
-                   wrapperClass: 'letterWrapper',
-                   bgOpacity: true,
-                   doNotFadeOut: true}) 
-
-    var router = new Backbone.Router();
+    new LetterView(thankyouTpl)
+    //var router = new Backbone.Router();
     //router.navigate('wishes', {trigger: true}) 
     this.render()
   }

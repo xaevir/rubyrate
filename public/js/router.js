@@ -25,6 +25,7 @@ var SignupView = require('views/users/signup').signup
   , Spider = require('views/spider')         
   , BubblesView = require('views/bubbles')         
   , InstructionsView = require('views/site/alert').instructions
+  , AlertContainedView = require('views/site/alert').contained
 
 function showStatic(path) {
   $.get(path, function(obj) {
@@ -90,11 +91,13 @@ var AppRouter = Backbone.Router.extend({
     , 'wishes/:id':                 'wish' 
     , 'helper/:id':                 'helper' 
     , 'wishes/:id/setup':           'wish_setup' 
+    , 'wishes/:id/seller':          'seller' 
     , 'subjects':                   'subjects'
     , 'subjects/:id':               'subject'
     , 'lead/:id/:slug':             'lead'
     , 'spider':                     'spider'
     , '':                           'home'
+    , 'home/:state':                'home'
     , 'admin':                      'admin'
     , 'electronic-repair':          'electronic_repair'
     , '*actions':                   'notFound'
@@ -122,6 +125,7 @@ AppRouter.prototype.modernizr = function(){
 } 
 
 AppRouter.prototype.reset = function(route, section) {
+  $('#notification').html(''); //clear alerts
   route = route.replace('route:', '');
   if(this.prev_route)
     if(_.has(this, 'reset_'+this.prev_route)){
@@ -231,17 +235,51 @@ AppRouter.prototype.reset_wish = function(){
   $('body').removeAttr('id')
 }
 
+AppRouter.prototype.seller = function(id, slug) {
+  $('body').addClass('_lead seller')
+
+  $.get('/wishes/'+id+'/seller', $.proxy(function(res) {
+    var message = '<div class="instructions"><h2>How this page works</h2>\
+      <p>You have a lead from a potential buyer. To send a message to the lead\
+         all you have to do is reply in the box below.\
+      </p></div>'
+    $('#app').html(message)
+    var messages = new Messages([res.wish])
+    var bubblesView = new BubblesView({collection: messages,
+                                       user: this.user})
+    $('#app').append(bubblesView.render().el)
+    var opts = {convo_id: res.convo_id,
+                subject_id: res.subject_id,
+                collection: messages,
+                context: 'wish',
+                user: this.user}
+    var replyLeadView = new ReplyLeadView(opts)
+    $('button', replyLeadView.render().el).addClass('btn-large btn-success')
+    $('#app').append(replyLeadView.el)
+
+    var ul = $('.bubbles')[0];
+    var height = ul.scrollHeight
+    ul.scrollTop = height
+    _gaq.push(['_trackPageview', '/lead/'+ res.wish.body])
+    document.title = 'Ruby Rate';
+  }, this));
+}
+
+AppRouter.prototype.reset_seller = function(){
+  $('body').removeClass('_lead seller')
+}
+
 AppRouter.prototype.lead = function(id, slug) {
-  $('body').attr('id','lead')
+  $('body').addClass('_lead')
 
   $.get('/lead/'+id+'/'+slug, $.proxy(function(res){
     this.getUser()
     $('#app').html('')
-    var message = '<h2>How this page works</h2>\
+    var message = '<div class="instructions"><h2>How this page works</h2>\
       <p>You have a lead from a potential buyer. We started the convo for you and\
         your lead has just replied. All you have to do is fill in the box at the bottom.\
-      </p>'
-    new InstructionsView(message) 
+      </p></div>'
+    $('#app').html(message)
 
     var messages = new Messages(res.messages)
     var bubblesView = new BubblesView({collection: messages,
@@ -265,7 +303,7 @@ AppRouter.prototype.lead = function(id, slug) {
 }
 
 AppRouter.prototype.reset_lead = function(){
-  $('body').removeAttr('id')
+  $('body').removeClass('lead')
 }
 
 AppRouter.prototype.helper = function(id) {
@@ -276,11 +314,11 @@ AppRouter.prototype.helper = function(id) {
       return this.notFound()
     this.getUser()
     $('#app').html('')
-    var message = '<h2>How this page works</h2>\
+    var message = '<div class="instructions"><h2>How this page works</h2>\
       <p>Shown below are answers to your request. You can respond to any \
          company you are interested in by clicking on the reply.\
-      </p>'
-    new InstructionsView(message) 
+      </p></div>'
+    $('#app').html(message)
 
     var tpl = '<div class="you"><div class="bubble-orange-border">\
                 <blockquote>{{{body}}}</blockquote>\

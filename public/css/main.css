@@ -4278,7 +4278,7 @@ li {
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
 }
 .bubble:after {
   content: "";
@@ -4308,7 +4308,7 @@ li {
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -4350,7 +4350,7 @@ li {
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -4391,7 +4391,7 @@ li {
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -4595,11 +4595,10 @@ li {
   font-size: 18px;
   margin-bottom: 15px;
 }
-#lead #app {
-  padding: 20px;
+._lead #app {
   width: 650px;
 }
-#lead .reply-form {
+._lead .reply-form {
   clear: both;
   background: #CFF3FC;
   background: rgba(49, 201, 247, 0.1);
@@ -4613,12 +4612,12 @@ li {
   margin: 0 auto;
   width: 575px;
 }
-#lead .reply-form form {
+._lead .reply-form form {
   width: 350px;
   margin: 0 auto;
   padding: 20px;
 }
-#lead .reply-form textarea {
+._lead .reply-form textarea {
   height: 100px;
   display: block;
   width: 100%;
@@ -4628,14 +4627,14 @@ li {
   -ms-box-sizing: border-box;
   box-sizing: border-box;
 }
-#lead .bubbles {
+._lead .bubbles {
   width: 575px;
   margin: 0 auto;
   list-style: none;
   background: rgba(49, 201, 247, 0.1);
   border: 1px solid #333;
   border-bottom: none;
-  padding: 0 20px 10px 20px;
+  padding: 20px 20px 10px 20px;
   max-height: 300px;
   overflow: auto;
   -webkit-border-radius: 20px 20px 0 0;
@@ -4643,19 +4642,19 @@ li {
   border-radius: 20px 20px 0 0;
   behavior: url(/js/libs/PIE.htc);
 }
-#lead .bubbles li {
+._lead .bubbles li {
   clear: both;
 }
-#lead .bubbles .author {
+._lead .bubbles .author {
   font-size: 16px;
 }
-#lead .bubbles blockquote {
+._lead .bubbles blockquote {
   font-size: 18px;
 }
-#lead .bubbles .seller {
+._lead .bubbles .seller {
   float: right;
 }
-#lead .bubbles .seller .author {
+._lead .bubbles .seller .author {
   float: right;
 }
 #mock-homepage {
@@ -4805,8 +4804,15 @@ li {
 }
 #main-nav {
   *zoom: 1;
-  margin-top: 10px;
-  padding: 0 10px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  background: rgba(49, 201, 247, 0.1);
+  border: 1px solid #31C9F7;
+  border-top: none;
+  padding: 0 10px 5px 10px;
+  -webkit-border-radius: 0 0 10px 10px;
+  -moz-border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 10px;
 }
 #main-nav:before,
 #main-nav:after {
@@ -4855,8 +4861,9 @@ li {
   width: 182px;
   height: 43px;
   margin: 0 auto;
-  margin-top: -5px;
-  padding: 0 20px 0 0;
+  margin-top: -6px;
+  margin-right: 20px;
+  padding: 0 !important;
   display: block;
   float: left;
   background: url(/img/ruby-logo.png) no-repeat top left;
@@ -5116,7 +5123,7 @@ img {
 }
 .restricted-modal {
   margin: -100px 0 0 0 !important;
-  width: inherit;
+  width: 300px;
 }
 .sidebar-nav {
   padding: 0;
@@ -5183,7 +5190,7 @@ img {
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -5273,7 +5280,7 @@ img {
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -5315,7 +5322,7 @@ img {
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -5354,21 +5361,22 @@ img {
 }
 #helper .you {
   width: 275px;
+  margin-bottom: 20px;
 }
 #helper .you .author {
   font-size: 24px;
   font-weight: bold;
-  margin-left: 19px;
 }
 #helper .bubble-orange-border {
   font-size: 16px;
+  margin-bottom: 15px;
 }
 #helper .chat-composite {
   margin-bottom: 15px;
   padding: 10px;
   position: relative;
   width: 250px;
-  margin: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -5626,10 +5634,6 @@ table.setup td.editing .edit {
   left: 50%;
   z-index: 1060;
 }
-#alert .letterWrapper {
-  width: 300px;
-  left: -150px;
-}
 #alert .content {
   position: relative;
   left: -50%;
@@ -5655,11 +5659,6 @@ table.setup td.editing .edit {
   opacity: 1;
   filter: alpha(opacity=100);
 }
-#alert .letter p {
-  font-size: 18px;
-  text-align: left;
-  font-weight: normal;
-}
 #alert .error {
   border: 1px solid #E73E36;
   background: #fff;
@@ -5668,24 +5667,74 @@ table.setup td.editing .edit {
 #alert .error .close {
   color: #E73E36;
 }
-#alert.instructions {
-  margin-bottom: 25px;
+#containedAlert {
+  border: 1px solid #E73E36;
+  background: #fff;
+  color: #E73E36;
+  padding: 5px;
 }
-#alert.instructions h2 {
-  color: #fff;
+#containedAlert .close {
+  color: #E73E36;
+}
+.instructions {
+  background: #F9EDBE;
+  border: 1px solid #F0C36D;
+  color: #222;
   text-align: center;
-  margin: 0;
+  margin-bottom: 20px;
 }
-#alert.instructions .wrapper {
+.instructions p {
   width: 500px;
-  left: -250px;
-}
-#alert.instructions .wrapper p {
   font-size: 16px;
-  font-weight: normal;
+  margin-left: auto;
+  margin-right: auto;
 }
-#alert.instructions .content {
-  text-align: left;
+.instructions h2 {
+  margin-bottom: 0;
+}
+#letter {
+  position: absolute;
+  left: 50%;
+  z-index: 1060;
+}
+#letter .content {
+  position: relative;
+  left: -50%;
+  background: #F9EDBE;
+  border: 1px solid #F0C36D;
+  color: #222;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  behavior: url(/js/libs/PIE.htc);
+  font-size: 16px;
+  padding: 10px;
+  text-align: center;
+}
+#letter .content .close {
+  color: #fff;
+  text-decoration: none;
+  margin-top: -9px;
+  margin-right: -6px;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+#letter .error {
+  border: 1px solid #E73E36;
+  background: #fff;
+  color: #E73E36;
+}
+#letter .error .close {
+  color: #E73E36;
+}
+#letter .content {
+  width: 300px;
+}
+#letter p {
+  font-size: 16px;
 }
 .notice {
   left: 50%;

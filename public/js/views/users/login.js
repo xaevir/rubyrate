@@ -38,12 +38,12 @@ login.login = Backbone.View.extend({
     if (res.success === false)
       return this.renderError()
     this.user.set(res)
-    this.remove() 
-    new AlertView('Hello')
     this.close()
+    new AlertView('Hello')
   },
 
   close: function(){
+    this.remove() 
     var router = new Backbone.Router()
     router.navigate('', true);
   },
@@ -57,17 +57,20 @@ login.login = Backbone.View.extend({
   
 login.modal = login.login.extend({
   initialize: function(options){
-    login.login.prototype.initialize(options)
+    login.login.prototype.initialize.call(this,options)
     this.parent = options.parent
   },
 
   close: function(){
-    this.parent.remove()
+    this.parent.close()
   },
 
   renderError: function(){
+    if (this.happened) return  
+    this.happened = true 
     var alert = new AlertContainedView(this.errorMsg)
-    $('.modal-body', this.el).prepend(alert.render().el)
+    var html = alert.render().el
+    $(this.el).prepend(html)
   },
 })
 

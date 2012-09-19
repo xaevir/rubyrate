@@ -17,11 +17,9 @@ var SignupModalView = require('views/users/signup').modal
 
       this.signupModalView = new SignupModalView({model: new NewUser(), 
                                                   user: this.user,
-                                                  parent: this,
-                                                  errorEl: $('.modal-body', this.el)})
+                                                  parent: this})
       this.loginModalView = new LoginModalView({user: this.user, 
-                                                parent: this,
-                                                errorEl: $('.modal-body', this.el)})
+                                                parent: this})
     },
 
     render: function(){
@@ -33,6 +31,11 @@ var SignupModalView = require('views/users/signup').modal
       $(this.el).modal('show');
       $(this.el).center();
     },
+
+    close: function(){
+      $(this.el).modal('hide');
+      this.remove()
+    }
 
 })
 
