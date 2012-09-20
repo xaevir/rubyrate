@@ -1,6 +1,6 @@
 define(function(require) {
 
-var AlertView = require('views/site/alert')
+var AlertView = require('views/site/alert').alert
   , tpl = require('text!templates/wishes/create_wish.mustache') 
   , Wish = require('models/wish')
 

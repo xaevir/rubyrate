@@ -7,7 +7,7 @@ return Backbone.View.extend({
   className: 'chat-composite',
 
   events: {
-    "click a:not(.reply)": "pushState",
+    "click a:not(.btn)": "pushState",
     'click .reply' : 'renderReplyForm',
   },
 

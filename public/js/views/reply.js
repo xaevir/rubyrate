@@ -40,7 +40,7 @@ var ReplyView = Backbone.View.extend({
   },
 
   render: function () {
-    var template = this.template.render({largeButton: this.largeButton })
+    var template = this.template.render({largeButton: this.largeButton})
     $(this.el).html(template);
     var tArea = $('textarea', this.el) 
     tArea.wysihtml5({
