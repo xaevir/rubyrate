@@ -331,6 +331,7 @@ app.post('/wishes-home', function(req, res) {
     contact: req.body.contact,
     slug: req.body.slug
   })
+  var test = user.toJSON()
   user.setPassword(function(){
     db.users.insert(user.toJSON())
     db.subjects.insert(subject)

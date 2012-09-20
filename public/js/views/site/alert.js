@@ -22,9 +22,9 @@ alerts.alert = Backbone.View.extend({
   initialize: function(message){
     _.bindAll(this) 
     if (_.isObject(message)) {
-      this.message = options.message
-      this.type = options.type
-      this.duration = options.duration
+      this.message = message.message
+      this.type = message.type
+      this.duration = message.duration
     } else {
       this.message = message
     }

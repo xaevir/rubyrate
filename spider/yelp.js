@@ -1,15 +1,22 @@
 var Spider = require('./spider')
-var Events = require('events').EventEmitter
-var events = new Events()
+var EventEmitter = require('events').EventEmitter
 
 var Yelp = module.exports = function(description, location){
   this.url = this.setUrl(description, location)
   this.spider = new Spider()
 }
 
+Yelp.prototype = new EventEmitter();
+
+Yelp.prototype.setupEvents = function(){
+  this.on('firstStageDone', this.scrapeEmail)
+}
+
 Yelp.prototype.run = function(fn) {
+  var self = this
   this.spider.getDom(this.url, function(err, $){
-     var companies = this.scrapeCompanies($)
+     var companies = self.scrapeCompanies($)
+     self.emit('firstStageDone', companies)
      fn(null, companies)
   })
 }
@@ -31,11 +38,26 @@ Yelp.prototype.scrapeCompanies = function($) {
   var self = this
   $('.businessresult .itemheading a').each(function() {
     var a = $(this)
-    var href = 'http://www.yelp.com'+ a.attr('href')
+    var url = 'http://www.yelp.com'+ a.attr('href')
     var companyName = a.text()
     var companyName = self.extractName(companyName)
-    companies.push({companyName: companyName, href:href})
+    companies.push({companyName: companyName, url:url})
   });
   return companies
+}
+
+Yelp.prototype.scrapeEmail = function(companies) {
+  /*
+  companies.forEach(function(company) {
+    this.spider.getDom(company.href, function(err, $){
+    doRequest(item.href, function(err, body){
+      doJsdom(body, function(err, $){
+        var website = getWebsiteFromYelp($)
+        item.website = website     
+        socket.emit('got website from yelp', item)
+      })
+    })
+  })
+  */
 }
 

@@ -28,13 +28,17 @@ describe('Yelp', function(){
       server.listen(5000)
 
       yelp.url = 'http://localhost:5000'
-      var spy = sinon.spy(yelp.spider, 'getDom')
-      var spy = sinon.spy(yelp, 'scrapeCompanies')
-      
-      yelp.run(function(err, companies){
-        console.log(companies)  
-      })
+      var spy1 = sinon.spy(yelp.spider, 'getDom')
+      var spy2 = sinon.spy(yelp, 'scrapeCompanies')
+      var spy3 = sinon.spy(yelp, 'emit')
 
+      yelp.run(function(err, companies){
+        expect(spy1).to.have.been.called
+        expect(spy2).to.have.been.called
+        expect(spy3).to.have.been.calledWith('firstStageDone')
+        expect(companies).to.be.an('array')
+        done()
+      })
 
     }) 
   })
@@ -62,7 +66,7 @@ describe('Yelp', function(){
       var companies = yelp.scrapeCompanies($)
       expect(companies.length).to.equal(10)
       expect(companies[0].companyName).to.be.a('string')
-      expect(companies[0].href).to.contain('http')
+      expect(companies[0].url).to.contain('http')
       expect(spy).to.have.been.called
     }) 
   })
