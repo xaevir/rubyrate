@@ -1,7 +1,7 @@
 define(function(require) {
 
 var tpl = require('text!templates/users/profile-edit.mustache')
-  , AlertView = require('views/site/alert')
+  , AlertView = require('views/site/alert').alert
 
 return Backbone.View.extend({
 
