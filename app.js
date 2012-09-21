@@ -302,6 +302,12 @@ app.get('/wishes', function(req, res) {
   })
 })
 
+app.put('/messages/:id', loadUser, andRestrictTo('admin'), function(req, res) {
+  db.messages.update({_id: new ObjectID(req.params.id)}, {$set: {body: req.body.body}})
+  res.send({success: true, message: 'messages updated'})
+})
+
+
 function makeShortId() {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

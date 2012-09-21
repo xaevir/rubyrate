@@ -6,20 +6,11 @@ var MessageItem = Backbone.View.extend({
 
   tagName:  "li",
 
-  events: {
-    'click .reply' : 'edit',
-  },
-
-  edit: function(e) {
-    e.preventDefault() 
-    var linkEl = $(e.currentTarget);
-    var href = linkEl.attr("href");
-  },
-
   initialize: function(options) {
-    this.message = options.message
+    //this.message = options.message
     this.truncate = options.truncate
     this.user = options.user
+    this.model.bind('change', this.render, this);
     _.bindAll(this, 'render');
   },
 
@@ -29,10 +20,10 @@ var MessageItem = Backbone.View.extend({
  
     // add color if me 
     var username = this.user.get('username')    
-    if (this.message.author == 'Me')
+    if (this.model.get('author') == 'Me')
       $(this.el).addClass('colored')
 
-    if (this.message.unread)
+    if (this.model.get('unread'))
       $(this.el).addClass('msg-unread') 
 
 //    if (this.user.get('role') == 'admin')
@@ -55,14 +46,14 @@ return  Backbone.View.extend({
     _.bindAll(this);
 //    this.collection.bind('add', this.addOne, this)
     this.truncate = options.truncate
-    this.messagesOfChat = options.messagesOfChat
+    //this.messagesOfChat = options.messagesOfChat
     this.user = options.user
   },
 
-  addOne: function(message) {
-    if (message.unread == true)
+  addOne: function(model) {
+    if (model.get('unread') == true)
       this.unread() 
-    var opts = {message: message, user: this.user}
+    var opts = {model: model, user: this.user}
     if (this.truncate)
       opts.truncate = this.truncate
     var messageItem = new MessageItem(opts)
@@ -70,12 +61,13 @@ return  Backbone.View.extend({
   },
 
   render: function() {
-    if (_.isArray(this.messagesOfChat)) 
-      _.each(this.messagesOfChat, this.addOne, this);
-    else
-      this.addOne(this.messagesOfChat)
+    this.collection.each(this.addOne, this)
+    //if (_.isArray(this.messagesOfChat)) 
+      //_.each(this.messagesOfChat, this.addOne, this);
+    //else
+      //this.addOne(this.messagesOfChat)
 
-    if(this.messagesOfChat.length > 1) 
+    //if(this.messagesOfChat.length > 1) 
       $(this.el).addClass('scrollable')
     return this
   },

@@ -1,6 +1,7 @@
 define(function(require) {
 
 var tpl = require('text!templates/messageBody.mustache')
+  , EditView = require('views/editMessage')
 
 return Backbone.View.extend({
 
@@ -8,15 +9,25 @@ return Backbone.View.extend({
 
   template: Hogan.compile(tpl),
 
+  events: {
+    'click .edit' : 'edit',
+  },
+
   initialize: function(options) {
     _.bindAll(this, 'render');
-    this.message = options.message
     this.truncate = options.truncate 
     this.user = options.user
   },
 
+  edit: function(e) {
+    e.preventDefault() 
+    var editView = new EditView({model: this.model});
+    editView.render()
+    return false
+  },
+
   render: function() {
-    var locals = this.message
+    var locals = this.model.toJSON()
     var username = this.user.get('username')    
 
     if (this.truncate && locals.body.length > this.truncate) 
@@ -26,6 +37,9 @@ return Backbone.View.extend({
       locals.author = 'Me'
     else 
       locals.makeProfileLink = true
+
+    if (this.user.get('role') == 'admin')
+      locals.edit = true
 
     var prettyTime = $.shortDate(locals._id)
     locals.time = prettyTime

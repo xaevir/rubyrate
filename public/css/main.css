@@ -5090,6 +5090,38 @@ img {
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
+.modal-edit {
+  width: 350px;
+  position: absolute;
+  margin: -250px 0 0 -250px;
+  top: 0;
+  margin-top: 90px;
+}
+.modal-edit .modal-header {
+  border: none;
+  padding: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+}
+.modal-edit .modal-body {
+  padding-top: 0;
+}
+.modal-edit textarea {
+  height: 56px;
+  margin-bottom: 15px;
+}
+.modal-edit form label {
+  font-size: 18px;
+  font-weight: bold;
+}
+.modal-edit form button {
+  float: right;
+}
+.modal-edit .form-horizontal .control-label {
+  width: 145px;
+  text-align: left;
+}
 .modal-wish {
   width: 500px;
   position: absolute;
@@ -5456,8 +5488,23 @@ img {
 .chat-composite:hover .admin-options {
   display: block;
 }
+.chat-composite:hover .extra-options {
+  display: block;
+}
 .chat-composite .author {
   font-weight: normal;
+}
+.chat-composite .extra-options {
+  position: absolute;
+  display: none;
+  top: 0px;
+  right: 0px;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  padding: 5px;
 }
 .chat-composite .admin-options {
   position: absolute;
@@ -5518,6 +5565,9 @@ img {
 }
 .chat-columns .span4 {
   width: 290px;
+}
+.msg {
+  position: relative;
 }
 .msg .sent {
   display: block;

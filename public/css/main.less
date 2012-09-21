@@ -675,7 +675,42 @@ img {
   .opacity(50);
 }
 
+.modal-edit {
+  width: 350px;
+  position: absolute;
+  margin: -250px 0 0 -250px;
+  top: 0;
+  margin-top: 90px;
+  .modal-header {
+    border: none; 
+    padding: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+  }
 
+  .modal-body {
+    padding-top: 0;
+  }
+  textarea {
+    height: 56px; 
+    margin-bottom: 15px;
+  }
+  form {
+    label {
+      font-size: 18px; 
+      font-weight: bold;
+    } 
+    button {
+      float: right; 
+    }
+  }
+  .form-horizontal .control-label {
+    width: 145px;  
+    text-align: left;
+  }
+
+}
 .modal-wish {
   width: 500px;
   position: absolute;
@@ -824,10 +859,24 @@ img {
     .admin-options {
       display: block; 
     }
+    .extra-options {
+      display: block; 
+    }
   }
   .author {
     font-weight: normal;
   }
+  .extra-options {
+    position: absolute;  
+    display: none;
+    top: 0px;
+    right: 0px;
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    .border-radius(4px);
+    padding: 5px; 
+  }
+
   .admin-options {
     position: absolute;  
     display: none;
@@ -880,6 +929,7 @@ img {
 }
 
 .msg {
+  position: relative;
   .sent {
     display: block; 
     font-size: 10px;

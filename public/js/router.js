@@ -168,8 +168,10 @@ AppRouter.prototype.wishes = function(e) {
     var views = []
     _.each(wishes, function(wish){
       var subject_id = wish[0]._id
+      var shortId = wish[0].shortId
       var chatCompositeView = new ChatCompositeView({bigTextarea: true, user: self.user})
-      chatCompositeView.messagesView = new MessagesView({messagesOfChat: wish, truncate: 200, user: self.user})
+      var messages = new Messages(wish)
+      chatCompositeView.messagesView = new MessagesView({collection: messages, truncate: 200, user: self.user})
       chatCompositeView.replyView = new ReplyView({subject_id: subject_id, 
                                                    parentView: chatCompositeView, 
                                                    context: 'wish',
@@ -177,7 +179,8 @@ AppRouter.prototype.wishes = function(e) {
                                                    user: self.user})
       $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
       if (self.user.get('role') == 'admin')
-        $(chatCompositeView.el).prepend('<div class="admin-options"><a href="/wishes/'+subject_id+'/setup">setup</a></div>')
+        $(chatCompositeView.el).prepend('<div class="admin-options">shortId:'+shortId+'</div>')
+        //$(chatCompositeView.el).prepend('<div class="admin-options"><a href="/wishes/'+subject_id+'/setup">setup</a></div>')
 
       views.push(chatCompositeView);
    }, this);
@@ -201,7 +204,8 @@ AppRouter.prototype.wish = function(id) {
       return self.notFound()
     // header
     var chatCompositeView = new ChatCompositeView({user: self.user})
-    chatCompositeView.messagesView = new MessagesView({messagesOfChat: res.subject, user: self.user})
+    var messages = new Messages(res.subject)
+    chatCompositeView.messagesView = new MessagesView({collection: messages, user: self.user})
     chatCompositeView.replyView = new ReplyView({subject_id: id, 
                                                  parentView: chatCompositeView, 
                                                  context: 'wish',
@@ -213,7 +217,8 @@ AppRouter.prototype.wish = function(id) {
     var views = []
     _.each(res.conversations, function(convo){
       var chatCompositeView = new ChatCompositeView({noReply: true, user: self.user})
-      chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: self.user})
+      var messages = new Messages(convo.value.comments)
+      chatCompositeView.messagesView = new MessagesView({collection: messages, user: self.user})
       var opts = {
         convo_id: convo._id,
         subject_id: convo.value.comments[0].subject_id,
@@ -334,7 +339,8 @@ AppRouter.prototype.helper = function(id) {
     var views = []
     _.each(res.conversations, function(convo){
       var chatCompositeView = new ChatCompositeView({user: this.user, unread: convo.value.unread})
-      chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: this.user})
+      var messages = new Messages(convo.value.comments)
+      chatCompositeView.messagesView = new MessagesView({collection: messages, user: this.user})
       var opts = {
         convo_id: convo._id,
         subject_id: convo.value.comments[0].subject_id,
@@ -349,7 +355,10 @@ AppRouter.prototype.helper = function(id) {
     $('#app').append(html);
     $.each($('.scrollable'), function(index, ul) { 
       var unread = $('.msg-unread', ul)[0]
-      var height1 = unread.scrollHeight
+      if (unread)
+        var height1 = unread.scrollHeight
+      else 
+        var height1 = 0
       var height = ul.scrollHeight
       var total = height-height1
       ul.scrollTop = total 
