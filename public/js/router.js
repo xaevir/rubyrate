@@ -348,8 +348,11 @@ AppRouter.prototype.helper = function(id) {
     var html =  view.render().el
     $('#app').append(html);
     $.each($('.scrollable'), function(index, ul) { 
+      var unread = $('.msg-unread', ul)[0]
+      var height1 = unread.scrollHeight
       var height = ul.scrollHeight
-      ul.scrollTop = height
+      var total = height-height1
+      ul.scrollTop = total 
     });
   }, this));
 }
