@@ -394,7 +394,11 @@ app.get('/helper/:id', function(req, res, next) {
       var subject_id = subject._id.toHexString() 
 
         function map() {
-          var values = {comments: new Array(this), count: 1, modified: this._id.getTimestamp()}
+          var values = {comments: new Array(this), 
+                        count: 1, 
+                        modified: this._id.getTimestamp(),
+                        unread: this.unread
+                        }
           emit(this.convo_id, values);        
         }
 
@@ -402,7 +406,8 @@ app.get('/helper/:id', function(req, res, next) {
           var result = {
             comments: new Array(), 
             count: 0,
-            modified: ''
+            modified: '',
+            unread: false
           };
           values.forEach(function(value) {
             result.count += value.count;
@@ -416,6 +421,9 @@ app.get('/helper/:id', function(req, res, next) {
               result.modified = value.modified 
             else
               result.modified = value.modified
+
+            if (value.unread)
+              result.unread = true
           });
           return result;
         }

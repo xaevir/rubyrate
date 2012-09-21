@@ -8,7 +8,6 @@ return Backbone.View.extend({
   template: Hogan.compile(tpl),
 
   events: {
-    "click a": "preventDefault",
     "click a:not([href^='#'])": "pushState",
     "click a.create-wish": "renderWishView",
   },
@@ -21,10 +20,10 @@ return Backbone.View.extend({
   },
 
   preventDefault: function(e) {
-    e.preventDefault() 
   },
 
   pushState: function(e) {
+    e.preventDefault() 
     var linkEl = $(e.currentTarget);
     var href = linkEl.attr("href");
     var router = new Backbone.Router();
@@ -39,6 +38,7 @@ return Backbone.View.extend({
   },
 
   renderWishView: function(e) {
+    e.preventDefault() 
     var createWishView = new CreateWishView();
     createWishView.render()
   },

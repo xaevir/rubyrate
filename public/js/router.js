@@ -333,7 +333,7 @@ AppRouter.prototype.helper = function(id) {
     document.title = 'Ruby Rate - Helper';
     var views = []
     _.each(res.conversations, function(convo){
-      var chatCompositeView = new ChatCompositeView({user: this.user})
+      var chatCompositeView = new ChatCompositeView({user: this.user, unread: convo.value.unread})
       chatCompositeView.messagesView = new MessagesView({messagesOfChat: convo.value.comments, user: this.user})
       var opts = {
         convo_id: convo._id,

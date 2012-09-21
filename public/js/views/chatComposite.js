@@ -22,12 +22,15 @@ return Backbone.View.extend({
   initialize: function(options) {
     _.bindAll(this)
     this.user = options.user
+    this.unread = options.unread
     if (options && options.noReply)
       this.noReply = options.noReply
   },
 
   render: function(){
     $(this.el).append(this.messagesView.render().el)
+    if(this.unread)
+      $(this.el).addClass('unread')
     if (this.noReply == undefined)
       this.$el.append('<a href="#" class="btn reply">Reply</a>')
     return this

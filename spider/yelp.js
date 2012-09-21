@@ -4,19 +4,16 @@ var EventEmitter = require('events').EventEmitter
 var Yelp = module.exports = function(description, location){
   this.url = this.setUrl(description, location)
   this.spider = new Spider()
+  this.on('first stage done', this.secondStage)
 }
 
 Yelp.prototype = new EventEmitter();
-
-Yelp.prototype.setupEvents = function(){
-  this.on('firstStageDone', this.scrapeEmail)
-}
 
 Yelp.prototype.run = function(fn) {
   var self = this
   this.spider.getDom(this.url, function(err, $){
      var companies = self.scrapeCompanies($)
-     self.emit('firstStageDone', companies)
+     self.emit('first stage done', companies)
      fn(null, companies)
   })
 }
@@ -46,16 +43,13 @@ Yelp.prototype.scrapeCompanies = function($) {
   return companies
 }
 
-Yelp.prototype.scrapeEmail = function(companies) {
+Yelp.prototype.secondStage = function(companies) {
+  throw Error('shoudl not be calling this func secondStage')
   /*
   companies.forEach(function(company) {
-    this.spider.getDom(company.href, function(err, $){
-    doRequest(item.href, function(err, body){
-      doJsdom(body, function(err, $){
-        var website = getWebsiteFromYelp($)
-        item.website = website     
-        socket.emit('got website from yelp', item)
-      })
+    this.spider.getDom(company.url, function(err, $){
+      var website = $('#bizUrl a').text()
+      company.website = website
     })
   })
   */

@@ -5498,7 +5498,7 @@ img {
 }
 .chat-composite .unread {
   position: absolute;
-  top: -10px;
+  top: -30px;
   -webkit-box-shadow: 0px 3px 6px #666666;
   -moz-box-shadow: 0px 3px 6px #666666;
   box-shadow: 0px 3px 6px #666666;
