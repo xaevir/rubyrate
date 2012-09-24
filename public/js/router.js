@@ -15,8 +15,9 @@ var SignupView = require('views/users/signup').signup
   , ProfileMenuView = require('views/profile-menu')
   , WishSetupView = require('views/wishes/setup')
   , ChatCompositeView = require('views/chatComposite')         
-  , ReplyView = require('views/reply')
-  , ReplyLeadView = require('views/reply-lead')
+  , ReplyView = require('views/reply').Reply
+  , ReplyLeadView = require('views/reply').Lead
+  , ReplySellerView = require('views/reply').Seller
   , instructionsTpl = require('text!templates/instructions.mustache')
   , UserMenu = require('views/user-menu')
   , User = require('models/user')
@@ -258,9 +259,9 @@ AppRouter.prototype.seller = function(id, slug) {
                 collection: messages,
                 context: 'wish',
                 user: this.user}
-    var replyLeadView = new ReplyLeadView(opts)
-    $('button', replyLeadView.render().el).addClass('btn-large btn-success')
-    $('#app').append(replyLeadView.el)
+    var replySellerView = new ReplySellerView(opts)
+    $('button', replySellerView.render().el).addClass('btn-large btn-success')
+    $('#app').append(replySellerView.el)
 
     var ul = $('.bubbles')[0];
     var height = ul.scrollHeight

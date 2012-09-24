@@ -3,6 +3,7 @@ define(function(require) {
 var tpl = require('text!templates/reply-form.mustache')
   , Message = require('models/message') 
   , AlertView = require('views/site/alert').alert
+  , SellerUserMessage = require('models/seller_user_message')
 
 var longMessage = '<p>Hello,</p> \
                    <p>Thank you for your message. \
@@ -13,7 +14,9 @@ var longMessage = '<p>Hello,</p> \
 
 var shortMsg = 'Message sent'
 
-var ReplyView = Backbone.View.extend({
+var Reply = {}
+
+Reply.Reply = Backbone.View.extend({
 
   template: Hogan.compile(tpl),
 
@@ -88,6 +91,45 @@ var ReplyView = Backbone.View.extend({
   }
 })
 
-return ReplyView
+Reply.Lead = Reply.Reply.extend({
+  xhr_callback: function(res) {
+    this.render()
+    this.showMessage()
+    this.collection.add(res.data); 
+  }
+}) 
+
+Reply.Seller = Reply.Reply.extend({
+
+  initialize: function(options) {
+    _.bindAll(this)
+    this.user = options.user
+    this.subject_id = options.subject_id
+    this.convo_id = options.convo_id
+    this.model = new SellerUserMessage();
+    Backbone.Validation.bind(this);
+  },
+
+  submit: function (e) {
+    e.preventDefault()
+    var params = this.$('form').serializeObject();
+    this.model.set(params)
+    if (!this.model.isValid()) return
+    var url = '/reply-logged-out/'+this.subject_id
+    $.post(url, this.model.toJSON(), $.proxy(this.xhr_callback, this) );
+
+    // log them in
+    this.user.set({username: this.model.get('username'), 
+                   slug: this.model.get('slug') })
+  },
+
+  xhr_callback: function(res) {
+    this.render()
+    this.showMessage()
+    this.collection.add(res.data); 
+  }
+})
+
+return Reply
 
 })

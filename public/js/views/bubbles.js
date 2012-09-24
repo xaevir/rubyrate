@@ -20,8 +20,9 @@ var BubbleView = Backbone.View.extend({
   render: function() {
     var locals = this.model.toJSON()
 
-    // add color if me 
-    if (this.user.get('username') == this.model.get('author')) {
+    // add color if me or not logged in
+    var username = this.user.get('username')
+    if (username == this.model.get('author')) {
       locals.bubbleClass = 'bubble-blue-border'
       locals.author = 'Me'
       $(this.el).addClass('seller')

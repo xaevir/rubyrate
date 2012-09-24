@@ -90,6 +90,7 @@ define(function(require) {
       var slug = name.replace(/^@/, '')  //twitter
       slug = slug.replace(/[^a-zA-z0-9_\-]+/g, '-').toLowerCase()
       this.set({'slug': slug}, {silent: true})
+      return slug
     },
   
     setPassword: function(fn){

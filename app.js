@@ -615,6 +615,43 @@ app.post('/wishes/:id/messages', function(req, res) {
 })
 
 
+app.post('/reply-logged-out/:id', function(req, res) {
+  var username = req.body.username
+  var slug = new NewUser().setSlug(username)
+  var convo_id = new ObjectID().toString()
+
+  var user = {
+    username: username, 
+    convo_id: convo_id,
+    total: 1
+  } 
+
+  db.subjects.update({_id: new ObjectID(req.params.id)}, {$push: {users: user}, $set:{modified: new Date() }}) 
+  db.subjects.update({_id: new ObjectID(req.params.id)}, {$inc: {'users.0.unread': 1, 'users.0.total': 1}}) 
+
+  var message = {}
+  message.body = req.body.body 
+  message.convo_id = convo_id
+  message.author = username
+  message.authorSlug = slug
+  message.subject_id = req.params.id
+  message.label = ['first'] 
+  db.messages.insert(message, function(err, message){
+    if (err) throw err;
+    res.send({success: true, message: 'message inserted', data: message[0]})
+  })
+
+
+  // email
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
+    var html = '<h1>First reply to wish</h1><p><b>author:</b>'+message.author+'</p><h3>Message</h3><p>'+message.body+'</p>'
+        html += '<h2>In response to this wish</h2><p>'+subject.body+'</p>'
+    email({subject: 'First reply from seller page', html: html})
+  })
+
+})
+
+
 
 app.post('/first-reply/:id', loadUser, function(req, res) {
   var username = req.user.username
