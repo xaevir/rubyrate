@@ -20,7 +20,7 @@ var MessageItem = Backbone.View.extend({
  
     // add color if me 
     var username = this.user.get('username')    
-    if (this.model.get('author') == 'Me')
+    if (this.model.get('author') == this.user.get('username'))
       $(this.el).addClass('colored')
 
     if (this.model.get('unread'))
