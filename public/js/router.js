@@ -257,7 +257,6 @@ AppRouter.prototype.seller = function(id, slug) {
     var opts = {convo_id: res.convo_id,
                 subject_id: res.subject_id,
                 collection: messages,
-                context: 'wish',
                 user: this.user}
     var replySellerView = new ReplySellerView(opts)
     $('button', replySellerView.render().el).addClass('btn-large btn-success')

@@ -5091,9 +5091,9 @@ img {
   filter: alpha(opacity=50);
 }
 .modal-edit {
-  width: 350px;
-  position: absolute;
-  margin: -250px 0 0 -250px;
+  width: 450px;
+  position: fixed;
+  margin: -250px 0 0 -175px;
   top: 0;
   margin-top: 90px;
 }
@@ -5108,8 +5108,15 @@ img {
   padding-top: 0;
 }
 .modal-edit textarea {
-  height: 56px;
+  height: 200px;
   margin-bottom: 15px;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .modal-edit form label {
   font-size: 18px;
