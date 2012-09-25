@@ -18,7 +18,7 @@ var Reply = {}
 
 Reply.Reply = Backbone.View.extend({
 
-  template: Hogan.compile(tpl),
+  template: Hogan.compile(tpl).render(),
 
   className: 'reply-form',
 
@@ -43,8 +43,7 @@ Reply.Reply = Backbone.View.extend({
   },
 
   render: function () {
-    var template = this.template.render({largeButton: this.largeButton})
-    $(this.el).html(template);
+    $(this.el).html(this.template);
     var tArea = $('textarea', this.el) 
     tArea.wysihtml5({
       "font-styles": false, //Font styling, e.g. h1, h2, etc. Default true
@@ -100,6 +99,8 @@ Reply.Lead = Reply.Reply.extend({
 }) 
 
 Reply.Seller = Reply.Reply.extend({
+
+  template: Hogan.compile(tpl).render({sellerTpl: true}),
 
   initialize: function(options) {
     _.bindAll(this)
