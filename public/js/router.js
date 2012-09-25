@@ -216,13 +216,13 @@ AppRouter.prototype.wish = function(id) {
     $('#header', '#app').html(chatCompositeView.render().el);
     // body
     var views = []
-    _.each(res.conversations, function(convo){
+    _.each(res.messages, function(message){
       var chatCompositeView = new ChatCompositeView({noReply: true, user: self.user})
-      var messages = new Messages(convo.value.comments)
+      var messages = new Messages(message)
       chatCompositeView.messagesView = new MessagesView({collection: messages, user: self.user})
       var opts = {
-        convo_id: convo._id,
-        subject_id: convo.value.comments[0].subject_id,
+        convo_id: message._id,
+        subject_id: message.subject_id,
         parentView: chatCompositeView,
         user: self.user
       }

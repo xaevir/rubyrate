@@ -454,39 +454,40 @@ app.get('/helper/:id', function(req, res, next) {
 app.get('/wishes/:id', loadSubject, function(req, res) {
   var subject = req.subject
   function map() {
-    var values = {comments: new Array(this), count: 1}
-    emit(this.convo_id, values);        
+    emit(this.convo_id, 
+    {
+      message: this, 
+      count: 1 //not sure why doing a count
+    });        
   }
 
   var reduce = function(key, values) {
-    var result = {comments: new Array(), count: 0};
+    var res = {message: '', 
+               count: 0};
     values.forEach(function(value) {
-      result.count += value.count;
-      if (value.comments.length > 0)
-        result.comments = result.comments.concat(value.comments);
-      else
-        result.comments.push(value.comments[0]) 
+      res.count += value.count;
+      if (!res.message) 
+        res.message = value.message 
     });
-    return result;
-  }
-
-  var finalize = function(key, value){
-    if (value.comments.length > 0) 
-        value.comments = new Array(value.comments[0])
-      return value;
+    return res;
   }
 
   var options = {
     "query": {subject_id: subject._id.toHexString()}, 
-    "sort": {_id: 1 },
+    "sort": {_id: 1}, //find the messages in order, bc the 2nd one gets dropped in finalize
     "out" : {replace : 'tempCollection'},
-    "finalize": finalize
   };
 
   db.messages.mapReduce(map, reduce, options, function(err, collection) {
-    collection.find().toArray(function(err, conversations) {
+    // the sort gets them in order of last modified
+    collection.find().sort({'value.message._id': -1}).toArray(function(err, results) {
         if (err) throw err;
-        res.send({subject: subject, conversations: conversations})
+        var messages = []
+        results.forEach(function(result) { //folding values into one object
+          result.value.message.count = result.value.count
+          messages.push(result.value.message)  
+        })
+        res.send({subject: subject, messages: messages})
     })
   })
 })

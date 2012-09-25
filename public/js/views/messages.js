@@ -53,6 +53,8 @@ return  Backbone.View.extend({
   addOne: function(model) {
     if (model.get('unread') == true)
       this.unread() 
+    this.addTotalMessages(model)
+
     var opts = {model: model, user: this.user}
     if (this.truncate)
       opts.truncate = this.truncate
@@ -72,6 +74,12 @@ return  Backbone.View.extend({
     return this
   },
   
+  addTotalMessages: function(model){
+    var count = model.get('count')
+    if (count > 1)
+      $(this.el).prepend('<div class="count">'+count+' other messages</div>')
+  },
+
   unread: function(){
     $(this.el).prepend('<div class="unread">New Message</div>')
 
