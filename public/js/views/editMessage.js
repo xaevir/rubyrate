@@ -20,12 +20,38 @@ var AlertView = require('views/site/alert').alert
       _.bindAll(this);
     },
 
+  render: function () {
+    var template = this.template.render({largeButton: this.largeButton})
+    $(this.el).html(template);
+    var tArea = $('textarea', this.el) 
+    tArea.wysihtml5({
+      "font-styles": false, //Font styling, e.g. h1, h2, etc. Default true
+      "emphasis": true, //Italics, bold, etc. Default true
+      "lists": false, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+      "html": false, //Button which allows you to edit the generated HTML. Default false
+      "link": true, //Button to insert a link. Default true
+      "image": false //Button to insert an image. Default true
+    });
+    return this
+  },
+
+
     render: function () {
       var template = this.template.render();
       $(this.el).html(template);
+      var tArea = $('textarea', this.el) 
+      tArea.wysihtml5({
+        "font-styles": false, //Font styling, e.g. h1, h2, etc. Default true
+        "emphasis": true, //Italics, bold, etc. Default true
+        "lists": false, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+        "html": false, //Button which allows you to edit the generated HTML. Default false
+        "link": true, //Button to insert a link. Default true
+        "image": false //Button to insert an image. Default true
+      });
       $(this.el).modal('show');
       this.globalEvent()
       this.button = $('button[type="submit"]', this.el);
+      return this
     },
 
     submit: function (e) {

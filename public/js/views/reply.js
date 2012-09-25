@@ -119,7 +119,7 @@ Reply.Seller = Reply.Reply.extend({
     $.post(url, this.model.toJSON(), $.proxy(this.xhr_callback, this) );
 
     // log them in
-    this.user.set({username: this.model.get('username'), 
+    this.user.set({username: this.model.get('username'),
                    slug: this.model.get('slug') })
   },
 
