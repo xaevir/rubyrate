@@ -484,7 +484,7 @@ app.get('/wishes/:id', loadSubject, function(req, res) {
         if (err) throw err;
         var messages = []
         results.forEach(function(result) { //folding values into one object
-          result.value.message.count = result.value.count
+          result.value.message.count = result.value.count - 1 //bc u are showing the first message so you need a number for the others
           messages.push(result.value.message)  
         })
         res.send({subject: subject, messages: messages})

@@ -281,8 +281,7 @@ AppRouter.prototype.lead = function(id, slug) {
     this.getUser()
     $('#app').html('')
     var message = '<div class="instructions"><h2>How this page works</h2>\
-      <p>You have a lead from a potential buyer. We started the convo for you and\
-        your lead has just replied. All you have to do is fill in the box at the bottom.\
+      <p>To continue your conversation just fill in the box at the bottom.\
       </p></div>'
     $('#app').html(message)
 
