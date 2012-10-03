@@ -514,6 +514,14 @@ li {
         //text-shadow: 1px 1px 0 #fff;
       }
     }
+    .dropdown-menu {
+      li {
+        a {
+          color: #333; 
+        } 
+      }
+    } 
+
   }
   #user-menu {
     float: right; 
@@ -875,7 +883,7 @@ img {
   }
 }
 
-#contacted {
+#contacted-companies {
   .chat-composite {
     .bubble-green;
   }
@@ -885,8 +893,13 @@ img {
   .edit {
     display: none; 
   }
-  .editing .edit {
-    display: block; 
+  .editing {
+    .edit {
+      display: block; 
+    }
+    label {
+      display:none; 
+    }
   }
 }
 

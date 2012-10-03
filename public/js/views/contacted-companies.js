@@ -1,9 +1,9 @@
 define(function(require) {
 
 var AlertView = require('views/site/alert')
-  , tplContacted = require('text!templates/contacted/contacted.mustache')
-  , tplAdd = require('text!templates/contacted/add.mustache')
-  , Contact = require('models/contact')
+  , tplContacted = require('text!templates/contacted-companies/contacted.mustache')
+  , tplAdd = require('text!templates/contacted-companies/add.mustache')
+  , ContactedCompany = require('models/contacted-company')
 
 
 var ContactView = Backbone.View.extend({
@@ -13,63 +13,56 @@ var ContactView = Backbone.View.extend({
   template: Hogan.compile(tplAdd),
 
   events: {
+    "click td"  : "edit",
     //"dblclick td"  : "edit",
-    //"click td"  : "edit",
-    //"keypress .edit"  : "updateOnEnter",
-    //"blur .edit"      : "close",
-    //"click .edit"      : "close",
-    'click .create' : 'create'
+    "keypress .edit"  : "updateOnEnter",
+    "blur .edit"      : "close",
   },
 
   initialize: function(options) {
     _.bindAll(this);
-    this.model.bind('change', this.render, this);
+    //this.model.bind('change', this.renderCell, this);
     this.model.bind('destroy', this.remove, this);
   },
 
   edit: function(e){
     var td = $(e.currentTarget)
-    $(td).addClass('editing')
-    $('textarea', td).focus()
-    //this.input.focus();
+    this.$td = $(td)
+    this.$input = $('input', td)
+    this.$td.addClass('editing')
+    this.$input.focus()
   },
 
   updateOnEnter: function(e) {
-    if (e.keyCode == 13) this.close(e);
+    if (e.keyCode == 13) this.close();
   },
 
-  create: function(e) {
-    e.preventDefault()
-    var $inputs = $('input', this.el);
-    var values = {};
-    $inputs.each(function() {
-        values[this.name] = $(this).val();
-    });
-    /*
-    $.ajax({
-      type: "PUT",
-      url: '/halfUser/'+this.halfUser._id,
-      data: attr  
-    })
-    */
-    //textarea.parent().removeClass("editing");
-  },
-
-
-  render: function() {
-    var html = this.template.render(this.model.toJSON())
-    this.$el.html(html);
-    this.input = this.$('.edit');
-    return this;
+  close: function() {
+    var param = {}
+    var key = this.$input[0].name, 
+        value = this.$input.val()
+    param[key] = value 
+    if (this.model.get(key) !== value) { //dont resave the same thing
+      this.model.save(param);
+      $('label', this.$td).html(value)
+    }
+    this.$td.removeClass("editing")
   },
 
   /*
-  render: function() {
-    var template = this.template.render({id: this.model.cid})
-    $(this.el).append(template)
-    return this
+  renderCell: function(model, options){
+    var changed = model.changedAttributes()
+    for (var key in changed) {
+       return $('label', this.$td).html(changed[key])
+    }
   },
   */
+
+  render: function() {
+    var html = this.template.render(this.model.toJSON())
+    this.$el.html(html)
+    return this;
+  },
 
 })
 
@@ -84,11 +77,9 @@ var AppView = Backbone.View.extend({
   },
 
   initialize: function(options) {
-    this.subject = options.subject
     _.bindAll(this)
-    this.model = new Contact({},{collection: this.collection})
+    this.model = new ContactedCompany({},{collection: this.collection})
     this.collection.bind('add', this.addOne, this);
-    //this.collection.bind('all', this.render, this);
     this.model.bind('sync', this.synched, this);
     Backbone.Validation.bind(this);
   },
@@ -105,9 +96,9 @@ var AppView = Backbone.View.extend({
   },
 
   render: function() {
-    $(this.el).html(this.template)  
+    this.$el.html(this.template)  
+    this.collection.each(this.addOne, this)
     this.$inputs = $('input', this.el);
-    //_.each(this.halfUsers, this.addOne, this);
     return this
   },
 

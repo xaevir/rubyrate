@@ -4948,6 +4948,10 @@ li {
   padding: 10px;
   display: block;
 }
+#main-nav #main-menu .dropdown-menu li a,
+#main-nav #user-menu .dropdown-menu li a {
+  color: #333;
+}
 #main-nav #user-menu {
   float: right;
 }
@@ -5333,7 +5337,7 @@ img {
 #bigTextarea textarea {
   height: 300px;
 }
-#contacted .chat-composite {
+#contacted-companies .chat-composite {
   margin-bottom: 15px;
   padding: 8px 11px 3px 11px;
   position: relative;
@@ -5365,11 +5369,11 @@ img {
 
   border: 1px solid #8ace31;
 }
-#contacted .chat-composite:after {
+#contacted-companies .chat-composite:after {
   content: "";
   position: absolute;
 }
-#contacted .chat-composite blockquote {
+#contacted-companies .chat-composite blockquote {
   overflow: auto;
   max-height: 165px;
   display: inline;
@@ -5380,17 +5384,17 @@ img {
   line-height: 1.3;
   margin-bottom: 7px;
 }
-#contacted .chat-composite blockquote a {
+#contacted-companies .chat-composite blockquote a {
   text-decoration: underline;
 }
-#contacted .chat-composite:after {
+#contacted-companies .chat-composite:after {
   left: 18px;
   bottom: -16px;
   border-left: 17px solid #b4ef67;
   border-bottom: 17px solid rgba(0, 0, 0, 0);
   z-index: 2;
 }
-#contacted .chat-composite:before {
+#contacted-companies .chat-composite:before {
   content: "";
   position: absolute;
   left: 17px;
@@ -5398,14 +5402,17 @@ img {
   border-left: 17px solid #8ace31;
   border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
-#contacted table {
+#contacted-companies table {
   background: #fff;
 }
-#contacted .edit {
+#contacted-companies .edit {
   display: none;
 }
-#contacted .editing .edit {
+#contacted-companies .editing .edit {
   display: block;
+}
+#contacted-companies .editing label {
+  display: none;
 }
 #wishes .chat-composite {
   margin-bottom: 15px;
