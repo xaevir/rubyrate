@@ -23,6 +23,7 @@ return Backbone.View.extend({
     _.bindAll(this)
     this.user = options.user
     this.unread = options.unread
+    this.viewRepliesFor = options.viewRepliesFor
     if (options && options.noReply)
       this.noReply = options.noReply
   },
@@ -33,6 +34,8 @@ return Backbone.View.extend({
       $(this.el).addClass('unread')
     if (this.noReply == undefined)
       this.$el.append('<a href="#" class="btn reply">Reply</a>')
+    if (this.viewRepliesFor)
+      $('.metadata', this.el).append('<li><a class="view-replies" href="/wishes/' + this.viewRepliesFor + '">view replies</a></li>')
     return this
   },
 

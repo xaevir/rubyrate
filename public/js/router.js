@@ -5,6 +5,8 @@ var SignupView = require('views/users/signup').signup
   , SubjectsNav = require('views/subjects_nav')
   , Wishes = require('collections/wishes')
   , Messages = require('collections/messages')
+  , Message = require('models/message')
+  , Contacts = require('collections/contacts')
   , Subjects = require('collections/subjects')
   , Subject = require('models/subject')
   , ChatColumns = require('views/chatColumns')
@@ -13,7 +15,7 @@ var SignupView = require('views/users/signup').signup
   , ProfileView = require('views/users/profile')
   , ProfileEditView = require('views/users/profile-edit')
   , ProfileMenuView = require('views/profile-menu')
-  , WishSetupView = require('views/wishes/setup')
+  , ContactedView = require('views/contacted')
   , ChatCompositeView = require('views/chatComposite')         
   , ReplyView = require('views/reply').Reply
   , ReplyLeadView = require('views/reply').Lead
@@ -91,7 +93,7 @@ var AppRouter = Backbone.Router.extend({
     , 'wishes':                     'wishes' 
     , 'wishes/:id':                 'wish' 
     , 'helper/:id':                 'helper' 
-    , 'wishes/:id/setup':           'wish_setup' 
+    , 'contacted/:id':              'contacted' 
     , 'wishes/:id/seller':          'seller' 
     , 'subjects':                   'subjects'
     , 'subjects/:id':               'subject'
@@ -163,22 +165,19 @@ AppRouter.prototype.spider = function(){
 }
 
 AppRouter.prototype.wishes = function(e) {
-  $('body').attr('id','wishes')
   var self = this
   $.get('/wishes', function(wishes) {
+    $('body').attr('id','wishes')
     var views = []
     _.each(wishes, function(wish){
       var subject_id = wish[0]._id
       var shortId = wish[0].shortId
-      var chatCompositeView = new ChatCompositeView({bigTextarea: true, user: self.user})
+      var chatCompositeView = new ChatCompositeView({bigTextarea: true, 
+                                                     user: self.user, 
+                                                     noReply: true,
+                                                     viewRepliesFor: subject_id})
       var messages = new Messages(wish)
       chatCompositeView.messagesView = new MessagesView({collection: messages, truncate: 200, user: self.user})
-      chatCompositeView.replyView = new ReplyView({subject_id: subject_id, 
-                                                   parentView: chatCompositeView, 
-                                                   context: 'wish',
-                                                   bigTextarea: true,
-                                                   user: self.user})
-      $(chatCompositeView.el).prepend('<a class="view-reply" href="/wishes/' + subject_id + '">view replies</a>')
       if (self.user.get('role') == 'admin')
         $(chatCompositeView.el).prepend('<div class="admin-options">shortId:'+shortId+'</div>')
         //$(chatCompositeView.el).prepend('<div class="admin-options"><a href="/wishes/'+subject_id+'/setup">setup</a></div>')
@@ -198,13 +197,13 @@ AppRouter.prototype.reset_wishes = function(){
 }
 
 AppRouter.prototype.wish = function(id) {
-  $('body').attr('id','wish')
   var self = this
   $.get('/wishes/'+id, function(res) {
+    $('body').attr('id','wish')
     if (res.success === false)
       return self.notFound()
     // header
-    var chatCompositeView = new ChatCompositeView({user: self.user})
+    var chatCompositeView = new ChatCompositeView({user: self.user, noReply: true})
     var messages = new Messages(res.subject)
     chatCompositeView.messagesView = new MessagesView({collection: messages, user: self.user})
     chatCompositeView.replyView = new ReplyView({subject_id: id, 
@@ -229,9 +228,10 @@ AppRouter.prototype.wish = function(id) {
       chatCompositeView.replyView = new ReplyView(opts)
       views.push(chatCompositeView);
    }, this);
-    var view = new ChatColumns({views: views, columns: 2, span: 6})
+    var view = new ChatColumns({views: views, columns: 3, span: 4})
     var html =  view.render().el
-    $('#app').append(html);
+    $('#app').append('<div id="body" />')
+    $('#body' ,'#app').append(html);
     _gaq.push(['_trackPageview', '/wishes/'+ res.subject.body])
     document.title = 'Wish';
   });
@@ -242,9 +242,8 @@ AppRouter.prototype.reset_wish = function(){
 }
 
 AppRouter.prototype.seller = function(id, slug) {
-  $('body').addClass('_lead seller')
-
   $.get('/wishes/'+id+'/seller', $.proxy(function(res) {
+    $('body').addClass('_lead seller')
     var message = '<div class="instructions"><h2>How this page works</h2>\
       <p>You have a lead from a potential buyer. To send a message to the lead\
          all you have to do is reply in the box below.\
@@ -311,9 +310,8 @@ AppRouter.prototype.reset_lead = function(){
 }
 
 AppRouter.prototype.helper = function(id) {
-  $('body').attr('id','helper')
-
   $.get('/helper/'+id, $.proxy(function(res){
+    $('body').attr('id','helper')
     if (res.success === false)
       return this.notFound()
     this.getUser()
@@ -324,10 +322,10 @@ AppRouter.prototype.helper = function(id) {
       </p></div>'
     $('#app').html(message)
 
-    var tpl = '<div class="you"><div class="bubble-orange-border">\
+    var tpl = '<div class="you"><div class="bubble-green bubble-header">\
                 <blockquote>{{{body}}}</blockquote>\
-              </div>\
-              <div class="author">You</div></div>'
+              </div>'
+              //<div class="author">You</div></div>'
 
     tpl = Hogan.compile(tpl)
     tpl = tpl.render(res.subject)
@@ -369,19 +367,28 @@ AppRouter.prototype.reset_helper = function(){
   $('body').removeAttr('id')
 }
 
-AppRouter.prototype.wish_setup = function(id) {
-  var self = this
-  $.get('/wishes/'+id+'/setup', function(res) {
+AppRouter.prototype.contacted = function(id) {
+  $.get('/contacted/'+id, $.proxy(function(res) {
+    $('body').attr('id','contacted')
     // header
-    var wishHeader = new MessageBodyView({message: res.wish, tagName: 'h1', user: self.user})
-    $('#app').html(wishHeader.render().el);
+    $('#app').html('<div class="chat-composite" />')
+    var message =  new Message(res.subject)
+    var wishHeader = new MessageBodyView({model: message, 
+                                          user: this.user})
+    $('.chat-composite','#app').html(wishHeader.render().el);
 
     // body
-    var view = new WishSetupView(res)
+    var contacts = new Contacts()
+    contacts.subject_id = message.id 
+    var view = new ContactedView({subject: message, collection: contacts})
     $('#app').append(view.render().el);
-
-  });
+  }, this));
 }
+
+AppRouter.prototype.reset_contacted = function(){
+  $('body').removeAttr('id')
+}
+
 
 AppRouter.prototype.profileMenu = function(userSlug){
   if (this.user.isLoggedIn()){ 

@@ -69,7 +69,7 @@ return  Backbone.View.extend({
     //else
       //this.addOne(this.messagesOfChat)
 
-    //if(this.messagesOfChat.length > 1) 
+    //if(this.messagesOfChat.length > 1)
       $(this.el).addClass('scrollable')
     return this
   },
@@ -81,7 +81,7 @@ return  Backbone.View.extend({
   },
 
   unread: function(){
-    $(this.el).prepend('<div class="unread">New Message</div>')
+    //$(this.el).prepend('<div class="unread">New Message</div>')
 
   },
 

@@ -492,13 +492,20 @@ app.get('/wishes/:id', loadSubject, function(req, res) {
   })
 })
 
-app.get('/wishes/:id/setup', loadUser, function(req, res) {
-  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, wish) {
+app.get('/contacted/:id', loadUser, function(req, res) {
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
       res.send({
-        wish: wish, 
+        subject: subject, 
       })
   })
 })
+
+app.post('/contacts', loadUser, function(req, res) {
+  req.body._id = new ObjectID() 
+  db.subjects.update({_id: new ObjectID(req.body.subject_id)}, {$push: {contacted: req.body}}) 
+  res.send(req.body)
+})
+
 
 /* add restrict to role */
 app.post('/halfUser/:id', loadUser, function(req, res) {

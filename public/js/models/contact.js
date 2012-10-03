@@ -1,24 +1,19 @@
 define(function(require) {
 
-  return Backbone.Model.extend({
-    
-    url: '/contact',
+  var Contact = Backbone.Model.extend({
+
+    initialize: function(subject_id) {
+      this.set({subject_id: this.collection.subject_id })
+      this.set({cid: this.cid})
+    },
+
+    idAttribute: "_id",
 
     validation: {
-      name: {
-        required: true,
-        msg: 'Please enter your name'
-      },
-      email: {
-        required: true,
-        pattern: 'email',
-        msg: 'Please enter a valid email'
-      },
-      message: {
-        required: true,
-        msg: 'Please enter a message'
-      },
-    }, 
-
+      username:      {required: true},
+    }
   })
+
+  return Contact
+
 })
