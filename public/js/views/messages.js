@@ -81,7 +81,7 @@ return  Backbone.View.extend({
   },
 
   unread: function(){
-    //$(this.el).prepend('<div class="unread">New Message</div>')
+    $(this.el).prepend('<div class="unread">New Message</div>')
 
   },
 

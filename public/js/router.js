@@ -6,7 +6,7 @@ var SignupView = require('views/users/signup').signup
   , Wishes = require('collections/wishes')
   , Messages = require('collections/messages')
   , Message = require('models/message')
-  , Contacts = require('collections/contacts')
+  , ContactedCompanies = require('collections/contacted-companies')
   , Subjects = require('collections/subjects')
   , Subject = require('models/subject')
   , ChatColumns = require('views/chatColumns')
@@ -15,7 +15,7 @@ var SignupView = require('views/users/signup').signup
   , ProfileView = require('views/users/profile')
   , ProfileEditView = require('views/users/profile-edit')
   , ProfileMenuView = require('views/profile-menu')
-  , ContactedView = require('views/contacted')
+  , ContactedCompaniesView = require('views/contacted-companies')
   , ChatCompositeView = require('views/chatComposite')         
   , ReplyView = require('views/reply').Reply
   , ReplyLeadView = require('views/reply').Lead
@@ -85,25 +85,25 @@ var AppRouter = Backbone.Router.extend({
   },
 
   routes: {
-      'signup':                     'signup'
-    , 'login':                      'login'
-    , 'how-it-works':               'how_it_works'
-    , 'profile/:username':          'profile'
-    , 'profile/:username/edit':     'profile_edit'
-    , 'wishes':                     'wishes' 
-    , 'wishes/:id':                 'wish' 
-    , 'helper/:id':                 'helper' 
-    , 'contacted/:id':              'contacted' 
-    , 'wishes/:id/seller':          'seller' 
-    , 'subjects':                   'subjects'
-    , 'subjects/:id':               'subject'
-    , 'lead/:id/:slug':             'lead'
-    , 'spider':                     'spider'
-    , '':                           'home'
-    , 'home/:state':                'home'
-    , 'admin':                      'admin'
-    , 'electronic-repair':          'electronic_repair'
-    , '*actions':                   'notFound'
+      'signup':                                 'signup'
+    , 'login':                                  'login'
+    , 'how-it-works':                           'how_it_works'
+    , 'profile/:username':                      'profile'
+    , 'profile/:username/edit':                 'profile_edit'
+    , 'wishes':                                 'wishes' 
+    , 'wishes/:id':                             'wish' 
+    , 'helper/:id':                             'helper' 
+    , 'wishes/:id/contacted-companies':         'contacted_companies' 
+    , 'wishes/:id/seller':                      'seller' 
+    , 'subjects':                               'subjects'
+    , 'subjects/:id':                           'subject'
+    , 'lead/:id/:slug':                         'lead'
+    , 'spider':                                 'spider'
+    , '':                                       'home'
+    , 'home/:state':                            'home'
+    , 'admin':                                  'admin'
+    , 'electronic-repair':                      'electronic_repair'
+    , '*actions':                               'notFound'
   },
 }) 
 
@@ -149,12 +149,6 @@ AppRouter.prototype.getUser = function() {
   });
 }
 
-AppRouter.prototype.how_it_works = function() { 
-  var template = Hogan.compile(homeTpl)
-  $('#app').html(template.render())
-  _gaq.push(['_trackPageview', '/home'])
-  document.title = 'Ruby Rate' 
-}
 
 AppRouter.prototype.spider = function(){
   this.view = new Spider({context: 'main'})
@@ -367,9 +361,9 @@ AppRouter.prototype.reset_helper = function(){
   $('body').removeAttr('id')
 }
 
-AppRouter.prototype.contacted = function(id) {
-  $.get('/contacted/'+id, $.proxy(function(res) {
-    $('body').attr('id','contacted')
+AppRouter.prototype.contacted_companies = function(id) {
+  $.get('/wishes/'+id+'/contacted-companies', $.proxy(function(res) {
+    $('body').attr('id','contacted-companies')
     // header
     $('#app').html('<div class="chat-composite" />')
     var message =  new Message(res.subject)
@@ -378,9 +372,9 @@ AppRouter.prototype.contacted = function(id) {
     $('.chat-composite','#app').html(wishHeader.render().el);
 
     // body
-    var contacts = new Contacts()
-    contacts.subject_id = message.id 
-    var view = new ContactedView({subject: message, collection: contacts})
+    var contactedCompanies = new ContactedCompanies(res.contacted, 
+                                                    {wishes_id: message.id})
+    var view = new ContactedCompaniesView({collection: contactedCompanies})
     $('#app').append(view.render().el);
   }, this));
 }

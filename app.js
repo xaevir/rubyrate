@@ -492,19 +492,32 @@ app.get('/wishes/:id', loadSubject, function(req, res) {
   })
 })
 
-app.get('/contacted/:id', loadUser, function(req, res) {
-  db.subjects.findOne({_id: new ObjectID(req.params.id)}, function(err, subject) {
-      res.send({
-        subject: subject, 
-      })
+app.get('/wishes/:id/contacted-companies', loadUser, andRestrictTo('admin'), function(req, res) {
+  db.subjects.findOne({_id: new ObjectID(req.params.id)}, {users:0}, function(err, subject) {
+    res.send({
+      subject: subject, 
+      contacted: subject.contacted || [] 
+    })
   })
 })
 
-app.post('/contacts', loadUser, function(req, res) {
+app.post('/wishes/:id/contacted-companies', loadUser, andRestrictTo('admin'), function(req, res) {
   req.body._id = new ObjectID() 
   db.subjects.update({_id: new ObjectID(req.body.subject_id)}, {$push: {contacted: req.body}}) 
   res.send(req.body)
 })
+
+app.put('/wishes/:subject_id/contacted-companies/:id', loadUser, andRestrictTo('admin'), function(req, res) {
+  //maybe make faster by querying for subject_id first
+  delete req.body._id
+  db.subjects.update({_id: new ObjectID(req.params.subject_id),
+                      'contacted._id': new ObjectID(req.id)}, 
+    {$set: {'contracted.$': req.body}}, {safe:true}, function(err, doc){
+    console.log(err)     
+  }) 
+  res.send(req.body)
+})
+
 
 
 /* add restrict to role */
@@ -634,7 +647,7 @@ app.post('/reply-logged-out/:id', function(req, res) {
     total: 1
   } 
 
-  db.subjects.update({_id: new ObjectID(req.params.id)}, {$push: {users: user}, $set:{modified: new Date() }}) 
+  db.subjects.update({_id: new ObjectID(req.params.id)}, {$push: {users: user}, $set:{modified: new Date() }})
   db.subjects.update({_id: new ObjectID(req.params.id)}, {$inc: {'users.0.unread': 1, 'users.0.total': 1}}) 
 
   var message = {}
