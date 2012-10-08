@@ -1,6 +1,7 @@
 define(function(require) {
 
-var RestrictedView = require('views/site/restricted')         
+var RestrictedView = require('views/site/restricted'),
+    TimerView = require('views/timer')
 
 return Backbone.View.extend({
 
@@ -24,11 +25,12 @@ return Backbone.View.extend({
     this.user = options.user
     this.unread = options.unread
     this.viewRepliesFor = options.viewRepliesFor
+    this.timer = options.timer
     if (options && options.noReply)
       this.noReply = options.noReply
   },
 
-  render: function(){
+  render: function() {
     $(this.el).append(this.messagesView.render().el)
     if(this.unread)
       $(this.el).addClass('unread')
@@ -36,7 +38,15 @@ return Backbone.View.extend({
       this.$el.append('<a href="#" class="btn reply">Reply</a>')
     if (this.viewRepliesFor)
       $('.metadata', this.el).append('<li><a class="view-replies" href="/wishes/' + this.viewRepliesFor + '">view replies</a></li>')
+    if(this.timer) {
+      var timer = new TimerView(60) 
+      var html = timer.render().el
+      this.$el.prepend(html)
+    }
+      
     return this
+    
+    
   },
 
   renderReplyForm: function(e){

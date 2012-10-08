@@ -164,16 +164,15 @@ AppRouter.prototype.wishes = function(e) {
     $('body').attr('id','wishes')
     var views = []
     _.each(wishes, function(wish){
-      var subject_id = wish[0]._id
-      var shortId = wish[0].shortId
       var chatCompositeView = new ChatCompositeView({bigTextarea: true, 
                                                      user: self.user, 
                                                      noReply: true,
-                                                     viewRepliesFor: subject_id})
+                                                     timer: wish.timer,
+                                                     viewRepliesFor: wish._id})
       var messages = new Messages(wish)
       chatCompositeView.messagesView = new MessagesView({collection: messages, truncate: 200, user: self.user})
       if (self.user.get('role') == 'admin')
-        $(chatCompositeView.el).prepend('<div class="admin-options">shortId:'+shortId+'</div>')
+        $(chatCompositeView.el).prepend('<div class="admin-options">shortId:'+wish.shortId+'</div>')
         //$(chatCompositeView.el).prepend('<div class="admin-options"><a href="/wishes/'+subject_id+'/setup">setup</a></div>')
 
       views.push(chatCompositeView);
@@ -374,6 +373,7 @@ AppRouter.prototype.contacted_companies = function(id) {
     // body
     var contactedCompanies = new ContactedCompanies(res.contacted, 
                                                     {wishes_id: message.id})
+    contactedCompanies.wishes_id = message.id 
     var view = new ContactedCompaniesView({collection: contactedCompanies})
     $('#app').append(view.render().el);
   }, this));
