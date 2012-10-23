@@ -1,7 +1,7 @@
 define(function(require) {
 
 var tpl = require('text!templates/navbar/main-menu.mustache')
-  , CreateWishView = require('views/wishes/create_wish')
+  , CreateEmergencyView = require('views/emergencies/create_emergency')
 
 return Backbone.View.extend({
   
@@ -10,7 +10,7 @@ return Backbone.View.extend({
   events: {
     "click a": "preventDefault",
     "click a:not([href^='#'])": "pushState",
-    "click a.create-wish": "renderWishView",
+    "click a.create-emergency": "renderEmergencyView",
   },
 
   initialize: function(options){
@@ -37,9 +37,9 @@ return Backbone.View.extend({
     return this
   },
 
-  renderWishView: function(e) {
-    var createWishView = new CreateWishView();
-    createWishView.render()
+  renderEmergencyView: function(e) {
+    var createEmergencyView = new CreateEmergencyView();
+    createEmergencyView.render()
   },
 })
 })

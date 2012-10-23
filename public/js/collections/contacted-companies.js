@@ -6,7 +6,7 @@ define(function(require) {
     model: ContactedCompany,
 
     initialize: function(models, options) {
-      this.url = '/wishes/'+options.wishes_id+'/contacted-companies'  
+      this.url = '/emergencies/'+options.emergencies_id+'/contacted-companies'  
     },
   });
 

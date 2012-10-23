@@ -9,8 +9,8 @@ var ItemView = Backbone.View.extend({
 
   template: Hogan.compile(itemTpl),
 
-  initialize: function(wish){
-    this.wish = wish
+  initialize: function(emergency){
+    this.emergency = emergency
     _.bindAll(this) 
   },
 
@@ -29,7 +29,7 @@ var ItemView = Backbone.View.extend({
   },
 
   reset_unread: function(e){
-    this.wish.unread = 0
+    this.emergency.unread = 0
     this.render()
   },
 
@@ -42,17 +42,17 @@ var ItemView = Backbone.View.extend({
   },
 
   render: function() {
-    var wish = this.wish
-    var _id = wish._id
-    var body = wish.body
-    if (wish.body.length > 50) {
-      wish.body = wish.body.substr(0, 50) + '...' 
+    var emergency = this.emergency
+    var _id = emergency._id
+    var body = emergency.body
+    if (emergency.body.length > 50) {
+      emergency.body = emergency.body.substr(0, 50) + '...' 
     }
 
-    wish.if_total = (wish.total > 0) ? true : false 
-    wish.if_unread = (wish.unread > 0) ? true : false 
+    emergency.if_total = (emergency.total > 0) ? true : false 
+    emergency.if_unread = (emergency.unread > 0) ? true : false 
 
-    var template = this.template.render(wish)
+    var template = this.template.render(emergency)
     $(this.el).html(template);
     return this;
   },
@@ -70,13 +70,13 @@ var ListView = Backbone.View.extend({
     _.bindAll(this)
   },
 
-  addOne: function(wish) {
-    var view = new ItemView(wish);
+  addOne: function(emergency) {
+    var view = new ItemView(emergency);
     $(this.el).append(view.render().el)
   },
 
-  render: function(wishes) {
-    _.each(wishes, this.addOne, this);
+  render: function(emergencies) {
+    _.each(emergencies, this.addOne, this);
     //var el_html = $(this.el).clone().wrap('<p>').parent().html();
     var template = $(this.template.render())
     var h = $(this.el).html()

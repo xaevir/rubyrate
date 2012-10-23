@@ -1,19 +1,18 @@
 define(function(require) {
 
-var tpl = '<div class="content">\
-            <a class="close" href="#">×</a>{{{message}}}\
-           </div>'
+var TimerView = require('views/timer')
+  , tpl = require('text!templates/homepage_thankyou.html')
+
 
 return Backbone.View.extend({
 
-  id: 'letter',
+  id: 'homepage-thanks',
 
-  template: Hogan.compile(tpl),
+  template: tpl,
 
-  initialize: function(message){
+  initialize: function(options){
     _.bindAll(this) 
     this.globalEvent()
-    this.message = message
     this.render()
   },
 
@@ -29,10 +28,12 @@ return Backbone.View.extend({
   },
 
   render: function(){
-    var template = this.template.render({
-      message: this.message, 
-    })
-    $(this.el).html(template)
+    $(this.el).html(tpl)
+    var timer = new TimerView({model: this.model}) 
+    var html = timer.render().el
+    $('#bomb', this.el).html(html)
+
+
     $('body').append('<div class="modal-backdrop" />')
     $('#notification').html(this.el)
     $(this.el).animate({ top: '50'})

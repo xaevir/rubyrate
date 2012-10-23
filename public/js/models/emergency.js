@@ -6,14 +6,14 @@ if (typeof exports === 'object' && typeof define !== 'function') {
 
 define(function(require) {
 
-  var Wish = Backbone.Model.extend({
+  var Emergency = Backbone.Model.extend({
 
     idAttribute: "_id",
 
-    url: '/wishes',
+    url: '/emergencies',
 
     defaults: {
-      label: 'wish' 
+      label: 'emergency' 
     },
 
     validation: {
@@ -24,6 +24,6 @@ define(function(require) {
 
   })
 
-  return Wish
+  return Emergency
 
 })

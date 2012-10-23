@@ -2,21 +2,13 @@ define(function(require) {
 
 var NewUser = require('models/newUser')
 
-var Wish = NewUser.extend({
+var Emergency = NewUser.extend({
 
   idAttribute: "_id",
-
-  //url: '/wishes-home',
-
-  defaults: {
-    //label: 'wish' 
-  },
 
   validation: {
     username:    NewUser.prototype.validation.username,
     body:        {required: true},
-    //location:    {required: true},
-    //contact:     {required: true}
   },
 
   parse: function(res){
@@ -26,6 +18,6 @@ var Wish = NewUser.extend({
 
 })
 
-  return Wish
+  return Emergency
 
 })

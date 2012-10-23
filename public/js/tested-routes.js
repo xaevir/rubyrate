@@ -3,8 +3,8 @@ define(function(require) {
 var HomeView = require('views/home'),
     Router = require('router')
 
-Router.prototype.home = function(state) {
-  var homeView = new HomeView({state: state})
+Router.prototype.home = function(thankyou) {
+  var homeView = new HomeView({thankyou: thankyou})
   $('#app').html(homeView.render().el)
   document.title = 'Ruby Rate'
   _gaq.push(['_trackPageview', '/home'])

@@ -1,27 +1,40 @@
 <div id="home">
   <img id="banner" src="/img/banner.png"/>
+    <h2>How it works</h2>
+      <div class="how-it-works">
+        <p>Enter your "emergency" on the right.
+
+        Then choose how time sentive the emergency is, for example 
+        "I need my daughters tooth fixed today and I need to find out what
+        dentist can take my daughter in the next hour."
+
+        We will find you the earliest appointments from local dentists in
+        your given area that can take your daughter.</p>
+      </div>
+
   <div class="examples">
-    <h2>Some examples</h2>
-    <ul>
-      <li>
-        A guy needs to find an open florist near him at 7 pm
-      </li>
-      <li>
-        Your daughter chipped her tooth and needs an emergency dentist that will take her right away
-      </li>
-      <li>
-        Broken phone any type any model and you need to find someone that will fix it asap
-      </li>
-      <li>
-        The photographer can't show up to the wedding. You have two days to find a qualified photographer
-      </li>
-    </ul>
+
+    <h2>Examples</h2>
+      <ul>
+        <li>
+          A guy needs to find an open florist near him at 7 pm
+        </li>
+        <li>
+          Your daughter chipped her tooth and needs an emergency dentist that will take her right away
+        </li>
+        <li>
+          Broken phone any type any model and you need to find someone that will fix it asap
+        </li>
+        <li>
+          The photographer can't show up to the wedding. You have two days to find a qualified photographer
+        </li>
+      </ul>
   </div>
   <div class="home-form">
     <h2>Clock starts ticking as soon as you fill this out</h2>
     <form method="post" action="#">
       
-      <label>Your Request</label>
+      <label>Your Emergency</label>
       <textarea id="body" class="span6" name="body" placeholder="For example - I need a car mechanic because the driver side window will not go down"></textarea>
 
       <label>Email or Twitter username</label>
@@ -37,11 +50,11 @@
       <label>When do you need this answered by</label>
       <select name="when">
         <option value=''>Please Select</option>
-        <option>1 hour</option>
-        <option>2 hours</option>
-        <option>less than 5 hours</option>
-        <option>24 hours</option>
-        <option>48 hours</option>
+        <option value="1 hour">1 hour ( $20 ) </option>
+        <option value="2 hours">2 hours ( $15 )</option>
+        <option value="less than 5 hours">less than 5 hours ( $5 )</option>
+        <option value="24 hours">24 hours ( Free )</option>
+        <option value="48 hours">48 hours ( Free )</option>
       </select>
       <p style="margin-top: -9px; color: #fff; font-size: 10px;">*hours are Monday - Friday, 9-5 EST</p>
       <button class="btn btn-large btn-info" type="submit" >Start timer</button>
@@ -50,6 +63,7 @@
   
   <div class="more-examples">
     <h2>More Scenarios</h2>
+
     <ul class="span5">
       <li>
         Your car broke down, ur in an u known town and u need to be home. We will take care of it.

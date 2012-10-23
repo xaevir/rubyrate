@@ -66,7 +66,7 @@ Reply.Reply = Backbone.View.extend({
     data.subject_id = this.subject_id,
     data.body =  tArea.val() 
     
-    if (this.context == 'wish') 
+    if (this.context == 'emergency') 
       var url = '/first-reply/' + this.subject_id
     else
       var url = '/reply/' + this.convo_id

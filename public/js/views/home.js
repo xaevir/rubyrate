@@ -1,19 +1,17 @@
 define(function(require) {
 
 var tpl = require('text!templates/home.html')
-  , thankyouTpl = require('text!templates/wish_thankyou.html')
-  , HomepageWish = require('models/homepage_wish')
-  , LetterView = require('views/letter')      
+  , HomepageEmergency = require('models/homepage_emergency')
+  , ThankyouView = require('views/homepage_thankyou')      
 
 return Backbone.View.extend({
 
   initialize: function(options){
     _.bindAll(this); 
-    this.state = options.state
-    this.model = new HomepageWish();
+    this.model = new HomepageEmergency();
     Backbone.Validation.bind(this);
     this.model.on('sync', this.onSync, this)
-    if (options.state)
+    if (options.thankyou)
       this.onSync()
   },
 
@@ -34,10 +32,10 @@ return Backbone.View.extend({
     this.model.save(params)
   },
 
-  onSync: function(){
-    new LetterView(thankyouTpl)
+  onSync: function(model){
+    new ThankyouView({model: model})
     //var router = new Backbone.Router();
-    //router.navigate('wishes', {trigger: true}) 
+    //router.navigate('emergencies', {trigger: true}) 
     this.render()
   }
 

@@ -1,4 +1,3 @@
-// Bootstrap
 @import "../js/libs/bootstrap/less/bootstrap.less";
 
 // Fonts
@@ -218,23 +217,17 @@ li {
     //border-bottom: 3px solid #e73e36;
     margin-bottom: 20px;
   }
+  .how-it-works {
+    p {
+      font-size: 20px;
+    }
+  } 
   .examples {
     width: 420px;
     margin-left: 0;
     float: left;
-    //padding: 20px;
     padding-top: 0;
-    //border: 3px solid #eee;
-    //.gradient-for-pie(#fff, #f7f7f7);
-    //.gradient-for-pie(#efefef, #ddd);
-
-    //background: rgba(247, 247, 247, .5);
-    //.border-radius-for-pie(4px);
-    //border: 1px solid #fff;
-
-    //margin: 0 auto;
     .clearfix();
-    //padding-bottom: 50px;
     h2 {
       text-align: center; 
       //font-size: 32px;
@@ -246,18 +239,9 @@ li {
       margin: 0;
     }
     li {
-      //background: #7fba00;
-      //border-bottom: 5px dashed #00bcf2;
-      //border-bottom: 5px dashed #9fdb1e;
       border-bottom: 3px dashed #eee;
-
-      //color: #9fdb1e;
       background: url(/img/check_mark.png) no-repeat center right;
-      //background: #a4def9;
-      //color: #fff;
       font-size: 20px;
-      //padding: 0px;
-      //padding-right: 10px;
       padding-bottom: 30px;
       padding-top: 30px;
       padding-right: 40px;
@@ -834,7 +818,7 @@ img {
   }
 
 }
-.modal-wish {
+.modal-emergency {
   width: 500px;
   position: absolute;
   margin: -250px 0 0 -250px;
@@ -950,7 +934,7 @@ img {
   }
 }
 
-#wishes {
+#emergencies {
   .chat-composite {
     .bubble-green;
   }
@@ -959,7 +943,7 @@ img {
   }
 }
 
-#wish {
+#emergency {
   #header {
     .clearfix();
     .chat-composite {
@@ -1153,7 +1137,7 @@ img {
   }
 }
 
-#wish #subject {
+#emergency #subject {
   h1 { 
     font-weight: normal;
   }
@@ -1253,7 +1237,6 @@ table.setup {
 
 .instructions {
   //background: #F9EDBE;
-  // brownish gray .gradient-for-pie(#ece6db, #d0c8b9);
   background: #999;
   background: #F9EDBE;
   //.gradient-for-pie(#999, #666);
@@ -1275,13 +1258,21 @@ table.setup {
   }
 }
 
-#letter {
+#homepage-thanks {
   #alert;
   .content {
-    width: 300px; 
+    width: 600px; 
+    background: #fff;
+    border: 1px solid #000;
+
   }
   p {
     font-size: 16px;
+  }
+  #bomb {
+    background: url(/img/bomb.svg) no-repeat -35px 90px;
+    width: 400px;
+    height: 400px;
   }
 }
 

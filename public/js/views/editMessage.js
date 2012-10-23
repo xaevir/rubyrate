@@ -2,7 +2,6 @@ define(function(require) {
 
 var AlertView = require('views/site/alert').alert
   , tpl = require('text!templates/editMessage.mustache') 
-  //, Wish = require('models/wish')
 
   return Backbone.View.extend({
 
