@@ -90,20 +90,20 @@ app.use(function(err, req, res, next) {
 //app.settings.env = 'production'
 
 app.configure('production', function(){
-  app.set('port', process.env.PORT || 8010);
-  db = mongo.db("localhost/rubyrate?auto_reconnect=true", {safe: true, strict: false}
+  app.set('port', process.env.PORT || 8020);
+  db = mongo.db("localhost/petes?auto_reconnect=true", {safe: true, strict: false}
   )
 })
 
 app.configure('staging', function(){
-  app.set('port', process.env.PORT || 8011);
-  db = mongo.db("localhost/dev_ruby?auto_reconnect=true", {safe: true, strict: false})
+  app.set('port', process.env.PORT || 8021);
+  db = mongo.db("localhost/dev_petes?auto_reconnect=true", {safe: true, strict: false})
 })
 
 app.configure('development', function(){
   app.use(express.errorHandler());
-  app.set('port', process.env.PORT || 8012);
-  db = mongo.db("localhost/dev_ruby?auto_reconnect=true", {safe: true, strict: false})
+  app.set('port', process.env.PORT || 8022);
+  db = mongo.db("localhost/dev_petes?auto_reconnect=true", {safe: true, strict: false})
 
 });
 
