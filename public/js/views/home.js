@@ -2,9 +2,8 @@ define(function(require) {
 
 var tpl = require('text!templates/home.html')
   , thankyouTpl = require('text!templates/wish_thankyou.html')
-  , HomepageWish = require('models/homepage_wish') 
+  , HomepageWish = require('models/homepage_wish')
   , LetterView = require('views/letter')      
-  , NewUser = require('models/newUser')
 
 return Backbone.View.extend({
 
@@ -31,7 +30,6 @@ return Backbone.View.extend({
 
   submit: function(e) {
     e.preventDefault()
-    var self = this
     var params = this.$('form').serializeObject();
     this.model.save(params)
   },

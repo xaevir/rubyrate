@@ -1,9 +1,11 @@
 define(function(require) {
 
-var SignupView = require('views/users/signup').signup
+var ModelExtended = require('models/modelExtended')
+  , SignupView = require('views/users/signup').signup
   , LoginView = require('views/users/login').login
   , SubjectsNav = require('views/subjects_nav')
   , Wishes = require('collections/wishes')
+  , Wish = require('models/wish')
   , Messages = require('collections/messages')
   , Message = require('models/message')
   , ContactedCompanies = require('collections/contacted-companies')
@@ -103,6 +105,7 @@ var AppRouter = Backbone.Router.extend({
     , 'home/:state':                            'home'
     , 'admin':                                  'admin'
     , 'electronic-repair':                      'electronic_repair'
+    , 'how-it-works':                           'how_it_works'
     , '*actions':                               'notFound'
   },
 }) 
@@ -164,11 +167,12 @@ AppRouter.prototype.wishes = function(e) {
     $('body').attr('id','wishes')
     var views = []
     _.each(wishes, function(wish){
-      var chatCompositeView = new ChatCompositeView({bigTextarea: true, 
-                                                     user: self.user, 
-                                                     noReply: true,
-                                                     timer: wish.timer,
-                                                     viewRepliesFor: wish._id})
+      var chatCompositeView = new ChatCompositeView({
+        bigTextarea: true, 
+        user: self.user, 
+        noReply: true,
+        timer: wish.timer,
+        model: new Wish(wish)})
       var messages = new Messages(wish)
       chatCompositeView.messagesView = new MessagesView({collection: messages, truncate: 200, user: self.user})
       if (self.user.get('role') == 'admin')
@@ -394,6 +398,11 @@ AppRouter.prototype.profileMenu = function(userSlug){
   }
 }
 
+
+AppRouter.prototype.how_it_works = function() {
+
+}
+
 AppRouter.prototype.profile = function(userSlug){
   this.profileMenu(userSlug) 
   $.get('/profile/'+userSlug, function(user) {
@@ -430,6 +439,7 @@ AppRouter.prototype.restrict = function(callback) {
     return this.navigate('/login', true)
   callback.apply(this, Array.prototype.slice.call(arguments,1)); 
 }
+
 
 AppRouter.prototype.login = _.wrap(function(){
     var view = new LoginView({className: 'small-content', user: this.user}).render()

@@ -4266,6 +4266,7 @@ body {
   background: #fafbf6;
   background: #f7f7f7;
   background: #ccc;
+  background: #fff;
 }
 p {
   line-height: 1.3em;
@@ -4580,123 +4581,113 @@ li {
 #home h2 {
   margin-bottom: 20px;
 }
-#home .how-it-works {
-  width: 400px;
+#home .examples {
+  width: 420px;
+  margin-left: 0;
   float: left;
-  padding: 20px;
   padding-top: 0;
-  background: -webkit-gradient(linear, 0 0, 0 100%, from(#efefef) to(#dddddd));
-  /*old webkit*/
-
-  background: -webkit-linear-gradient(#efefef, #dddddd);
-  /*new webkit*/
-
-  background: -moz-linear-gradient(#efefef, #dddddd);
-  /*gecko*/
-
-  background: -ms-linear-gradient(#efefef, #dddddd);
-  /*IE10 preview*/
-
-  background: -o-linear-gradient(#efefef, #dddddd);
-  /*opera 11.10+*/
-
-  background: linear-gradient(#efefef, #dddddd);
-  /*future CSS3 browsers*/
-
-  -pie-background: linear-gradient(#efefef, #dddddd);
-  /*PIE*/
-
-  border: 1px solid #fff;
-  margin: 0 auto;
   *zoom: 1;
-  padding-bottom: 50px;
 }
-#home .how-it-works:before,
-#home .how-it-works:after {
+#home .examples:before,
+#home .examples:after {
   display: table;
   content: "";
 }
-#home .how-it-works:after {
+#home .examples:after {
   clear: both;
 }
-#home .how-it-works h2 {
+#home .examples h2 {
   text-align: center;
 }
-#home .how-it-works ul {
+#home .examples ul {
   list-style: none;
   *zoom: 1;
   margin: 0;
 }
-#home .how-it-works ul:before,
-#home .how-it-works ul:after {
+#home .examples ul:before,
+#home .examples ul:after {
   display: table;
   content: "";
 }
-#home .how-it-works ul:after {
+#home .examples ul:after {
   clear: both;
 }
-#home .how-it-works li {
-  font-size: 22px;
-  margin-bottom: 20px;
+#home .examples li {
+  border-bottom: 3px dashed #eee;
+  background: url(/img/check_mark.png) no-repeat center right;
+  font-size: 20px;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  padding-right: 40px;
   clear: both;
   *zoom: 1;
 }
-#home .how-it-works li:before,
-#home .how-it-works li:after {
+#home .examples li:before,
+#home .examples li:after {
   display: table;
   content: "";
 }
-#home .how-it-works li:after {
+#home .examples li:after {
   clear: both;
 }
-#home .how-it-works li b {
+#home .examples li:last-child {
+  border-bottom: none;
+}
+#home .examples li:first-child {
+  padding-top: 0;
+}
+#home .examples li b {
   margin-right: 8px;
   position: relative;
   display: block;
   float: left;
 }
-#home .how-it-works li span {
+#home .examples li span {
   width: 338px;
   float: left;
+}
+#home .more-examples {
+  clear: both;
+}
+#home .more-examples ul {
+  list-style: none;
+}
+#home .more-examples li {
+  font-size: 22px;
+  padding: 10px;
+  margin-bottom: 20px;
+  clear: both;
+  *zoom: 1;
+}
+#home .more-examples li:before,
+#home .more-examples li:after {
+  display: table;
+  content: "";
+}
+#home .more-examples li:after {
+  clear: both;
 }
 #home .home-form {
   float: right;
   margin: 0 auto;
-  border: 1px solid #fff;
-  background: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462) to(#51a351));
-  /*old webkit*/
-
-  background: -webkit-linear-gradient(#62c462, #51a351);
-  /*new webkit*/
-
-  background: -moz-linear-gradient(#62c462, #51a351);
-  /*gecko*/
-
-  background: -ms-linear-gradient(#62c462, #51a351);
-  /*IE10 preview*/
-
-  background: -o-linear-gradient(#62c462, #51a351);
-  /*opera 11.10+*/
-
-  background: linear-gradient(#62c462, #51a351);
-  /*future CSS3 browsers*/
-
-  -pie-background: linear-gradient(#62c462, #51a351);
-  /*PIE*/
-
+  background: #ffb901;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  behavior: url(/js/libs/PIE.htc);
   padding: 40px;
   padding-top: 0;
   width: 360px;
 }
 #home .home-form h2 {
   text-align: center;
+  color: #fff;
 }
 #home .home-form label {
-  font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
+  color: #fff;
 }
 #home .home-form textarea {
-  font-size: 18px;
   height: 95px;
   display: block;
   width: 100%;
@@ -4944,6 +4935,7 @@ li {
 #main-nav #main-menu > li a,
 #main-nav #user-menu > li a {
   color: #fff;
+  color: #333;
   font-weight: bold;
   padding: 10px;
   display: block;
@@ -4971,15 +4963,15 @@ li {
   text-shadow: none;
   color: transparent;
   background-color: transparent;
-  width: 182px;
-  height: 43px;
+  width: 190px;
+  height: 26px;
   margin: 0 auto;
-  margin-top: -6px;
+  margin-top: 9px;
   margin-right: 20px;
   padding: 0 !important;
   display: block;
   float: left;
-  background: url(/img/ruby-logo.png) no-repeat top left;
+  background: url(/img/logo.png) no-repeat top left;
 }
 footer {
   border-top: 1px solid #eee;
@@ -5018,15 +5010,14 @@ footer .details {
 }
 .small-content {
   padding: 50px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
   behavior: url(/js/libs/PIE.htc);
   margin: 0 auto;
   width: 230px;
-  background: rgba(49, 201, 247, 0.1);
+  background: #A4DEF9;
   margin-top: 30px;
-  border: 10px solid #000;
 }
 .body-content-small {
   min-height: 20px;
@@ -6127,4 +6118,10 @@ table.setup td.editing .edit {
 }
 .notice .container .msg {
   font-size: 16px;
+}
+.timer {
+  border: 1px solid #000;
+  display: inline-block;
+  padding: 0 2px;
+  background: #fff;
 }

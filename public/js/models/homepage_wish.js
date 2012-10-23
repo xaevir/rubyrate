@@ -1,6 +1,14 @@
+if (typeof exports === 'object') {
+  define = function (factory) {
+    module.exports = factory(require, exports, module);
+  };
+  var node = true
+}
+
+
 define(function(require) {
 
-var NewUser = require('models/newUser')
+var NewUser = (node) ? require('./newUser') : require('models/newUser')
 
 var Wish = NewUser.extend({
 
@@ -13,16 +21,17 @@ var Wish = NewUser.extend({
   },
 
   validation: {
-    username:    NewUser.prototype.validation.username,
-    body:        {required: true},
-    location:    {required: true},
-    contact:     {required: true}
+    body:            {required: true},
+    twitterOrEmail:  {required: true},
+    username:        NewUser.prototype.validation.username,
+    location:        {required: true},
+    when:            {required: true}
   },
 
-  parse: function(res){
-    if (res.success === true)  
-      return 
-  }
+//  parse: function(res){
+//    if (res.success === true)  
+//      return 
+//  }
 
 })
 

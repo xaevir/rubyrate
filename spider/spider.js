@@ -1,5 +1,5 @@
-var jsdom = require("jsdom"),
-    request = require('request'),
+//var jsdom = require("jsdom"),
+var request = require('request'),
     cheerio = require('cheerio')
 
 function Spider(){

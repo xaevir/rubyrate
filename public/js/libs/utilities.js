@@ -66,7 +66,6 @@ _.extend(Backbone.Validation.callbacks, {
   }
 })
 
-
 $.extend({
 
   shortDate :  function (_id) {

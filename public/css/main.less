@@ -22,6 +22,7 @@ body {
   background: #fafbf6;
   background: #f7f7f7;
   background: #ccc; 
+  background: #fff;
   //background: #ccc;
   //background: #e5f6f6;
   //background: url(/img/orange-bokeh-bg.jpg) no-repeat top center;
@@ -217,21 +218,27 @@ li {
     //border-bottom: 3px solid #e73e36;
     margin-bottom: 20px;
   }
-  .how-it-works {
-    width: 400px;
+  .examples {
+    width: 420px;
+    margin-left: 0;
     float: left;
-    padding: 20px;
+    //padding: 20px;
     padding-top: 0;
+    //border: 3px solid #eee;
     //.gradient-for-pie(#fff, #f7f7f7);
-    .gradient-for-pie(#efefef, #ddd);
+    //.gradient-for-pie(#efefef, #ddd);
+
     //background: rgba(247, 247, 247, .5);
     //.border-radius-for-pie(4px);
-    border: 1px solid #fff;
-    margin: 0 auto;
+    //border: 1px solid #fff;
+
+    //margin: 0 auto;
     .clearfix();
-    padding-bottom: 50px;
+    //padding-bottom: 50px;
     h2 {
       text-align: center; 
+      //font-size: 32px;
+      //font-weight: normal;
     }
     ul {
       list-style: none;
@@ -239,10 +246,30 @@ li {
       margin: 0;
     }
     li {
-      font-size: 22px;
-      margin-bottom: 20px; 
+      //background: #7fba00;
+      //border-bottom: 5px dashed #00bcf2;
+      //border-bottom: 5px dashed #9fdb1e;
+      border-bottom: 3px dashed #eee;
+
+      //color: #9fdb1e;
+      background: url(/img/check_mark.png) no-repeat center right;
+      //background: #a4def9;
+      //color: #fff;
+      font-size: 20px;
+      //padding: 0px;
+      //padding-right: 10px;
+      padding-bottom: 30px;
+      padding-top: 30px;
+      padding-right: 40px;
       clear: both;
       .clearfix();
+      &:last-child {
+        border-bottom: none; 
+      }
+      &:first-child {
+        padding-top: 0; 
+      }
+
       b {
         margin-right: 8px;
         position: relative;
@@ -255,6 +282,21 @@ li {
       }
     } 
   }
+  .more-examples {
+    clear: both;
+    ul {
+      list-style: none;
+    }
+    li {
+      //background: url(/img/check_mark.png) no-repeat center right;
+      font-size: 22px;
+      padding: 10px;
+      //padding-right: 40px;
+      margin-bottom: 20px; 
+      clear: both;
+      .clearfix();
+    }
+  }
   .home-form {
     float: right;
     margin: 0 auto;
@@ -264,26 +306,29 @@ li {
     //.gradient-for-pie( #b4ef67, #d8ffa5);
     //background: #8ace31;
     //border: 1px solid #31C9F7;
-    border: 1px solid #fff; 
-    .gradient-for-pie(#62C462, #51A351);
+    //border: 1px solid #fff; 
+    //.gradient-for-pie(#62C462, #51A351);
+    background: #ffb901;
     //background: #222;
-    //.border-radius-for-pie(7px);
+    .border-radius-for-pie(7px);
     //border: 1px solid #000;
     padding: 40px;
     padding-top: 0;
     width: 360px;
     h2 {
       text-align: center; 
-      //color: #fff;
+      color: #fff;
+      //font-size: 32px;
+      //font-weight: normal;
       //text-shadow: 1px 1px 0 #666;
     }
     label {
-      font-weight: bold;
-      font-size: 16px;
-      //color: #fff;
+      //font-weight: bold;
+      font-size: 14px;
+      color: #fff;
     }
     textarea {
-      font-size: 18px;
+      //font-size: 18px;
       height: 95px; 
       .input-block-level();
     }
@@ -508,6 +553,7 @@ li {
       a {
         //color: #6293FC;
         color: #fff;
+        color: #333;
         font-weight: bold;
         padding: 10px;
         display: block;
@@ -540,16 +586,16 @@ li {
 
 #main-nav .brand {
   .ir();
-  width: 182px;
-  height: 43px;
+  width: 190px;
+  height: 26px;
   margin: 0 auto;
-  margin-top: -6px;
-  //margin-top: 5px;
+  //margin-top: -6px;
+  margin-top: 9px;
   margin-right: 20px;
   padding: 0 !important;
   display: block;
   float: left;
-  background: url(/img/ruby-logo.png) no-repeat top left;
+  background: url(/img/logo.png) no-repeat top left;
 }
 
 footer {
@@ -580,12 +626,13 @@ footer {
 .small-content {
   padding: 50px;
   //.box-shadow(0 0px 1px rgba(0, 0, 0, 0.35));
-  .border-radius-for-pie(5px);
+  .border-radius-for-pie(7px);
   margin: 0 auto;
   width: 230px;
-  background: rgba(49,201,247, .1);
+  //background: rgba(49,201,247, .1);
+  background: #A4DEF9;
   margin-top: 30px;
-  border: 10px solid #000;
+  //border: 10px solid #000;
   //.error {
   //  color: red;
   //  font-weight: bold;
@@ -1263,6 +1310,11 @@ table.setup {
   }
 }
 
-
+.timer {
+  border: 1px solid #000; 
+  display: inline-block;
+  padding: 0 2px;
+  background: #fff;
+}
 
 

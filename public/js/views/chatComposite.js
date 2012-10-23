@@ -37,16 +37,13 @@ return Backbone.View.extend({
     if (this.noReply == undefined)
       this.$el.append('<a href="#" class="btn reply">Reply</a>')
     if (this.viewRepliesFor)
-      $('.metadata', this.el).append('<li><a class="view-replies" href="/wishes/' + this.viewRepliesFor + '">view replies</a></li>')
+      $('.metadata', this.el).append('<li><a class="view-replies" href="/wishes/' + this.model.id + '">view replies</a></li>')
     if(this.timer) {
-      var timer = new TimerView(60) 
+      var timer = new TimerView({model: this.model}) 
       var html = timer.render().el
       this.$el.prepend(html)
     }
-      
     return this
-    
-    
   },
 
   renderReplyForm: function(e){

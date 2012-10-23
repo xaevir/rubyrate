@@ -9,20 +9,19 @@ var express = require('express')
   , check = require('validator').check
   , sanitize = require('validator').sanitize
   , nodemailer = require("nodemailer")
- 
+  , smtpTransport = nodemailer.createTransport("SMTP", {host: "localhost"})
+  , staticServer = express.static(__dirname + '/public')
+  , util = require('util')
 
-// setup Backbone models    
+// Backbone models    
 Backbone = require('backbone')
 _ = require('underscore')
 var Validation = require('./public/js/libs/backbone.validation/backbone.validation.js')
+  , NewUser = require('./public/js/models/newUser')
+  , HomepageWish = require('./public/js/models/homepage_wish')
+  , Subject = require('./models/subject')
+
 _.extend(Backbone.Model.prototype, Backbone.Validation.mixin);
-var NewUser = require('./public/js/models/newUser')
-
-var staticServer = express.static(__dirname + '/public')
-
-var smtpTransport = nodemailer.createTransport("SMTP",{
-    host: "localhost",
-})
 
 var app = exports.app = express();
 
@@ -40,18 +39,51 @@ app.configure(function(){
   app.use(app.router);
 });
 
+// Error handling
+var DatabaseError = function (msg) {}
+util.inherits(DatabaseError, Error)
+
+var ExternalValidationError = function (msg) {}
+util.inherits(ExternalValidationError, Error)
+
+var InternalValidationError = function (msg) {}
+util.inherits(InternalValidationError, Error)
+
+var _404Error = function (msg) {}
+util.inherits(_404Error, Error)
+
 app.use(function(err, req, res, next) {
-  if (err.statusCode == 404) {
+  if (err instanceof _404) {
     res.send({
       success: false, 
-      statusCode: err.status, 
+      statusCode: 404, 
       message: 'Page not found'
     });
+  } 
+  else if (err instanceof DatabaseError) {
+    email({ 
+      subject: 'Database error', 
+      html: '<p><b>url:</b> '+req.url+'</p><p><b>message:</b> '+err.message+'</p><p>'+err.stack+'</p>'
+    })
+  } 
+  else if (err instanceof InternalValidationError) {
+    res.status(500);
+    res.send({
+      success: false, 
+      message: "We're sorry, but something went wrong."
+    }); 
+    email({ 
+      subject: 'Internal Validation error', 
+      html: '<p><b>url:</b> '+req.url+'</p><p><b>message:</b> '+err.message+'</p><p>'+err.stack+'</p>'
+    })
   }
-  email({ 
-    subject: 'Error', 
-    html: '<p><b>url:</b> '+req.url+'</p><p><b>message:</b> '+err.message+'</p><p>'+err.stack+'</p>'
-  })
+  else if (err instanceof ExternalValidationError) {
+    res.status(409);
+    res.send({
+      success: false, 
+      errors: err.message 
+    }); 
+  }
 });
 
 // debug
@@ -59,18 +91,20 @@ app.use(function(err, req, res, next) {
 
 app.configure('production', function(){
   app.set('port', process.env.PORT || 8010);
-  db = mongo.db('localhost/rubyrate?auto_reconnect');
+  db = mongo.db("localhost/rubyrate?auto_reconnect=true", {safe: true, strict: false}
+  )
 })
 
 app.configure('staging', function(){
   app.set('port', process.env.PORT || 8011);
-  db = mongo.db('localhost/dev_ruby?auto_reconnect');
+  db = mongo.db("localhost/dev_ruby?auto_reconnect=true", {safe: true, strict: false})
 })
 
 app.configure('development', function(){
   app.use(express.errorHandler());
   app.set('port', process.env.PORT || 8012);
-  db = mongo.db('localhost/dev_ruby?auto_reconnect');
+  db = mongo.db("localhost/dev_ruby?auto_reconnect=true", {safe: true, strict: false})
+
 });
 
 require ('./routes');
@@ -101,14 +135,14 @@ function loadSubject(req, res, next) {
   try { 
     var _id = new ObjectID(req.params.id) 
   } catch(err) { 
-    return next({statusCode: 404, message: err}) 
+    return next(new _404Error(err)) 
   }
   db.subjects.findOne({_id: _id}, function(err, subject) {
     if (subject) {
       req.subject = subject;
       next();
     } else {
-      return next({statusCode: 404, message: 'bad object_id'})
+      return next(new _404('bad subject_id'))
     }
   })
 }
@@ -163,16 +197,6 @@ app.get('/*', function(req, res, next) {
 //app.post('/scraper', spider.scraper)  
 
 //app.get('/crawl', spider.crawl)
-
-
-
-/*
-app.get('/', function(req, res) {
-  res.render('home', function(err, html){
-    res.send({title: 'Ruby Rate', body: html});
-  });
-})
-*/
 
 
 app.get('/user', function(req, res){
@@ -312,32 +336,44 @@ function makeShortId() {
   return text;
 }
 
-app.post('/wishes-home', function(req, res) {
-  req.body.username = req.body.username.trim()
-  email({
-    subject: 'Homepage wish created', 
-    html: '<p>Ip address: '+req.ip+'</p><p>'+req.body.body+'</p>'
-  })
-  var subject = {
+app.post('/wishes-home', function(req, res, next) {
+  var homepageWish = new HomepageWish(req.body)
+  var errors = homepageWish.validate()
+  if (errors) 
+    return next(new ExternalValidationError(errors))
+
+  var subject = new Subject({
     author : req.body.username,
     authorSlug : req.body.slug,
     body: req.body.body,
     location: req.body.location,
-    shortId: makeShortId(),
-    users: [{username: req.body.username}]
-  }
-  //validate next time to make sure you have all the necessary attrs
+    users: [{username: req.body.username}],
+    when: req.body.when
+  })
+  subject.set('timer', true)
+  var errors = subject.validate()
+  if (errors)
+    return next(new InternalValidationError(JSON.stringify(errors)))
+
   var user = new NewUser({
     username: req.body.username,
     password: 'animeeverything',
-    contact: req.body.contact,
+    twitterOrEmail: req.body.twitterOrEmail,
     slug: req.body.slug
   })
-  var test = user.toJSON()
+  delete user.validation.email // using email or twitter
+  var errors = user.validate()
+  if (errors)
+    return next(new InternalValidationError(JSON.stringify(errors)))
+
+  email({
+    subject: 'Homepage request created', 
+    html: '<p>Ip address: '+req.ip+'</p><p>'+req.body.body+'</p>'
+  })
   user.setPassword(function(){
-    db.users.insert(user.toJSON())
-    db.subjects.insert(subject)
-    res.send({success: true, message: 'wish inserted'})
+    db.users.insert(user.toJSON(), function(err) {next(new DatabaseError(err))})
+    db.subjects.insert(subject.toJSON(), function(err) {next(new DatabaseError(err))})
+    res.send({success: true, message: 'homepageWish created'})
   })
 });
 
@@ -384,7 +420,7 @@ app.get('/lead/:id/:slug', function(req, res) {
 app.get('/helper/:id', function(req, res, next) {
   db.subjects.findOne({shortId: req.params.id}, function(err, subject) {
     if (!subject) 
-      return next({statusCode: 404, message: 'bad helper page'})
+      return next(new _404Error('bad helper page')) 
 
     // send email
     var html  = '<p>Ip address: '+req.ip+'</p>'

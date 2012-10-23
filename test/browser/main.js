@@ -27,8 +27,10 @@ define(function(require) {
 //  require('order!/socket.io/socket.io.js')  
 //  require('order!libs/jquery-color/jquery.color') 
 
-  var tpl = require('text!templates/wishes/wish.mustache')
-  require('order!routers/tested-routes.js')
+  //var tpl = require('text!templates/wishes/wish.mustache')
+  //require('order!routers/tested-routes.js')
+  require('models/homepage_wish.test.js')
+  require('models/newUser.test.js')
   //var App = require('order!app')
   //App.initialize();
   
