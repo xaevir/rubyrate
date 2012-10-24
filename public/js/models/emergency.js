@@ -18,6 +18,7 @@ define(function(require) {
 
     validation: {
       author:      {required: true},
+      authorSlug: {required: true},
       body:        {required: true},
       location:    {required: true},
     }

@@ -81,7 +81,7 @@ var AppRouter = Backbone.Router.extend({
     , 'lead/:id/:slug':                         'lead'
     , 'spider':                                 'spider'
     , '':                                       'home'
-    , 'home/:state':                            'home'
+    , 'home/:thankyou':                         'home'
     , 'admin':                                  'admin'
     , 'electronic-repair':                      'electronic_repair'
     , 'how-it-works':                           'how_it_works'

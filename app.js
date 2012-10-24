@@ -285,6 +285,7 @@ function isUniqueUsername(username, fn) {
   var username = username.toLowerCase()
   username = username.replace(/^@/, '')  //twitter @
   db.collection('users').findOne({username: username}, function(err, user){
+    if (err) next(new DatabaseError(err))
     if (user)
       fn(false)
     else 

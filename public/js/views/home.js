@@ -29,7 +29,9 @@ return Backbone.View.extend({
   submit: function(e) {
     e.preventDefault()
     var params = this.$('form').serializeObject();
-    this.model.save(params)
+    var result = this.model.set(params)
+    if (result !== false)
+      this.model.save({}, {silent: true})  // dont validate on return from server
   },
 
   onSync: function(model){

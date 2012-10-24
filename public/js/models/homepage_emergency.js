@@ -29,8 +29,10 @@ var Emergency = NewUser.extend({
   },
 
 //  parse: function(res){
-//    if (res.success === true)  
-//      return 
+//    //this.clear() // so doesnt re-validate unique username
+//   // this.unset('username')
+//    delete this.attributes.username
+///    return res // for setting _id
 //  }
 
 })
