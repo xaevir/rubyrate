@@ -4570,10 +4570,16 @@ li {
 #home #banner {
   background-color: #a4def9;
   height: 300px;
+  text-align: center;
+}
+#home #banner .container {
+  padding-top: 20px;
 }
 #home #banner h1 {
   color: #fff;
-  font-size: 44px;
+  font-size: 40px;
+  font-weight: normal;
+  line-height: 1.25;
 }
 .home {
   width: 940px;
@@ -4979,8 +4985,8 @@ li {
   text-shadow: none;
   color: transparent;
   background-color: transparent;
-  width: 192px;
-  height: 29px;
+  width: 123px;
+  height: 26px;
   margin: 0 auto;
   margin-top: 6px;
   margin-right: 20px;
