@@ -4,12 +4,16 @@ var HomeView = require('views/home'),
     Router = require('router')
 
 Router.prototype.home = function(thankyou) {
+  $('body').attr('id','home')
   var homeView = new HomeView({thankyou: thankyou})
   $('#app').html(homeView.render().el)
   document.title = 'Ruby Rate'
   _gaq.push(['_trackPageview', '/home'])
 }
 
+Router.prototype.reset_home = function(){
+  $('body').removeAttr('id')
+}
 
 Router.prototype.electronic_repair = function(){
   var view = new HomeView({user: this.user})

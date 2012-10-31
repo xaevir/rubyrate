@@ -4563,59 +4563,72 @@ li {
   z-index: 2;
   border-bottom: 17px solid rgba(0, 0, 0, 0);
 }
-#home #banner {
-  margin-bottom: 20px;
+#home #app {
+  width: 100%;
+  margin-top: -15px;
 }
-#home .logo {
+#home #banner {
+  background-color: #a4def9;
+  height: 300px;
+}
+#home #banner h1 {
+  color: #fff;
+  font-size: 44px;
+}
+.home {
+  width: 940px;
+  margin: 0 auto;
+}
+.home .logo {
   margin: 0 auto;
   display: block;
   margin-top: 10px;
 }
-#home h1 {
+.home h1 {
   margin: 15px 0 25px 0;
   padding: 0;
   font-size: 28px;
   padding: 0 15px;
   text-align: center;
 }
-#home h2 {
+.home h2 {
   margin-bottom: 20px;
 }
-#home .how-it-works p {
+.home .how-it-works p {
   font-size: 20px;
 }
-#home .examples {
+.home .examples {
   width: 420px;
   margin-left: 0;
   float: left;
   padding-top: 0;
   *zoom: 1;
 }
-#home .examples:before,
-#home .examples:after {
+.home .examples:before,
+.home .examples:after {
   display: table;
   content: "";
 }
-#home .examples:after {
+.home .examples:after {
   clear: both;
 }
-#home .examples h2 {
+.home .examples h2 {
   text-align: center;
 }
-#home .examples ul {
+.home .examples ul {
   list-style: none;
   *zoom: 1;
   margin: 0;
 }
-#home .examples ul:before,
-#home .examples ul:after {
+.home .examples ul:before,
+.home .examples ul:after {
   display: table;
   content: "";
 }
-#home .examples ul:after {
+.home .examples ul:after {
   clear: both;
 }
-#home .examples li {
+.home .examples li {
   border-bottom: 3px dashed #eee;
   background: url(/img/check_mark.png) no-repeat center right;
   font-size: 20px;
@@ -4625,52 +4638,52 @@ li {
   clear: both;
   *zoom: 1;
 }
-#home .examples li:before,
-#home .examples li:after {
+.home .examples li:before,
+.home .examples li:after {
   display: table;
   content: "";
 }
-#home .examples li:after {
+.home .examples li:after {
   clear: both;
 }
-#home .examples li:last-child {
+.home .examples li:last-child {
   border-bottom: none;
 }
-#home .examples li:first-child {
+.home .examples li:first-child {
   padding-top: 0;
 }
-#home .examples li b {
+.home .examples li b {
   margin-right: 8px;
   position: relative;
   display: block;
   float: left;
 }
-#home .examples li span {
+.home .examples li span {
   width: 338px;
   float: left;
 }
-#home .more-examples {
+.home .more-examples {
   clear: both;
 }
-#home .more-examples ul {
+.home .more-examples ul {
   list-style: none;
 }
-#home .more-examples li {
+.home .more-examples li {
   font-size: 22px;
   padding: 10px;
   margin-bottom: 20px;
   clear: both;
   *zoom: 1;
 }
-#home .more-examples li:before,
-#home .more-examples li:after {
+.home .more-examples li:before,
+.home .more-examples li:after {
   display: table;
   content: "";
 }
-#home .more-examples li:after {
+.home .more-examples li:after {
   clear: both;
 }
-#home .home-form {
+.home .home-form {
   float: right;
   margin: 0 auto;
   background: #ffb901;
@@ -4682,15 +4695,15 @@ li {
   padding-top: 0;
   width: 360px;
 }
-#home .home-form h2 {
+.home .home-form h2 {
   text-align: center;
   color: #fff;
 }
-#home .home-form label {
+.home .home-form label {
   font-size: 14px;
   color: #fff;
 }
-#home .home-form textarea {
+.home .home-form textarea {
   height: 95px;
   display: block;
   width: 100%;
@@ -4913,6 +4926,7 @@ li {
 }
 #main-nav {
   *zoom: 1;
+  background: #333;
   margin-bottom: 15px;
   height: 40px;
 }
@@ -4928,7 +4942,6 @@ li {
 #main-nav #user-menu {
   list-style: none;
   margin: 0;
-  margin-top: 5px;
   float: left;
 }
 #main-nav #main-menu > li,
@@ -4937,8 +4950,8 @@ li {
 }
 #main-nav #main-menu > li a,
 #main-nav #user-menu > li a {
-  color: #fff;
   color: #333;
+  color: #fff;
   font-weight: bold;
   padding: 10px;
   display: block;
@@ -4966,10 +4979,10 @@ li {
   text-shadow: none;
   color: transparent;
   background-color: transparent;
-  width: 190px;
-  height: 26px;
+  width: 192px;
+  height: 29px;
   margin: 0 auto;
-  margin-top: 9px;
+  margin-top: 6px;
   margin-right: 20px;
   padding: 0 !important;
   display: block;
