@@ -4570,6 +4570,7 @@ li {
 #home #banner {
   background-color: #a4def9;
   height: 300px;
+  margin-bottom: 20px;
   text-align: center;
 }
 #home #banner .container {
