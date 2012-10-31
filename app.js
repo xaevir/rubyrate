@@ -102,19 +102,19 @@ app.use(function(err, req, res, next) {
 //app.settings.env = 'production'
 
 app.configure('production', function(){
-  app.set('port', process.env.PORT || 8020);
+  app.set('port', process.env.PORT || 8030);
   db = mongo.db("localhost/petes?auto_reconnect=true", {safe: true, strict: false}
   )
 })
 
 app.configure('staging', function(){
-  app.set('port', process.env.PORT || 8021);
+  app.set('port', process.env.PORT || 8031);
   db = mongo.db("localhost/dev_petes?auto_reconnect=true", {safe: true, strict: false})
 })
 
 app.configure('development', function(){
   app.use(express.errorHandler());
-  app.set('port', process.env.PORT || 8022);
+  app.set('port', process.env.PORT || 8032);
   db = mongo.db("localhost/dev_petes?auto_reconnect=true", {safe: true, strict: false})
 
 });
