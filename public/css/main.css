@@ -4609,7 +4609,17 @@ li {
   margin-left: 0;
   float: left;
   padding-top: 0;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  behavior: url(/js/libs/PIE.htc);
+  text-align: center;
   *zoom: 1;
+  background-color: #9fdb1e;
+  padding: 40px;
+  padding-top: 0;
+  width: 360px;
+  color: #fff;
 }
 .home .examples:before,
 .home .examples:after {
@@ -4671,6 +4681,7 @@ li {
 }
 .home .more-examples {
   clear: both;
+  margin-top: 20px;
 }
 .home .more-examples ul {
   list-style: none;
@@ -4693,6 +4704,7 @@ li {
 .home .home-form {
   float: right;
   margin: 0 auto;
+  text-align: center;
   background: #ffb901;
   -webkit-border-radius: 7px;
   -moz-border-radius: 7px;
@@ -4934,6 +4946,7 @@ li {
 #main-nav {
   *zoom: 1;
   background: #333;
+  background: #00699e;
   margin-bottom: 15px;
   height: 40px;
 }
@@ -5033,14 +5046,14 @@ footer .details {
 }
 .small-content {
   padding: 50px;
-  -webkit-border-radius: 7px;
-  -moz-border-radius: 7px;
-  border-radius: 7px;
-  behavior: url(/js/libs/PIE.htc);
   margin: 0 auto;
   width: 230px;
-  background: #A4DEF9;
+  background: #1EB2FF;
   margin-top: 30px;
+  color: #fff;
+}
+.small-content form label {
+  color: #fff;
 }
 .body-content-small {
   min-height: 20px;

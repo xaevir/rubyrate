@@ -67,6 +67,7 @@ var AppRouter = Backbone.Router.extend({
 
   routes: {
       'signup':                                 'signup'
+    , 'signup/:type':                           'signup'
     , 'login':                                  'login'
     , 'how-it-works':                           'how_it_works'
     , 'profile/:username':                      'profile'
@@ -427,10 +428,14 @@ AppRouter.prototype.login = _.wrap(function(){
     _gaq.push(['_trackPageview', '/login'])
   }, AppRouter.prototype.alreadyLoggedIn)
 
-AppRouter.prototype.signup = _.wrap(function(){ 
-    this.signupView = new SignupView({model: new NewUser(), 
-                                      className: 'small-content',
-                                      user: this.user})
+AppRouter.prototype.signup = _.wrap(function(type){ 
+    this.signupView = new SignupView(
+      {
+        model: new NewUser(), 
+        type: type,
+        className: 'small-content',
+        user: this.user
+      })
     this.signupView.render();
     $('#app').html(this.signupView.el)
     document.title = 'Sign Up'
