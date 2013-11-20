@@ -24,6 +24,14 @@ body {
   //background: url(/img/orange-bokeh-bg-small.jpg) no-repeat top center;
 }
 
+.home {
+  background: url(/img/bg-header.jpg) no-repeat top center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 p {
   line-height: 1.3em;
 }
@@ -378,6 +386,20 @@ li {
 
 .ir { border:0; font: 0/0 a; text-shadow: none; color: transparent; background-color: transparent; }
 
+.home #main-nav {
+  #main-menu, #user-menu {
+    >li {
+      a {
+        //color: #333;
+        padding: 10px;
+        display: block;
+        text-shadow: none;
+        color: #fff;
+      }
+    }
+  }
+}
+
 #main-nav {
   .clearfix();
   //margin-bottom: 20px;
@@ -398,6 +420,7 @@ li {
         padding: 10px;
         display: block;
         text-shadow: 1px 1px 0 #fff;
+        //color: #fff;
       }
     }
   }

@@ -825,40 +825,64 @@ textarea,
 .uneditable-input {
   margin-left: 0;
 }
-input.span12, textarea.span12, .uneditable-input.span12 {
+input.span12,
+textarea.span12,
+.uneditable-input.span12 {
   width: 930px;
 }
-input.span11, textarea.span11, .uneditable-input.span11 {
+input.span11,
+textarea.span11,
+.uneditable-input.span11 {
   width: 850px;
 }
-input.span10, textarea.span10, .uneditable-input.span10 {
+input.span10,
+textarea.span10,
+.uneditable-input.span10 {
   width: 770px;
 }
-input.span9, textarea.span9, .uneditable-input.span9 {
+input.span9,
+textarea.span9,
+.uneditable-input.span9 {
   width: 690px;
 }
-input.span8, textarea.span8, .uneditable-input.span8 {
+input.span8,
+textarea.span8,
+.uneditable-input.span8 {
   width: 610px;
 }
-input.span7, textarea.span7, .uneditable-input.span7 {
+input.span7,
+textarea.span7,
+.uneditable-input.span7 {
   width: 530px;
 }
-input.span6, textarea.span6, .uneditable-input.span6 {
+input.span6,
+textarea.span6,
+.uneditable-input.span6 {
   width: 450px;
 }
-input.span5, textarea.span5, .uneditable-input.span5 {
+input.span5,
+textarea.span5,
+.uneditable-input.span5 {
   width: 370px;
 }
-input.span4, textarea.span4, .uneditable-input.span4 {
+input.span4,
+textarea.span4,
+.uneditable-input.span4 {
   width: 290px;
 }
-input.span3, textarea.span3, .uneditable-input.span3 {
+input.span3,
+textarea.span3,
+.uneditable-input.span3 {
   width: 210px;
 }
-input.span2, textarea.span2, .uneditable-input.span2 {
+input.span2,
+textarea.span2,
+.uneditable-input.span2 {
   width: 130px;
 }
-input.span1, textarea.span1, .uneditable-input.span1 {
+input.span1,
+textarea.span1,
+.uneditable-input.span1 {
   width: 50px;
 }
 input[disabled],
@@ -4265,6 +4289,13 @@ body {
   line-height: 1.3;
   background: #fafbf6;
 }
+.home {
+  background: url(/img/bg-header.jpg) no-repeat top center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 p {
   line-height: 1.3em;
 }
@@ -4351,10 +4382,6 @@ li {
 }
 .bubble-blue {
   margin-bottom: 15px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
   padding: 10px;
   position: relative;
   color: #fff;
@@ -4515,7 +4542,6 @@ li {
   background-image: -webkit-linear-gradient(top, #888888, #666666);
   background-image: -o-linear-gradient(top, #888888, #666666);
   background-image: linear-gradient(top, #888888, #666666);
-  background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#888888', endColorstr='#666666', GradientType=0);
   background-color: #474747;
   background-image: -moz-linear-gradient(top, #555555, #333333);
@@ -4762,6 +4788,13 @@ li {
   text-shadow: none;
   color: transparent;
   background-color: transparent;
+}
+.home #main-nav #main-menu > li a,
+.home #main-nav #user-menu > li a {
+  padding: 10px;
+  display: block;
+  text-shadow: none;
+  color: #fff;
 }
 #main-nav {
   *zoom: 1;
@@ -5139,10 +5172,6 @@ img {
 }
 #helper .chat-composite {
   margin-bottom: 15px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-  behavior: url(/js/libs/PIE.htc);
   padding: 10px;
   position: relative;
   color: #fff;
